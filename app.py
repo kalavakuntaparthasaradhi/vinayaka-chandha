@@ -107,7 +107,7 @@ Thank you for your valuable contribution.
         FROM donations
         WHERE donation_date = CURDATE()
     """)
-    daily = 0
+    daily = cursor.fetchone()["total"]
 
     # Weekly Collection
     cursor.execute("""
@@ -115,7 +115,7 @@ Thank you for your valuable contribution.
         FROM donations
         WHERE YEARWEEK(donation_date,1)=YEARWEEK(CURDATE(),1)
     """)
-    weekly = 0
+    weekly = cursor.fetchone()["total"]
 
     # Today's Donors
     cursor.execute("""
