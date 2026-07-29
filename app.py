@@ -9,22 +9,18 @@ app.secret_key = "vinayaka123"
 USERNAME = "admin"
 PASSWORD = "12345"
 
-# MySQL Connection
-db_host = os.environ.get('DB_HOST')
-db_user = os.environ.get('DB_USER')
-db_password = os.environ.get('DB_PASSWORD')
-db_name = os.environ.get('DB_NAME')
-
-mydb = mysql.connector.connect(
-    host=db_host,
-    user=db_user,
-    password=db_password,
-    database=db_name
+# ------------------ MySQL Connection ------------------
+conn = mysql.connector.connect(
+    host=os.getenv("MYSQLHOST"),
+    port=int(os.getenv("MYSQLPORT")),
+    user=os.getenv("MYSQLUSER"),
+    password=os.getenv("MYSQLPASSWORD"),
+    database=os.getenv("MYSQLDATABASE")
 )
 
 cursor = conn.cursor(dictionary=True)
 
-
+# ------------------ Login ------------------
 @app.route("/", methods=["GET", "POST"])
 def login():
 
@@ -44,6 +40,7 @@ def login():
     return render_template("login.html")
 
 
+# ------------------ Dashboard ------------------
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
 
@@ -59,11 +56,10 @@ def dashboard():
         collector = request.form["collector"]
         remarks = request.form["remarks"]
 
-        # Save Data
         sql = """
         INSERT INTO donations
-        (name,mobile,area,house,donation,payment,collector,remarks,donation_date)
-        VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        (name, mobile, area, house, donation, payment, collector, remarks, donation_date)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
         values = (
@@ -83,7 +79,6 @@ def dashboard():
 
         flash("✅ Chandha Collected Successfully!")
 
-        # WhatsApp Message
         message = f"""
 🪔 Vinayaka Chavithi Committee 🪔
 
@@ -106,7 +101,7 @@ Thank you for your valuable contribution.
 
         return redirect(whatsapp_url)
 
-    # Today's Collection
+    # Daily Collection
     cursor.execute("""
         SELECT IFNULL(SUM(donation),0) AS total
         FROM donations
@@ -122,7 +117,7 @@ Thank you for your valuable contribution.
     """)
     weekly = cursor.fetchone()["total"]
 
-    # Total Donors Today
+    # Today's Donors
     cursor.execute("""
         SELECT COUNT(*) AS donors
         FROM donations
