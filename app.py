@@ -80,11 +80,11 @@ def dashboard():
         flash("✅ Chandha Collected Successfully!")
 
         message = f"""
-🪔 Vinayaka Chavithi Committee 🪔
+🪔 Lakshmi Ganapathi Youth 🪔
 
 Dear {name},
 
-Your Chandha has been collected successfully.
+Your Donation has been collected successfully.
 
 💰 Amount : ₹{donation}
 📅 Date : {date}
