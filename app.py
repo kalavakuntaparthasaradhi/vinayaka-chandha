@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from urllib.parse import quote
 import mysql.connector
@@ -9,11 +10,16 @@ USERNAME = "admin"
 PASSWORD = "12345"
 
 # MySQL Connection
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="1234",
-    database="vinayaka"
+db_host = os.environ.get('DB_HOST')
+db_user = os.environ.get('DB_USER')
+db_password = os.environ.get('DB_PASSWORD')
+db_name = os.environ.get('DB_NAME')
+
+mydb = mysql.connector.connect(
+    host=db_host,
+    user=db_user,
+    password=db_password,
+    database=db_name
 )
 
 cursor = conn.cursor(dictionary=True)
