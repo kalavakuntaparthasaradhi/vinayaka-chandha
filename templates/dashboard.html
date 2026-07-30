@@ -285,6 +285,59 @@ placeholder="Enter Remarks"></textarea>
 </div>
 
 </div>
+<!-- Saved Donations -->
+
+<h2 style="margin-top:40px;">📋 Saved Donations</h2>
+
+<div style="overflow-x:auto; margin-top:20px;">
+
+<table style="width:100%; border-collapse:collapse;">
+
+<thead>
+
+<tr style="background:#FF9800;color:white;">
+
+<th style="padding:10px;">ID</th>
+<th>Name</th>
+<th>Mobile</th>
+<th>Area</th>
+<th>House</th>
+<th>Donation</th>
+<th>Payment</th>
+<th>Date</th>
+<th>Received By</th>
+<th>Remarks</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for member in members %}
+
+<tr style="text-align:center;">
+
+<td style="padding:10px;">{{ member.id }}</td>
+<td>{{ member.name }}</td>
+<td>{{ member.mobile }}</td>
+<td>{{ member.area }}</td>
+<td>{{ member.house }}</td>
+<td>₹ {{ member.donation }}</td>
+<td>{{ member.payment }}</td>
+<td>{{ member.date }}</td>
+<td>{{ member.received_by }}</td>
+<td>{{ member.remarks }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
 
 <script>
 document.getElementById("date").valueAsDate = new Date();

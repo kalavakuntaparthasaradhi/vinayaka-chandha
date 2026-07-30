@@ -55,7 +55,7 @@ def dashboard():
         date = request.form["date"]
         collector = request.form["received by"]
         remarks = request.form["remarks"]
-
+    
         sql = """
         INSERT INTO donations
         (name, mobile, area, house, donation, payment, collector, remarks, donation_date)
@@ -125,13 +125,32 @@ Thank you for your valuable contribution.
     """)
     today_donors = cursor.fetchone()["donors"]
 
+    # All Donations#
+    cursor.execute("""
+        SELECT
+            id,
+            name,
+            mobile,
+            area,
+            house,
+            donation,
+            payment,
+            collector,
+            remarks,
+            donation_date
+        FROM donations
+        ORDER BY id DESC
+    """)
+
+    members = cursor.fetchall()
+
     return render_template(
         "dashboard.html",
         daily=daily,
         weekly=weekly,
-        today_donors=today_donors
+        today_donors=today_donors,
+        members=members
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
