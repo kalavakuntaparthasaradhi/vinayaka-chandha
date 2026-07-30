@@ -53,7 +53,7 @@ def dashboard():
         donation = float(request.form["donation"])
         payment = request.form["payment"]
         date = request.form["date"]
-        collector = request.form["received by"]
+        collector = request.form["collector"]
         remarks = request.form["remarks"]
     
         sql = """
