@@ -147,11 +147,40 @@ Thank you for your valuable contribution.
 
     return render_template(
         "dashboard.html",
-        daily=daily,
-        weekly=weekly,
-        today_donors=today_donors,
-        members=members
+    total_collection=total_collection,
+    total_expenses=total_expenses,
+    balance=balance,
+    members=members
     )
+
+@app.route("/add_expense", methods=["POST"])
+def add_expense():
+
+    expense_name = request.form["expense_name"]
+    amount = float(request.form["amount"])
+    payment_mode = request.form["payment_mode"]
+    expense_date = request.form["expense_date"]
+    spent_by = request.form["spent_by"]
+    remarks = request.form["remarks"]
+
+    cursor.execute("""
+        INSERT INTO expenses
+        (expense_name, amount, payment_mode, spent_by, remarks, expense_date)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (
+        expense_name,
+        amount,
+        payment_mode,
+        spent_by,
+        remarks,
+        expense_date
+    ))
+
+    conn.commit()
+
+    flash("Expense Added Successfully!")
+
+    return redirect(url_for("dashboard"))
 
 
 if __name__ == "__main__":

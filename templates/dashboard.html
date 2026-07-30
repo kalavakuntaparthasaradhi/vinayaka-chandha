@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><b>Lakshmi Ganapathi Youth 2026</b></title>
+<title>Lakshmi Ganapathi Youth</title>
 
 <style>
 
@@ -231,17 +231,22 @@ th{
 Lakshmi Ganapathi Youth
 </p>
 
-<div class="cards">
+<<div class="cards">
 
-<div class="card">
-<h3>📅 Total Collection</h3>
-<h2>₹ {{ daily }}</h2>
-</div>
+    <div class="card">
+        <h3>💰 Total Collection</h3>
+        <h2>₹ {{ total_collection }}</h2>
+    </div>
 
-<div class="card">
-<h3>📆 Expenses</h3>
-<h2>₹ {{ weekly }}</h2>
-</div>
+    <div class="card">
+        <h3>💸 Total Expenses</h3>
+        <h2>₹ {{ total_expenses }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>🏦 Balance</h3>
+        <h2>₹ {{ balance }}</h2>
+    </div>
 
 </div>
 
@@ -331,6 +336,67 @@ placeholder="Enter Remarks"></textarea>
 
 <button type="submit">
 💰 Save Donation
+</button>
+
+</form>
+
+<hr style="margin:40px 0;">
+
+<h2>💸 Expense Entry</h2>
+
+<form method="POST" action="{{ url_for('add_expense') }}">
+
+<div class="row">
+
+<div class="form-group">
+<label>Expense Name</label>
+<input type="text" name="expense_name" placeholder="Enter Expense Name" required>
+</div>
+
+<div class="form-group">
+<label>Amount (₹)</label>
+<input type="number" name="amount" placeholder="Enter Amount" required>
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="form-group">
+<label>Payment Mode</label>
+
+<select name="payment_mode">
+<option>Cash</option>
+<option>PhonePe</option>
+<option>Google Pay</option>
+<option>Bank Transfer</option>
+</select>
+
+</div>
+
+<div class="form-group">
+<label>Date</label>
+<input type="date" name="expense_date" required>
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="form-group">
+<label>Spent By</label>
+<input type="text" name="spent_by" placeholder="Spent By">
+</div>
+
+<div class="form-group">
+<label>Remarks</label>
+<input type="text" name="remarks" placeholder="Remarks">
+</div>
+
+</div>
+
+<button type="submit">
+💸 Save Expense
 </button>
 
 </form>
