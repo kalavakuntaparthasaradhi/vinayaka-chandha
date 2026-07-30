@@ -134,7 +134,7 @@ Thank you for your valuable contribution.
             id,
             name,
             mobile,
-            payment AS status
+            'paid' AS status
         FROM donations
         ORDER BY id DESC
     """)
