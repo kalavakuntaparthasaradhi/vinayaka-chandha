@@ -155,33 +155,32 @@ Thank you for your valuable contribution.
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
+    try:
+        expense_name = request.form["expense_name"]
+        amount = float(request.form["amount"])
+        payment_mode = request.form["payment_mode"]
+        spent_by = request.form["spent_by"]
+        expense_date = request.form["expense_date"]
+        remarks = request.form["remarks"]
 
-    expense_name = request.form["expense_name"]
-    amount = float(request.form["amount"])
-    payment_mode = request.form["payment_mode"]
-    expense_date = request.form["expense_date"]
-    spent_by = request.form["spent_by"]
-    remarks = request.form["remarks"]
+        cursor.execute("""
+            INSERT INTO expenses
+            (expense_name, amount, payment_mode, spent_by, remarks, expense_date)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (
+            expense_name,
+            amount,
+            payment_mode,
+            spent_by,
+            remarks,
+            expense_date
+        ))
 
-    cursor.execute("""
-        INSERT INTO expenses
-        (expense_name, amount, payment_mode, spent_by, remarks, expense_date)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (
-        expense_name,
-        amount,
-        payment_mode,
-        spent_by,
-        remarks,
-        expense_date
-    ))
+        conn.commit()
+        return redirect(url_for("dashboard"))
 
-    conn.commit()
-
-    flash("Expense Added Successfully!")
-
-    return redirect(url_for("dashboard"))
-
+    except Exception as e:
+        return f"<h2>Error</h2><pre>{e}</pre>"
 
 if __name__ == "__main__":
     app.run(debug=True)
