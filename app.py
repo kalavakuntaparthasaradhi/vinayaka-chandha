@@ -45,7 +45,7 @@ def login():
 def dashboard():
 
     if request.method == "POST":
-        print(request.form)
+        return "post is working"
         name = request.form["name"]
         mobile = request.form["mobile"].replace("+91", "").replace(" ", "")
         area = request.form["area"]
