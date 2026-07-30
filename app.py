@@ -109,30 +109,28 @@ Thank you for your valuable contribution.
             conn.rollback()
             return f"Error: {e}"
 
-    # Today's Collection
+        except Exception as e:
+            conn.rollback()
+        return f"Error: {e}"
+
+    # Total Collection
     cursor.execute("""
         SELECT IFNULL(SUM(donation),0) AS total
         FROM donations
-        WHERE donation_date = CURDATE()
     """)
-    daily = cursor.fetchone()["total"]
+    total_collection = cursor.fetchone()["total"]
 
-    # Weekly Collection
+    # Total Expenses
     cursor.execute("""
-        SELECT IFNULL(SUM(donation),0) AS total
-        FROM donations
-        WHERE YEARWEEK(donation_date,1)=YEARWEEK(CURDATE(),1)
+        SELECT IFNULL(SUM(amount),0) AS total
+        FROM expenses
     """)
-    weekly = cursor.fetchone()["total"]
+    total_expenses = cursor.fetchone()["total"]
 
-    # Today's Donors
-    cursor.execute("""
-        SELECT COUNT(*) AS donors
-        FROM donations
-        WHERE donation_date = CURDATE()
-    """)
-    today_donors = cursor.fetchone()["donors"]
+    # Balance
+    balance = total_collection - total_expenses
 
+    
     # Donation List
     cursor.execute("""
         SELECT
