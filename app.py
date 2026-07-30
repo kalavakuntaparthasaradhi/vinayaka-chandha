@@ -77,7 +77,7 @@ def dashboard():
             cursor.execute(sql, values)
             conn.commit()
 
-            flash("✅ Chandha Collected Successfully!")
+            flash("✅ Donation Saved Successfully!")
 
             message = f"""
 🪔 Lakshmi Ganapathi Youth 🪔
@@ -98,14 +98,13 @@ Thank you for your valuable contribution.
 """
 
             whatsapp_url = f"https://wa.me/91{mobile}?text={quote(message)}"
-
             return redirect(whatsapp_url)
 
         except Exception as e:
             conn.rollback()
             return f"Error: {e}"
 
-    # Daily Collection
+    # Today's Collection
     cursor.execute("""
         SELECT IFNULL(SUM(donation),0) AS total
         FROM donations
@@ -129,23 +128,16 @@ Thank you for your valuable contribution.
     """)
     today_donors = cursor.fetchone()["donors"]
 
-    # All Donations
+    # Donation List
     cursor.execute("""
         SELECT
             id,
             name,
             mobile,
-            area,
-            house,
-            donation,
-            payment,
-            collector,
-            remarks,
-            donation_date
+            payment AS status
         FROM donations
         ORDER BY id DESC
     """)
-
     members = cursor.fetchall()
 
     return render_template(
