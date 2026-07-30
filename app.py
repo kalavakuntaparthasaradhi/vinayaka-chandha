@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from urllib.parse import quote
 import mysql.connector
 
+
 app = Flask(__name__)
 app.secret_key = "vinayaka123"
 
@@ -12,7 +13,7 @@ PASSWORD = "12345"
 # ------------------ MySQL Connection ------------------
 conn = mysql.connector.connect(
     host=os.getenv("mysql.railway.internal"),
-    port=int(os.getenv(3306)),
+    port=int(os.getenv("MYSQLPORT")),
     user=os.getenv("root"),
     password=os.getenv("EiUnlhZdLkDSRJxpSsTxSFhKqoCRYjdc"),
     database=os.getenv("railway")
