@@ -45,41 +45,41 @@ def login():
 def dashboard():
 
     if request.method == "POST":
-        return "post is working"
-        name = request.form["name"]
-        mobile = request.form["mobile"].replace("+91", "").replace(" ", "")
-        area = request.form["area"]
-        house = request.form["house"]
-        donation = float(request.form["donation"])
-        payment = request.form["payment"]
-        date = request.form["date"]
-        collector = request.form["collector"]
-        remarks = request.form["remarks"]
-    
-        sql = """
-        INSERT INTO donations
-        (name, mobile, area, house, donation, payment, collector, remarks, donation_date)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
+        try:
+            name = request.form["name"]
+            mobile = request.form["mobile"].replace("+91", "").replace(" ", "")
+            area = request.form["area"]
+            house = request.form["house"]
+            donation = float(request.form["donation"])
+            payment = request.form["payment"]
+            date = request.form["date"]
+            collector = request.form["collector"]
+            remarks = request.form["remarks"]
 
-        values = (
-            name,
-            mobile,
-            area,
-            house,
-            donation,
-            payment,
-            collector,
-            remarks,
-            date
-        )
+            sql = """
+            INSERT INTO donations
+            (name, mobile, area, house, donation, payment, collector, remarks, donation_date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
 
-        cursor.execute(sql, values)
-        conn.commit()
+            values = (
+                name,
+                mobile,
+                area,
+                house,
+                donation,
+                payment,
+                collector,
+                remarks,
+                date
+            )
 
-        flash("✅ Chandha Collected Successfully!")
+            cursor.execute(sql, values)
+            conn.commit()
 
-        message = f"""
+            flash("✅ Chandha Collected Successfully!")
+
+            message = f"""
 🪔 Lakshmi Ganapathi Youth 🪔
 
 Dear {name},
@@ -97,9 +97,13 @@ Thank you for your valuable contribution.
 🌺 Happy Vinayaka Chavithi 🌺
 """
 
-        whatsapp_url = f"https://wa.me/91{mobile}?text={quote(message)}"
+            whatsapp_url = f"https://wa.me/91{mobile}?text={quote(message)}"
 
-        return redirect(whatsapp_url)
+            return redirect(whatsapp_url)
+
+        except Exception as e:
+            conn.rollback()
+            return f"Error: {e}"
 
     # Daily Collection
     cursor.execute("""
@@ -125,7 +129,7 @@ Thank you for your valuable contribution.
     """)
     today_donors = cursor.fetchone()["donors"]
 
-    # All Donations#
+    # All Donations
     cursor.execute("""
         SELECT
             id,
@@ -151,6 +155,7 @@ Thank you for your valuable contribution.
         today_donors=today_donors,
         members=members
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
