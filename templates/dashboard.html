@@ -160,6 +160,28 @@ button:hover{
     flex-direction:column;
 }
 
+.table-container{
+    width:90%;
+    margin:40px auto;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:12px;
+    text-align:center;
+    border:1px solid #ddd;
+}
+
+th{
+    background:#f4b400;
+    color:#fff;
+}
+
 }
 
 </style>
@@ -285,29 +307,32 @@ placeholder="Enter Remarks"></textarea>
 </div>
 
 </div>
-<!-- Saved Donations -->
+<!-- Donation List -->
+<div class="table-container">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Mobile Number</th>
-            <th>Status</th>
-        </tr>
-    </thead>
+    <h2>Donation List</h2>
 
-    <tbody>
-        {% for member in members %}
-        <tr>
-            <td>{{ member.id }}</td>
-            <td>{{ member.name }}</td>
-            <td>{{ member.mobile }}</td>
-            <td>{{ member.status }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Mobile Number</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.mobile }}</td>
+                <td>{{ member.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </div>
 
