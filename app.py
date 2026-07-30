@@ -12,11 +12,11 @@ PASSWORD = "12345"
 
 # ------------------ MySQL Connection ------------------
 conn = mysql.connector.connect(
-    host=os.getenv("MYSQLHOST"),
-    port=int(os.getenv("MYSQLPORT")),
-    user=os.getenv("MYSQLUSER"),
-    password=os.getenv("MYSQLPASSWORD"),
-    database=os.getenv("MYSQLDATABASE")
+    host="mysql.railway.internal",
+    port=3306,
+    user="root",
+    password="EiUnlhZdLkDSRJxpSsTxSFhKqoCRYjdc",
+    database="railway"
 )
 
 cursor = conn.cursor(dictionary=True)
