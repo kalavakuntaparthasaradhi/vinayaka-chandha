@@ -19,6 +19,11 @@ conn = mysql.connector.connect(
 )
 
 cursor = conn.cursor(dictionary=True)
+cursor.execute("SELECT DATABASE() AS db")
+print("Database:", cursor.fetchone())
+
+cursor.execute("SELECT COUNT(*) AS total FROM donations")
+print("Total donations:", cursor.fetchone())
 
 # ------------------ Login ------------------
 @app.route("/", methods=["GET", "POST"])
