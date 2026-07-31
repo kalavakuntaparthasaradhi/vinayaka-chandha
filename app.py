@@ -17,10 +17,11 @@ print(os.getenv("MYSQLDATABASE"))
 # ------------------ MySQL Connection ------------------
 conn = mysql.connector.connect(
     host=os.getenv("MYSQLHOST"),
-    port=int(os.getenv("MYSQLPORT","3306")),
+    port=int(os.getenv("MYSQLPORT")),
     user=os.getenv("MYSQLUSER"),
     password=os.getenv("MYSQLPASSWORD"),
-    database=os.getenv("MYSQLDATABASE")
+    database=os.getenv("MYSQLDATABASE"),
+    ssl_disabled=False
 )
 
 cursor = conn.cursor(dictionary=True)
