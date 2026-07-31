@@ -170,6 +170,9 @@ Thank you for your valuable contribution.
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
+
+    conn, cursor = get_db()
+
     try:
         expense_name = request.form["expense_name"]
         amount = float(request.form["amount"])
@@ -192,10 +195,16 @@ def add_expense():
         ))
 
         conn.commit()
+
         return redirect(url_for("dashboard"))
 
     except Exception as e:
+        conn.rollback()
         return f"<h2>Error</h2><pre>{e}</pre>"
+
+    finally:
+        cursor.close()
+        conn.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
