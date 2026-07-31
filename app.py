@@ -15,20 +15,28 @@ print(os.getenv("MYSQLPORT"))
 print(os.getenv("MYSQLUSER"))
 print(os.getenv("MYSQLDATABASE"))
 # ------------------ MySQL Connection ------------------
-conn = mysql.connector.connect(
-    host=os.getenv("MYSQLHOST"),
-    port=int(os.getenv("MYSQLPORT")),
-    user=os.getenv("MYSQLUSER"),
-    password=os.getenv("MYSQLPASSWORD"),
-    database=os.getenv("MYSQLDATABASE"),
-    ssl_disabled=False
-)
+def get_db():
+    conn = mysql.connector.connect(
+        host=os.getenv("MYSQLHOST"),
+        port=int(os.getenv("MYSQLPORT")),
+        user=os.getenv("MYSQLUSER"),
+        password=os.getenv("MYSQLPASSWORD"),
+        database=os.getenv("MYSQLDATABASE"),
+        ssl_disabled=False
+    )
+    return conn, conn.cursor(dictionary=True)
 
-cursor = conn.cursor(dictionary=True)
+# Test Connection
+conn, cursor = get_db()
+
 cursor.execute("SELECT DATABASE() AS db")
 print("Database:", cursor.fetchone())
-cursor.execute("SELECT COUNT(donation) AS total FROM donations")
+
+cursor.execute("SELECT COUNT(*) AS total FROM donations")
 print("Total donations:", cursor.fetchone())
+
+cursor.close()
+conn.close()
 
 # ------------------ Login ------------------
 @app.route("/", methods=["GET", "POST"])
@@ -53,6 +61,8 @@ def login():
 # ------------------ Dashboard ------------------
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
+
+    conn, cursor = get_db()
 
     if request.method == "POST":
         try:
@@ -86,6 +96,8 @@ def dashboard():
 
             cursor.execute(sql, values)
             conn.commit()
+            cursor.close()
+            conn.close()
 
             flash("✅ Donation Saved Successfully!")
 
@@ -114,9 +126,7 @@ Thank you for your valuable contribution.
             conn.rollback()
             return f"Error: {e}"
 
-        except Exception as e:
-            conn.rollback()
-        return f"Error: {e}"
+       
 
     # Total Collection
     cursor.execute("""
@@ -142,12 +152,14 @@ Thank you for your valuable contribution.
             id,
             name,
             mobile,
+            donation,
             'paid' AS status
         FROM donations
         ORDER BY id DESC
     """)
     members = cursor.fetchall()
-
+    cursor.close()
+    conn.close()
     return render_template(
         "dashboard.html",
     total_collection=total_collection,
