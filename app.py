@@ -1,19 +1,23 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash
 from urllib.parse import quote
 import mysql.connector
 
-
+load_dotenv()
 app = Flask(__name__)
 app.secret_key = "vinayaka123"
 
 USERNAME = "admin"
 PASSWORD = "12345"
-
+print(os.getenv("MYSQLHOST"))
+print(os.getenv("MYSQLPORT"))
+print(os.getenv("MYSQLUSER"))
+print(os.getenv("MYSQLDATABASE"))
 # ------------------ MySQL Connection ------------------
 conn = mysql.connector.connect(
     host=os.getenv("MYSQLHOST"),
-    port=int(os.getenv("MYSQLPORT")),
+    port=int(os.getenv("MYSQLPORT","3306")),
     user=os.getenv("MYSQLUSER"),
     password=os.getenv("MYSQLPASSWORD"),
     database=os.getenv("MYSQLDATABASE")
@@ -22,8 +26,7 @@ conn = mysql.connector.connect(
 cursor = conn.cursor(dictionary=True)
 cursor.execute("SELECT DATABASE() AS db")
 print("Database:", cursor.fetchone())
-
-cursor.execute("SELECT COUNT(*) AS total FROM donations")
+cursor.execute("SELECT COUNT(donation) AS total FROM donations")
 print("Total donations:", cursor.fetchone())
 
 # ------------------ Login ------------------
