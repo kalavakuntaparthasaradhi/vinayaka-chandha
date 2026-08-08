@@ -104,7 +104,7 @@ def dashboard():
             message = f"""
 🪔 Lakshmi Ganapathi Youth 🪔
 
-Dear {name},
+Dear {name} Garu,
 
 Your Donation has been collected successfully.
 
