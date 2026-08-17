@@ -290,28 +290,32 @@ th{
     font-size: 13px;
     font-weight: 600;
 }
+/* Horizontal Top Menu */
 .top-menu {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin: 20px 0 30px;
+    gap: 15px;
     width: 100%;
+    margin: 20px 0 25px;
+    padding: 0;
 }
 
 .top-menu a {
+    display: inline-block;
     text-decoration: none;
     color: white;
     background: #0d1b3d;
-    padding: 12px 22px;
+    padding: 12px 24px;
     border-radius: 8px;
+    font-size: 15px;
     font-weight: bold;
-    display: inline-block;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .top-menu a:hover {
     background: #ff6b00;
+    transform: translateY(-2px);
 }
 
 .top-menu a.active {
@@ -409,15 +413,6 @@ th{
     justify-content:center;
 }
 
-/* Sidebar */
-.sidebar{
-    position:fixed;
-    top:70px;
-    left:0;
-    width:220px;
-    height:calc(100vh - 70px);
-}
-
 /* Main Content */
 .main-content{
     margin-left:220px;
@@ -433,13 +428,6 @@ th{
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<div class="top-menu">
-    <a href="#" onclick="showDashboard(this)">🏠 Dashboard</a>
-    <a href="#" onclick="showDonations(this)">💰 Donations</a>
-    <a href="#" onclick="showExpenses(this)">💸 Expenses</a>
-    <a href="#" onclick="showReports(this)">📊 Reports</a>
-    <a href="/logout">🚪 Logout</a>
-</div>
 <div class="header">
 
     <div class="logo-section">
@@ -452,7 +440,6 @@ th{
         <span>Welcome, <strong>{{ username }}</strong></span>
         <span class="dropdown-arrow">▼</span>
     </div>
-
 </div>
 
 <div class="container">
@@ -462,6 +449,15 @@ th{
 <p class="subtitle">
 Lakshmi Ganapathi Youth
 </p>
+
+<div class="top-menu">
+    <a href="#" onclick="showDashboard(this)">🏠 Dashboard</a>
+    <a href="#" onclick="showDonations(this)">💰 Donations</a>
+    <a href="#" onclick="showExpenses(this)">💸 Expenses</a>
+    <a href="#" onclick="showReports(this)">📊 Reports</a>
+    <a href="/logout">🚪 Logout</a>
+</div>
+
 <div class="live-indicator">
     <span class="live-dot"></span>
     LIVE
