@@ -706,32 +706,36 @@ function setActiveMenu(element) {
     element.classList.add("active");
 }
 
-function showDashboard(){
-      setActiveMenu(element);
+function showDashboard(element) {
+    setActiveMenu(element);
+
     document.getElementById("dashboardSection").style.display = "block";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
     document.getElementById("reportSection").style.display = "none";
 }
 
-function showDonations(){
+function showDonations(element) {
     setActiveMenu(element);
+
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "block";
     document.getElementById("expenseSection").style.display = "none";
     document.getElementById("reportSection").style.display = "none";
 }
 
-function showExpenses(){
-      setActiveMenu(element);
+function showExpenses(element) {
+    setActiveMenu(element);
+
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "block";
     document.getElementById("reportSection").style.display = "none";
 }
 
-function showReports(){
+function showReports(element) {
     setActiveMenu(element);
+
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
@@ -790,9 +794,12 @@ function createReportChart() {
     });
 }
 
-/* Open Dashboard by default */
-showDashboard();
-
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("dashboardSection").style.display = "block";
+    document.getElementById("donationSection").style.display = "none";
+    document.getElementById("expenseSection").style.display = "none";
+    document.getElementById("reportSection").style.display = "none";
+});
 </script>
 </body>
 </html>
