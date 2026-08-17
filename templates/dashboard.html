@@ -572,6 +572,8 @@ placeholder="Enter Remarks"></textarea>
 
 </form>
 
+</div>
+
 <hr style="margin:30px 0;">
 
 <h2>Donation List</h2>
@@ -612,6 +614,16 @@ placeholder="Enter Remarks"></textarea>
 
 <script>
 document.getElementById("date").valueAsDate = new Date();
+
+function toggleExpenseForm() {
+    var form = document.getElementById("expenseForm");
+
+    if (form.style.display === "none") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
 </script>
 
 </body>
