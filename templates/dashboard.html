@@ -761,30 +761,32 @@ function showReports(){
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
     document.getElementById("reportSection").style.display = "block";
+
+    createReportChart();
 }
 
-/* Open Dashboard by default */
-showDashboard();
-</script>
+function createReportChart() {
 
-<script>
-const ctx = document.getElementById('reportChart');
-const reportData = document.getElementById('reportData');
+    const ctx = document.getElementById("reportChart");
+    const reportData = document.getElementById("reportData");
 
-if (ctx && reportData) {
+    if (!ctx || !reportData) {
+        return;
+    }
 
     const collection = Number(reportData.dataset.collection) || 0;
     const expenses = Number(reportData.dataset.expenses) || 0;
     const balance = Number(reportData.dataset.balance) || 0;
 
     new Chart(ctx, {
-        type: 'bar',
+        type: "bar",
 
         data: {
-            labels: ['Collection', 'Expenses', 'Balance'],
+            labels: ["Collection", "Expenses", "Balance"],
 
             datasets: [{
-                label: 'Amount (₹)',
+                label: "Amount (₹)",
+
                 data: [
                     collection,
                     expenses,
@@ -792,9 +794,9 @@ if (ctx && reportData) {
                 ],
 
                 backgroundColor: [
-                    '#22c55e',
-                    '#ef4444',
-                    '#3b82f6'
+                    "#22c55e",
+                    "#ef4444",
+                    "#3b82f6"
                 ],
 
                 borderWidth: 1
@@ -806,29 +808,16 @@ if (ctx && reportData) {
 
             scales: {
                 y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Amount (₹)'
-                    }
-                },
-
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Category'
-                    }
-                }
-            },
-
-            plugins: {
-                legend: {
-                    display: true
+                    beginAtZero: true
                 }
             }
         }
     });
 }
+
+/* Open Dashboard by default */
+showDashboard();
+
 </script>
 </body>
 </html>
