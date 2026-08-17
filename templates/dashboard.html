@@ -785,7 +785,6 @@ if (ctx && reportData) {
 
             datasets: [{
                 label: 'Amount (₹)',
-
                 data: [
                     collection,
                     expenses,
@@ -796,7 +795,9 @@ if (ctx && reportData) {
                     '#22c55e',
                     '#ef4444',
                     '#3b82f6'
-                ]
+                ],
+
+                borderWidth: 1
             }]
         },
 
@@ -805,7 +806,24 @@ if (ctx && reportData) {
 
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount (₹)'
+                    }
+                },
+
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Category'
+                    }
+                }
+            },
+
+            plugins: {
+                legend: {
+                    display: true
                 }
             }
         }
