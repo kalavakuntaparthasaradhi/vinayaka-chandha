@@ -272,6 +272,15 @@ th{
         transform: scale(1);
     }
 }
+.paid-status {
+    display: inline-block;
+    background: #d9f5df;
+    color: #198754;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
 </style>
 
 </head>
@@ -485,7 +494,9 @@ placeholder="Enter Remarks"></textarea>
                 <td>{{ member.name }}</td>
                 <td>{{ member.mobile }}</td>
                 <td>{{ member.donation }}</td>
-                <td>{{ member.status }}</td>
+                <td>
+                    <span class="paid-status">{{ member.status }}</span>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
