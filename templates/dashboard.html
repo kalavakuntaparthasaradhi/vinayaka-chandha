@@ -290,12 +290,99 @@ th{
     font-size: 13px;
     font-weight: 600;
 }
+/* Sidebar */
+
+.sidebar{
+    width:220px;
+    height:100vh;
+    position:fixed;
+    top:0;
+    left:0;
+    background:linear-gradient(180deg,#0d1b3d,#08162d);
+    padding-top:20px;
+    box-shadow:2px 0 10px rgba(0,0,0,0.2);
+}
+
+.sidebar ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.sidebar ul li{
+    margin:10px;
+}
+
+.sidebar ul li a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:14px 18px;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.sidebar ul li.active a{
+    background:#ff6b00;
+}
+
+.sidebar ul li a:hover{
+    background:#ff6b00;
+}
+
+/* Main Content */
+
+.main-content{
+    margin-left:240px;
+    padding:20px;
+}
+
+/* Container */
+
+.container{
+    width:100%;
+    max-width:1200px;
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.sidebar{
+    width:100%;
+    height:auto;
+    position:relative;
+}
+
+.main-content{
+    margin-left:0;
+}
+
+.cards,
+.row{
+    flex-direction:column;
+}
+
+}
 </style>
 
 </head>
 
 <body>
-
+<div class="sidebar">
+    <ul>
+        <li class="active"><a href="#">🏠 Dashboard</a></li>
+        <li><a href="#">💰 Donations</a></li>
+        <li><a href="#">💸 Expenses</a></li>
+        <li><a href="#">📊 Reports</a></li>
+        <li><a href="/logout">🚪 Logout</a></li>
+    </ul>
+</div>
 <div class="container">
 
 <h2>🪔 Vinayaka Chavithi Chandha Collection 🪔</h2>
