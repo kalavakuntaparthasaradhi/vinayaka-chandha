@@ -145,7 +145,7 @@ Thank you for your valuable contribution.
 
     # Balance
     balance = total_collection - total_expenses
-    
+
     # Donors
     cursor.execute("""
     SELECT COUNT(DISTINCT mobile) AS total_donors
@@ -174,6 +174,7 @@ Thank you for your valuable contribution.
     total_collection=total_collection,
     total_expenses=total_expenses,
     balance=balance,
+    total_donors=total_donors,
     members=members
     )
 
