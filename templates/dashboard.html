@@ -578,6 +578,7 @@ placeholder="Enter Remarks"></textarea>
 </div>
 <hr style="margin:30px 0;">
 
+<div id="dashboardSection">
 <h2>Donation List</h2>
 
 <div class="table-container">
@@ -611,6 +612,7 @@ placeholder="Enter Remarks"></textarea>
 <div class="footer">
 🙏 Thanking you 🙏
 </div>
+</div>
 
 </div>
 
@@ -618,19 +620,25 @@ placeholder="Enter Remarks"></textarea>
 document.getElementById("date").valueAsDate = new Date();
 
 function showDashboard(){
-  document.getElementById("donationSection").style.display="none";
-  document.getElementById("expenseSection").style.display="none";
+    document.getElementById("dashboardSection").style.display = "block";
+    document.getElementById("donationSection").style.display = "none";
+    document.getElementById("expenseSection").style.display = "none";
 }
 
 function showDonations(){
-  document.getElementById("donationSection").style.display="block";
-  document.getElementById("expenseSection").style.display="none";
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("donationSection").style.display = "block";
+    document.getElementById("expenseSection").style.display = "none";
 }
 
 function showExpenses(){
-  document.getElementById("donationSection").style.display="none";
-  document.getElementById("expenseSection").style.display="block";
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("donationSection").style.display = "none";
+    document.getElementById("expenseSection").style.display = "block";
 }
+
+/* Open Dashboard by default */
+showDashboard();
 </script>
 </body>
 </html>
