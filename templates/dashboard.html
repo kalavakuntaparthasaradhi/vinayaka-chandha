@@ -692,9 +692,9 @@ placeholder="Enter Remarks"></textarea>
     </button>
 
     <div class="dropdown-menu">
-        <a href="{{ url_for('donation_list') }}">Donation List</a>
-        <a href="{{ url_for('expense_list') }}">Expense List</a>
-    </div>
+    <a href="#" onclick="showList('donationList'); return false;">Donation List</a>
+    <a href="#" onclick="showList('expenseList'); return false;">Expense List</a>
+</div>
 </div>
 
 <div class="table-container">
@@ -725,6 +725,33 @@ placeholder="Enter Remarks"></textarea>
     </table>
 </div>
 </div>
+ <!-- EXPENSE LIST -->
+    <div id="expenseList" style="display: none;">
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense.id}}</td>
+                        <td>{{ expense.expense_name}}</td>
+                        <td>₹{{ expense.amount }}</td>
+                        <td>{{ expense.spent_by }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
 <div id="reportSection" style="display:none;">
 
     <h2>📊 Collection Analysis</h2>
@@ -854,6 +881,20 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("expenseSection").style.display = "none";
     document.getElementById("reportSection").style.display = "none";
 });
+</script>
+<script>
+function showList(list) {
+    document.getElementById("donationList").style.display = "none";
+    document.getElementById("expenseList").style.display = "none";
+
+    document.getElementById(list).style.display = "block";
+
+    if (list === "donationList") {
+        document.querySelector(".dropdown-btn").textContent = "Donation List ▾";
+    } else {
+        document.querySelector(".dropdown-btn").textContent = "Expense List ▾";
+    }
+}
 </script>
 </body>
 </html>

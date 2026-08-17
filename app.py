@@ -171,6 +171,19 @@ Thank you for your valuable contribution.
         ORDER BY id DESC
     """)
     members = cursor.fetchall()
+    
+    # Expense List
+    cursor.execute("""
+        SELECT
+            id,
+            expense_name,
+            amount,
+            spent_by
+        FROM expenses
+        ORDER BY id DESC
+    """)
+    expenses = cursor.fetchall()
+
     cursor.close()
     conn.close()
     return render_template(
@@ -179,7 +192,8 @@ Thank you for your valuable contribution.
     total_expenses=total_expenses,
     balance=balance,
     total_donors=total_donors,
-    members=members
+    members=members,
+    expenses=expenses
     )
 
 @app.route("/add_expense", methods=["POST"])
