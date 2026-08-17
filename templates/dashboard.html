@@ -369,6 +369,35 @@ th{
 }
 
 }
+/* Top Navbar */
+
+.top-navbar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:15px;
+}
+
+.admin-profile{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    padding:10px 15px;
+    border-radius:25px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    font-size:14px;
+    font-weight:500;
+}
+
+.admin-icon{
+    font-size:22px;
+    color:#ff6b00;
+}
+
+.dropdown-arrow{
+    color:#777;
+    font-size:12px;
+}
 </style>
 
 </head>
@@ -382,6 +411,13 @@ th{
         <li><a href="#">📊 Reports</a></li>
         <li><a href="/logout">🚪 Logout</a></li>
     </ul>
+</div>
+<div class="top-navbar">
+    <div class="admin-profile">
+        <span class="admin-icon">👤</span>
+        <span>Welcome, <strong>Admin</strong></span>
+        <span class="dropdown-arrow">▼</span>
+    </div>
 </div>
 <div class="container">
 
