@@ -466,10 +466,10 @@ th{
 </head>
 <div class="sidebar">
     <ul>
-        <li class="active"><a href="#" onclick="showDashboard()">🏠 Dashboard</a></li>
-        <li><a href="#" onclick="showDonations()">💰 Donations</a></li>
-        <li><a href="#" onclick="showExpenses()">💸 Expenses</a></li>
-        <li><a href="#" onclick="showReports()">📊 Reports</a></li>
+        <li class="active"><a href="#" onclick="showDashboard(this)">🏠 Dashboard</a></li>
+        <li><a href="#" onclick="showDonations(this)">💰 Donations</a></li>
+        <li><a href="#" onclick="showExpenses(this)">💸 Expenses</a></li>
+        <li><a href="#" onclick="showReports(this)">📊 Reports</a></li>
         <li><a href="/logout">🚪 Logout</a></li>
     </ul>
 </div>
@@ -735,8 +735,16 @@ placeholder="Enter Remarks"></textarea>
 
 <script>
 document.getElementById("date").valueAsDate = new Date();
+function setActiveMenu(element) {
+    document.querySelectorAll(".sidebar ul li").forEach(function(item) {
+        item.classList.remove("active");
+    });
+
+    element.parentElement.classList.add("active");
+}
 
 function showDashboard(){
+      setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "block";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
@@ -744,6 +752,7 @@ function showDashboard(){
 }
 
 function showDonations(){
+      setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "block";
     document.getElementById("expenseSection").style.display = "none";
@@ -751,6 +760,7 @@ function showDonations(){
 }
 
 function showExpenses(){
+      setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "block";
@@ -758,6 +768,7 @@ function showExpenses(){
 }
 
 function showReports(){
+      setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
