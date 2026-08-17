@@ -148,11 +148,9 @@ Thank you for your valuable contribution.
 
     # Donors
     cursor.execute("""
-    SELECT COUNT(DISTINCT mobile) AS total_donors
+    SELECT COUNT(*) AS total_donors
     FROM donations
-    WHERE mobile IS NOT NULL
-    AND mobile != ''
-    """)
+""")
     total_donors = cursor.fetchone()["total_donors"]
 
     # Donation List
