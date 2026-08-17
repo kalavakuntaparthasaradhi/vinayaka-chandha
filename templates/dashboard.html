@@ -376,11 +376,11 @@ th{
 <body>
 <div class="sidebar">
     <ul>
-        <li class="active"><a href="#" onclick="showExpenses()">💸 Dashboard</a>🏠 Dashboard</li>
-        <li><a href="#" onclick="showExpenses()">💸 Donations</a>💰 Donations</li>
-        <li><a href="#" onclick="showExpenses()">💸 Expenses</a>💸 Expenses</li>
-        <li><a href="#" onclick="showExpenses()">💸 Reports</a>📊 Reports</li>
-        <li><a href="#" onclick="showExpenses()">💸 Logout</a>🚪 Logout</li>
+        <li class="active"><a href="#" onclick="showDashboard()">🏠 Dashboard</a></li>
+        <li><a href="#" onclick="showDonations()">💰 Donations</a></li>
+        <li><a href="#" onclick="showExpenses()">💸 Expenses</a></li>
+        <li><a href="#">📊 Reports</a></li>
+        <li><a href="/logout">🚪 Logout</a></li>
     </ul>
 </div>
 <div class="container">
@@ -429,6 +429,7 @@ Lakshmi Ganapathi Youth
 {% endif %}
 {% endwith %}
 
+<div id="donationSection">
 <form method="POST">
 
 <div class="row">
@@ -511,8 +512,11 @@ placeholder="Enter Remarks"></textarea>
 
 </form>
 
+</form>
+</div>
 <hr style="margin:40px 0;">
 
+<div id="expenseSection" style="display:none;">
 <h2>💸 Expense Entry</h2>
 
 <form method="POST" action="{{ url_for('add_expense') }}">
@@ -571,9 +575,7 @@ placeholder="Enter Remarks"></textarea>
 </button>
 
 </form>
-
 </div>
-
 <hr style="margin:30px 0;">
 
 <h2>Donation List</h2>
@@ -615,16 +617,20 @@ placeholder="Enter Remarks"></textarea>
 <script>
 document.getElementById("date").valueAsDate = new Date();
 
-function toggleExpenseForm() {
-    var form = document.getElementById("expenseForm");
+function showDashboard(){
+  document.getElementById("donationSection").style.display="none";
+  document.getElementById("expenseSection").style.display="none";
+}
 
-    if (form.style.display === "none") {
-        form.style.display = "block";
-    } else {
-        form.style.display = "none";
-    }
+function showDonations(){
+  document.getElementById("donationSection").style.display="block";
+  document.getElementById("expenseSection").style.display="none";
+}
+
+function showExpenses(){
+  document.getElementById("donationSection").style.display="none";
+  document.getElementById("expenseSection").style.display="block";
 }
 </script>
-
 </body>
 </html>
