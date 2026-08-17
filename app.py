@@ -1,7 +1,7 @@
 
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from urllib.parse import quote
 import mysql.connector
 
@@ -58,6 +58,12 @@ def login():
 
     return render_template("login.html")
 
+# ------------------ Logout ------------------
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 # ------------------ Dashboard ------------------
 @app.route("/dashboard", methods=["GET", "POST"])
