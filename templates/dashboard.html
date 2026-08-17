@@ -646,7 +646,17 @@ placeholder="Enter Remarks"></textarea>
 <hr style="margin:30px 0;">
 
 <div id="dashboardSection">
-<h2>Donation List</h2>
+
+    <div class="list-dropdown">
+    <button class="dropdown-btn">
+        Donation List ▾
+    </button>
+
+    <div class="dropdown-menu">
+        <a href="{{ url_for('donation_list') }}">Donation List</a>
+        <a href="{{ url_for('expense_list') }}">Expense List</a>
+    </div>
+</div>
 
 <div class="table-container">
     <table>
