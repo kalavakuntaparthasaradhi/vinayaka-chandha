@@ -46,31 +46,45 @@ h2{
 
 /* Dashboard Cards */
 
-.cards{
-    display:flex;
-    gap:20px;
-    margin-bottom:30px;
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
 }
 
-.card{
-    flex:1;
-    background:linear-gradient(135deg,#FF6F00,#FF9800);
-    color:white;
-    padding:20px;
-    border-radius:15px;
-    text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.2);
+.card {
+    flex: 1;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,.2);
 }
 
-.card h3{
-    margin-bottom:10px;
+/* Total Collection - Green */
+.collection-card {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
 }
 
-.card h2{
-    color:white;
-    font-size:34px;
+/* Total Expenses - Red */
+.expense-card {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
 }
 
+/* Balance - Blue */
+.balance-card {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: white;
+}
+
+.card h2 {
+    font-size: 34px;
+    color: white;
+}
 /* Success */
 
 .success{
@@ -280,17 +294,17 @@ Lakshmi Ganapathi Youth
 </marquee>
 <div class="cards">
 
-    <div class="card">
+    <div class="card collection-card">
         <h3>💰 Total Collection</h3>
         <h2>₹ {{ total_collection }}</h2>
     </div>
 
-    <div class="card">
+    <div class="card expense-card">
         <h3>💸 Total Expenses</h3>
         <h2>₹ {{ total_expenses }}</h2>
     </div>
 
-    <div class="card">
+    <div class="card balance-card">
         <h3>🏦 Balance</h3>
         <h2>₹ {{ balance }}</h2>
     </div>
