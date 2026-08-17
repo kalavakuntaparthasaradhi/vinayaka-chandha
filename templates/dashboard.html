@@ -290,63 +290,32 @@ th{
     font-size: 13px;
     font-weight: 600;
 }
-/* Sidebar */
-
-.sidebar{
-    width:220px;
-    height:100vh;
-    position:fixed;
-    top:0;
-    left:0;
-    background:linear-gradient(180deg,#0d1b3d,#08162d);
-    padding-top:20px;
-    box-shadow:2px 0 10px rgba(0,0,0,0.2);
+.top-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 30px;
+    width: 100%;
 }
 
-.sidebar ul{
-    list-style:none;
-    padding:0;
-    margin:0;
+.top-menu a {
+    text-decoration: none;
+    color: white;
+    background: #0d1b3d;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    transition: 0.3s;
 }
 
-.sidebar ul li{
-    margin:10px;
+.top-menu a:hover {
+    background: #ff6b00;
 }
 
-.sidebar ul li a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    padding:14px 18px;
-    border-radius:10px;
-    font-size:15px;
-    font-weight:500;
-    transition:0.3s;
-}
-
-.sidebar ul li.active a{
-    background:#ff6b00;
-}
-
-.sidebar ul li a:hover{
-    background:#ff6b00;
-}
-
-/* Main Content */
-
-.main-content{
-    margin-left:240px;
-    padding:20px;
-}
-
-/* Container */
-
-.container{
-    width:100%;
-    max-width:1200px;
-    background:#fff;
-    border-radius:20px;
-    padding:35px;
+.top-menu a.active {
+    background: #ff6b00;
 }
 
 /* Mobile */
@@ -464,12 +433,12 @@ th{
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<div class="sidebar">
+<div class="top-menu">
     <ul>
-        <li class="active"><a href="#" onclick="showDashboard()">🏠 Dashboard</a></li>
-        <li><a href="#" onclick="showDonations()">💰 Donations</a></li>
-        <li><a href="#" onclick="showExpenses()">💸 Expenses</a></li>
-        <li><a href="#" onclick="showReports()">📊 Reports</a></li>
+        <li><a href="#" onclick="showDashboard(this)">🏠 Dashboard</a></li>
+        <li><a href="#" onclick="showDonations(this)">💰 Donations</a></li>
+        <li><a href="#" onclick="showExpenses(this)">💸 Expenses</a></li>
+        <li><a href="#" onclick="showReports(this)">📊 Reports</a></li>
         <li><a href="/logout">🚪 Logout</a></li>
     </ul>
 </div>
@@ -735,9 +704,16 @@ placeholder="Enter Remarks"></textarea>
 
 <script>
 document.getElementById("date").valueAsDate = new Date();
+function setActiveMenu(element) {
+    document.querySelectorAll(".top-menu a").forEach(function(item) {
+        item.classList.remove("active");
+    });
+
+    element.classList.add("active");
+}
 
 function showDashboard(){
-      
+      setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "block";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
@@ -745,7 +721,7 @@ function showDashboard(){
 }
 
 function showDonations(){
-    
+    setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "block";
     document.getElementById("expenseSection").style.display = "none";
@@ -753,7 +729,7 @@ function showDonations(){
 }
 
 function showExpenses(){
-      
+      setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "block";
@@ -761,7 +737,7 @@ function showExpenses(){
 }
 
 function showReports(){
-    
+    setActiveMenu(element);
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
