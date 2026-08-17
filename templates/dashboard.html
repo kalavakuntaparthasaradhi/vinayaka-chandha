@@ -1,531 +1,684 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lakshmi Ganapathi Youth</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakshmi Ganapathi Youth 2026</title>
 
-<style>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
+        body {
+            background: #f5f6fa;
+        }
 
-body{
-    background:linear-gradient(135deg,#FF9933,#FFD54F,#FFF8DC);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    padding:30px;
-}
+        /* ---------- TOP HEADER ---------- */
 
-.container{
-    width:950px;
-    background:#fff;
-    border-radius:20px;
-    padding:35px;
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
-}
+        .top-header {
+            height: 58px;
+            background: linear-gradient(90deg, #17105c, #120b50);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            justify-content: space-between;
+        }
 
-h2{
-    text-align:center;
-    color:#E65100;
-    font-size:32px;
-    margin-bottom:10px;
-}
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.subtitle{
-    text-align:center;
-    color:#666;
-    margin-bottom:30px;
-}
+        .logo-title img {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+        }
 
-/* Dashboard Cards */
+        .logo-title h1 {
+            font-size: 20px;
+        }
 
-.cards {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-}
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
 
-.card {
-    flex: 1;
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,.2);
-}
+        /* LIVE */
 
-/* Total Collection - Green */
-.collection-card {
-    background: linear-gradient(135deg, #16a34a, #22c55e);
-}
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #ff1616;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 7px;
+            font-weight: bold;
+            font-size: 13px;
+        }
 
-/* Total Expenses - Red */
-.expense-card {
-    background: linear-gradient(135deg, #dc2626, #ef4444);
-}
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: livePulse 1.2s infinite;
+        }
 
-/* Balance - Blue */
-.balance-card {
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-}
+        @keyframes livePulse {
+            0%, 100% {
+                opacity: 1;
+            }
 
-.card h3 {
-    margin-bottom: 10px;
-    color: white;
-}
+            50% {
+                opacity: .3;
+            }
+        }
 
-.card h2 {
-    font-size: 34px;
-    color: white;
-}
-.donors-card {
-    background: linear-gradient(135deg, #8e44ad, #9b59b6);
-    color: white;
-}
+        .admin {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+        }
 
-.donors-card h2 {
-    color: white;
-    font-size: 34px;
-}
-/* Success */
+        .admin-icon {
+            width: 25px;
+            height: 25px;
+            background: white;
+            color: #1c145e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.success{
-    background:#28a745;
-    color:white;
-    text-align:center;
-    padding:15px;
-    border-radius:10px;
-    font-size:18px;
-    margin-bottom:25px;
-}
+        /* ---------- SIDEBAR ---------- */
 
-/* Form */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 58px;
+            bottom: 0;
+            width: 153px;
+            background: linear-gradient(180deg, #21166f, #10094d);
+            color: white;
+            padding: 20px 10px;
+        }
 
-.row{
-    display:flex;
-    gap:20px;
-    margin-bottom:20px;
-}
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 10px;
+            margin-bottom: 8px;
+            border-radius: 7px;
+            font-size: 13px;
+            cursor: pointer;
+        }
 
-.form-group{
-    flex:1;
-}
+        .menu-item.active {
+            background: #3630c8;
+        }
 
-label{
-    display:block;
-    font-weight:bold;
-    color:#444;
-    margin-bottom:8px;
-}
+        .menu-item:hover {
+            background: #3025a5;
+        }
 
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    border:2px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-}
+        /* ---------- MAIN ---------- */
 
-input:focus,
-select:focus,
-textarea:focus{
-    border-color:#FF9800;
-    box-shadow:0 0 10px rgba(255,152,0,.4);
-    outline:none;
-}
+        .main {
+            margin-left: 153px;
+            min-height: calc(100vh - 58px);
+            padding: 25px 16px 70px;
+        }
 
-textarea{
-    resize:none;
-}
+        .welcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
 
-button{
-    width:100%;
-    padding:15px;
-    background:linear-gradient(to right,#FF6F00,#FF9800);
-    color:white;
-    border:none;
-    border-radius:10px;
-    font-size:18px;
-    cursor:pointer;
-    font-weight:bold;
-    transition:.3s;
-}
+        .welcome h2 {
+            color: #16145b;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
 
-button:hover{
-    transform:scale(1.02);
-    background:linear-gradient(to right,#E65100,#FB8C00);
-}
+        .welcome p {
+            color: #555;
+            font-size: 13px;
+        }
 
-.footer{
-    text-align:center;
-    margin-top:20px;
-    color:#777;
-    font-size:14px;
-}
+        .date-box {
+            background: white;
+            border: 1px solid #e1e1e1;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
 
-/* ---------- Table ---------- */
+        /* ---------- CARDS ---------- */
 
-.table-container{
-    margin-top:30px;
-    overflow-x:auto;
-}
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+        .card {
+            min-height: 108px;
+            border-radius: 7px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
 
-th{
-    background:#f4b400;
-    color:white;
-    padding:15px;
-    text-align:center;
-}
+        .collection-card {
+            background: linear-gradient(135deg, #00a52a, #0ba83b);
+            color: white;
+        }
 
-td{
-    padding:15px;
-    text-align:center;
-    border-bottom:1px solid #ddd;
-}
+        .expense-card {
+            background: linear-gradient(135deg, #ed2024, #f22929);
+            color: white;
+        }
 
-tr:nth-child(even){
-    background:#f9f9f9;
-}
+        .balance-card {
+            background: linear-gradient(135deg, #0964ed, #155ee4);
+            color: white;
+        }
 
-/* ---------- Mobile ---------- */
+        .donors-card {
+            background: linear-gradient(135deg, #f0e5ff, #eadcff);
+            color: #17105c;
+        }
 
-@media(max-width:768px){
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            flex-shrink: 0;
+        }
 
-.container{
-    width:100%;
-}
+        .donors-card .card-icon {
+            background: #5423b8;
+            color: white;
+        }
 
-.cards,
-.row{
-    flex-direction:column;
-}
+        .card h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
 
-}
+        .card h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
 
-.table-container{
-    width:90%;
-    margin:40px auto;
-    overflow-x:auto;
-}
+        .card p {
+            font-size: 12px;
+        }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+        /* ---------- CONTENT ---------- */
 
-th,td{
-    padding:12px;
-    text-align:center;
-    border:1px solid #ddd;
-}
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.7fr 1fr;
+            gap: 14px;
+        }
 
-th{
-    background:#f4b400;
-    color:#fff;
-}
-/* ---------- Live Indicator ---------- */
-.live-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+        .panel {
+            background: white;
+            border-radius: 7px;
+            padding: 10px;
+            box-shadow: 0 1px 5px rgba(0,0,0,.08);
+        }
 
-    background: rgb(7, 151, 63);
-    color: white;
+        .panel h2 {
+            color: #17105c;
+            font-size: 15px;
+            margin: 8px 5px 15px;
+        }
 
-    width: fit-content;
-    padding: 7px 15px;
-    border-radius: 20px;
+        /* ---------- TABLE ---------- */
 
-    font-weight: bold;
-    font-size: 14px;
-    margin: 10px auto;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
 
-.live-dot {
-    width: 9px;
-    height: 9px;
-    background: white;
-    border-radius: 50%;
+        th {
+            background: #17105c;
+            color: white;
+            padding: 10px 7px;
+            text-align: center;
+        }
 
-    animation: livePulse 1.2s infinite;
-}
+        td {
+            padding: 9px 7px;
+            text-align: center;
+            border-bottom: 1px solid #e5e5e5;
+        }
 
-@keyframes livePulse {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
+        .paid-status {
+            display: inline-block;
+            background: #d9f5df;
+            color: #198754;
+            padding: 4px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
 
-    50% {
-        opacity: 0.4;
-        transform: scale(1.4);
-    }
+        .view-btn {
+            display: block;
+            margin: 18px auto 5px;
+            padding: 8px 15px;
+            border: 1px solid #596cff;
+            background: white;
+            color: #243edb;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-.paid-status {
-    display: inline-block;
-    background: #d9f5df;
-    color: #198754;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-}
-</style>
+        /* ---------- EXPENSE FORM ---------- */
 
+        .expense-form label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 11px 0 5px;
+        }
+
+        .expense-form input,
+        .expense-form select,
+        .expense-form textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            font-size: 11px;
+        }
+
+        .expense-form textarea {
+            height: 55px;
+            resize: none;
+        }
+
+        .expense-btn {
+            width: 100%;
+            margin-top: 13px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #5423b8;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ---------- FOOTER ---------- */
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 153px;
+            right: 0;
+            height: 32px;
+            background: #17105c;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        /* ---------- MOBILE ---------- */
+
+        @media(max-width: 900px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .footer {
+                left: 0;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-title h1 {
+                font-size: 15px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- HEADER -->
 
-<h2>🪔 Vinayaka Chavithi Chandha Collection 🪔</h2>
+<header class="top-header">
 
-<p class="subtitle">
-Lakshmi Ganapathi Youth
-</p>
-<div class="live-indicator">
-    <span class="live-dot"></span>
-    LIVE
-</div>
-<marquee behaviour="scroll" direction="left" scrollamount="5" style="color: red; font-weight: bold;">
-    Note: Do Not Enter the Same Entry Twice
-</marquee>
-<div class="cards">
-
-    <div class="card collection-card">
-        <h3>💰 Total Collection</h3>
-        <h2>₹ {{ total_collection }}</h2>
+    <div class="logo-title">
+        <img src="/static/ganesha.png" alt="Ganesha">
+        <h1>Lakshmi Ganapathi Youth 2026</h1>
     </div>
 
-    <div class="card expense-card">
-        <h3>💸 Total Expenses</h3>
-        <h2>₹ {{ total_expenses }}</h2>
+    <div class="header-right">
+
+        <div class="live-indicator">
+            <span class="live-dot"></span>
+            LIVE
+        </div>
+
+        <div class="admin">
+            <span class="admin-icon">●</span>
+            Admin ▾
+        </div>
+
     </div>
 
-    <div class="card balance-card">
-        <h3>🏦 Balance</h3>
-        <h2>₹ {{ balance }}</h2>
+</header>
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="menu-item active">
+        🏠 Dashboard
     </div>
-    <div class="card donors-card">
-    <h3>👥 Total Donors</h3>
-    <h2>{{ total_donors }}</h2>
-    <p>All Time</p>
-</div>
 
-</div>
+    <div class="menu-item">
+        🎁 Add Donation
+    </div>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="success">
-{{ messages[0] }}
-</div>
-{% endif %}
-{% endwith %}
+    <div class="menu-item">
+        👥 Donations List
+    </div>
 
-<form method="POST">
+    <div class="menu-item">
+        ₹ Expenses
+    </div>
 
-<div class="row">
+    <div class="menu-item">
+        👥 Members
+    </div>
 
-<div class="form-group">
-<label>Name</label>
-<input type="text" name="name" placeholder="Enter Name" required>
-</div>
+    <div class="menu-item">
+        🚪 Logout
+    </div>
 
-<div class="form-group">
-<label>Mobile Number</label>
-<input type="text" name="mobile" placeholder="Enter Mobile Number" required>
-</div>
+</aside>
 
-</div>
 
-<div class="row">
+<!-- MAIN -->
 
-<div class="form-group">
-<label>Area</label>
-<input type="text" name="area" placeholder="Enter Area" required>
-</div>
+<main class="main">
 
-<div class="form-group">
-<label>House Number</label>
-<input type="text" name="house" placeholder="House Number">
-</div>
+    <div class="welcome-row">
 
-</div>
+        <div class="welcome">
+            <h2>Welcome, Admin 👋</h2>
+            <p>Here's what's happening today.</p>
+        </div>
 
-<div class="row">
+        <div class="date-box">
+            📅 17 August 2026
+        </div>
 
-<div class="form-group">
-<label>Donation Amount (₹)</label>
-<input type="number" name="donation" placeholder="Donation Amount" required>
-</div>
+    </div>
 
-<div class="form-group">
-<label>Payment Mode</label>
 
-<select name="payment">
-<option>Cash</option>
-<option>PhonePe</option>
-<option>Google Pay</option>
-<option>Paytm</option>
-<option>Bank Transfer</option>
-</select>
+    <!-- CARDS -->
 
-</div>
+    <div class="cards">
 
-</div>
+        <div class="card collection-card">
 
-<div class="row">
+            <div class="card-icon">
+                💰
+            </div>
 
-<div class="form-group">
-<label>Date</label>
-<input type="date" id="date" name="date" required>
-</div>
+            <div>
+                <h3>Total Collection</h3>
+                <h2>₹ {{ total_collection }}</h2>
+                <p>All Time</p>
+            </div>
 
-<div class="form-group">
-<label>Received by</label>
-<input type="text" name="collector" placeholder="Received by">
-</div>
+        </div>
 
-</div>
 
-<div class="form-group" style="margin-bottom:20px;">
+        <div class="card expense-card">
 
-<label>Remarks</label>
+            <div class="card-icon">
+                💳
+            </div>
 
-<textarea rows="4"
-name="remarks"
-placeholder="Enter Remarks"></textarea>
+            <div>
+                <h3>Total Expenses</h3>
+                <h2>₹ {{ total_expenses }}</h2>
+                <p>All Time</p>
+            </div>
 
-</div>
+        </div>
 
-<button type="submit">
-💰 Save Donation
-</button>
 
-</form>
+        <div class="card balance-card">
 
-<hr style="margin:40px 0;">
+            <div class="card-icon">
+                💼
+            </div>
 
-<h2>💸 Expense Entry</h2>
+            <div>
+                <h3>Balance</h3>
+                <h2>₹ {{ balance }}</h2>
+                <p>Remaining</p>
+            </div>
 
-<form method="POST" action="{{ url_for('add_expense') }}">
+        </div>
 
-<div class="row">
 
-<div class="form-group">
-<label>Expense Name</label>
-<input type="text" name="expense_name" placeholder="Enter Expense Name" required>
-</div>
+        <!-- TOTAL DONORS -->
 
-<div class="form-group">
-<label>Amount (₹)</label>
-<input type="number" name="amount" placeholder="Enter Amount" required>
-</div>
+        <div class="card donors-card">
 
-</div>
+            <div class="card-icon">
+                👥
+            </div>
 
-<div class="row">
+            <div>
+                <h3>Total Donors</h3>
+                <h2>{{ total_donors }}</h2>
+                <p>All Time</p>
+            </div>
 
-<div class="form-group">
-<label>Payment Mode</label>
+        </div>
 
-<select name="payment_mode">
-<option>Cash</option>
-<option>PhonePe</option>
-<option>Google Pay</option>
-<option>Bank Transfer</option>
-</select>
+    </div>
 
-</div>
 
-<div class="form-group">
-<label>Date</label>
-<input type="date" name="expense_date" required>
-</div>
+    <!-- CONTENT -->
 
-</div>
+    <div class="content-grid">
 
-<div class="row">
+        <!-- DONATIONS -->
 
-<div class="form-group">
-<label>Spent By</label>
-<input type="text" name="spent_by" placeholder="Spent By">
-</div>
+        <div class="panel">
 
-<div class="form-group">
-<label>Remarks</label>
-<input type="text" name="remarks" placeholder="Remarks">
-</div>
+            <h2>Recent Donations</h2>
 
-</div>
+            <table>
 
-<button type="submit">
-💸 Save Expense
-</button>
+                <thead>
 
-</form>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Mobile Number</th>
+                        <th>Amount (₹)</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
 
-<hr style="margin:30px 0;">
+                </thead>
 
-<h2>Donation List</h2>
+                <tbody>
 
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Mobile Number</th>
-                <th>Donation</th>
-                <th>Status</th>
-            </tr>
-        </thead>
+                    {% for member in members %}
 
-        <tbody>
-            {% for member in members %}
-            <tr>
-                <td>{{ member.id }}</td>
-                <td>{{ member.name }}</td>
-                <td>{{ member.mobile }}</td>
-                <td>{{ member.donation }}</td>
-                <td>
-                    <span class="paid-status">{{ member.status }}</span>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+                    <tr>
 
-<div class="footer">
-🙏 Thanking you 🙏
-</div>
+                        <td>{{ member.id }}</td>
 
-</div>
+                        <td>{{ member.name }}</td>
 
-<script>
-document.getElementById("date").valueAsDate = new Date();
-</script>
+                        <td>{{ member.mobile }}</td>
+
+                        <td>{{ member.donation }}</td>
+
+                        <td>
+                            <span class="paid-status">
+                                {{ member.status }}
+                            </span>
+                        </td>
+
+                        <td>{{ member.date }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            <button class="view-btn">
+                View All Donations
+            </button>
+
+        </div>
+
+
+        <!-- EXPENSE -->
+
+        <div class="panel">
+
+            <h2>Add Expense</h2>
+
+            <form class="expense-form"
+                  action="/add_expense"
+                  method="POST">
+
+                <label>Expense Name</label>
+
+                <input
+                    type="text"
+                    name="expense_name"
+                    placeholder="e.g. Pooja Items"
+                    required
+                >
+
+
+                <label>Amount (₹)</label>
+
+                <input
+                    type="number"
+                    name="amount"
+                    placeholder="Enter amount"
+                    required
+                >
+
+
+                <label>Payment Mode</label>
+
+                <select name="payment_mode">
+
+                    <option>Cash</option>
+                    <option>PhonePe</option>
+                    <option>Google Pay</option>
+                    <option>Paytm</option>
+                    <option>Bank Transfer</option>
+
+                </select>
+
+
+                <label>Spent By</label>
+
+                <input
+                    type="text"
+                    name="spent_by"
+                    placeholder="e.g. Ramesh"
+                    required
+                >
+
+
+                <label>Remarks (Optional)</label>
+
+                <textarea
+                    name="remarks"
+                    placeholder="Enter remarks">
+                </textarea>
+
+
+                <button
+                    type="submit"
+                    class="expense-btn">
+                    Add Expense
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+    © 2026 Lakshmi Ganapathi Youth. All rights reserved.
+</footer>
 
 </body>
 </html>
