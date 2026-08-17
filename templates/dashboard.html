@@ -462,13 +462,14 @@ th{
 }
 </style>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <div class="sidebar">
     <ul>
         <li class="active"><a href="#" onclick="showDashboard()">🏠 Dashboard</a></li>
         <li><a href="#" onclick="showDonations()">💰 Donations</a></li>
         <li><a href="#" onclick="showExpenses()">💸 Expenses</a></li>
-        <li><a href="#">📊 Reports</a></li>
+        <li><a href="#" onclick="showReports()">📊 Reports</a></li>
         <li><a href="/logout">🚪 Logout</a></li>
     </ul>
 </div>
@@ -481,7 +482,7 @@ th{
 
     <div class="admin-profile">
         <span class="admin-icon">👤</span>
-        <span>Welcome, <strong>Admin</strong></span>
+        <span>Welcome, <strong>{{ username }}</strong></span>
         <span class="dropdown-arrow">▼</span>
     </div>
 
@@ -616,7 +617,6 @@ placeholder="Enter Remarks"></textarea>
 
 </form>
 
-</form>
 </div>
 <hr style="margin:40px 0;">
 
@@ -712,7 +712,19 @@ placeholder="Enter Remarks"></textarea>
         </tbody>
     </table>
 </div>
+<div id="reportSection" style="display:none;">
 
+    <h2>📊 Collection Analysis</h2>
+
+    <div id="reportData"
+         data-collection="{{ total_collection or 0 }}"
+         data-expenses="{{ total_expenses or 0 }}"
+         data-balance="{{ balance or 0 }}">
+    </div>
+
+    <canvas id="reportChart"></canvas>
+
+</div>
 <div class="footer">
 🙏 Thanking you 🙏
 </div>
@@ -727,22 +739,78 @@ function showDashboard(){
     document.getElementById("dashboardSection").style.display = "block";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "none";
+    document.getElementById("reportSection").style.display = "none";
 }
 
 function showDonations(){
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "block";
     document.getElementById("expenseSection").style.display = "none";
+    document.getElementById("reportSection").style.display = "none";
 }
 
 function showExpenses(){
     document.getElementById("dashboardSection").style.display = "none";
     document.getElementById("donationSection").style.display = "none";
     document.getElementById("expenseSection").style.display = "block";
+    document.getElementById("reportSection").style.display = "none";
+}
+
+function showReports(){
+    document.getElementById("dashboardSection").style.display = "none";
+    document.getElementById("donationSection").style.display = "none";
+    document.getElementById("expenseSection").style.display = "none";
+    document.getElementById("reportSection").style.display = "block";
 }
 
 /* Open Dashboard by default */
 showDashboard();
+</script>
+
+<script>
+const ctx = document.getElementById('reportChart');
+const reportData = document.getElementById('reportData');
+
+if (ctx && reportData) {
+
+    const collection = Number(reportData.dataset.collection) || 0;
+    const expenses = Number(reportData.dataset.expenses) || 0;
+    const balance = Number(reportData.dataset.balance) || 0;
+
+    new Chart(ctx, {
+        type: 'bar',
+
+        data: {
+            labels: ['Collection', 'Expenses', 'Balance'],
+
+            datasets: [{
+                label: 'Amount (₹)',
+
+                data: [
+                    collection,
+                    expenses,
+                    balance
+                ],
+
+                backgroundColor: [
+                    '#22c55e',
+                    '#ef4444',
+                    '#3b82f6'
+                ]
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
 </script>
 </body>
 </html>
