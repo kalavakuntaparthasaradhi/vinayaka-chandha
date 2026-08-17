@@ -214,7 +214,53 @@ th{
     background:#f4b400;
     color:#fff;
 }
+/* ---------- Live Indicator ---------- */
+.live-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
+    background: rgb(60, 255, 0);
+    color: white;
+
+    width: fit-content;
+    padding: 7px 15px;
+    border-radius: 20px;
+
+    font-weight: bold;
+    font-size: 14px;
+
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: 5px;
+}
+
+.live-dot {
+    width: 9px;
+    height: 9px;
+    background: white;
+    border-radius: 50%;
+
+    animation: livePulse 1.2s infinite;
+}
+
+@keyframes livePulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(1.4);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 </style>
 
 </head>
@@ -228,6 +274,10 @@ th{
 <p class="subtitle">
 Lakshmi Ganapathi Youth
 </p>
+<div class="live-indicator">
+    <span class="live-dot"></span>
+    LIVE
+</div>
 <marquee behaviour="scroll" direction="left" scrollamount="5" style="color: red; font-weight: bold;">
     Note: Do Not Enter the Same Entry Twice
 </marquee>
