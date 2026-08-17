@@ -171,7 +171,7 @@ Thank you for your valuable contribution.
         ORDER BY id DESC
     """)
     members = cursor.fetchall()
-    
+
     # Expense List
     cursor.execute("""
         SELECT
@@ -183,6 +183,7 @@ Thank you for your valuable contribution.
         ORDER BY id DESC
     """)
     expenses = cursor.fetchall()
+    print("EXPENSE DATA:", expenses)
 
     cursor.close()
     conn.close()
