@@ -1,7 +1,111 @@
-<label>Donation Amount 🔒</label>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Donation</title>
+</head>
 
-<input
-    type="text"
-    value="₹ {{ donation.donation }}"
-    readonly
->
+<body>
+
+<h2>✏️ Edit Donation</h2>
+
+<form method="POST">
+
+    <label>Name</label>
+    <input type="text" name="name"
+           value="{{ donation.name }}" required>
+
+    <br><br>
+
+    <label>Mobile Number</label>
+    <input type="text" name="mobile"
+           value="{{ donation.mobile }}" required>
+
+    <br><br>
+
+    <label>Area</label>
+    <input type="text" name="area"
+           value="{{ donation.area }}" required>
+
+    <br><br>
+
+    <label>House Number</label>
+    <input type="text" name="house"
+           value="{{ donation.house }}">
+
+    <br><br>
+
+    <!-- 🔒 Amount cannot be edited -->
+    <label>Donation Amount 🔒</label>
+    <input type="text"
+           value="₹ {{ donation.donation }}"
+           readonly>
+
+    <br><br>
+
+    <label>Payment Mode</label>
+    <select name="payment">
+
+        <option value="Cash"
+            {% if donation.payment == "Cash" %}selected{% endif %}>
+            Cash
+        </option>
+
+        <option value="PhonePe"
+            {% if donation.payment == "PhonePe" %}selected{% endif %}>
+            PhonePe
+        </option>
+
+        <option value="Google Pay"
+            {% if donation.payment == "Google Pay" %}selected{% endif %}>
+            Google Pay
+        </option>
+
+        <option value="Paytm"
+            {% if donation.payment == "Paytm" %}selected{% endif %}>
+            Paytm
+        </option>
+
+        <option value="Bank Transfer"
+            {% if donation.payment == "Bank Transfer" %}selected{% endif %}>
+            Bank Transfer
+        </option>
+
+    </select>
+
+    <br><br>
+
+    <label>Date</label>
+    <input type="date"
+           name="donation_date"
+           value="{{ donation.donation_date }}"
+           required>
+
+    <br><br>
+
+    <label>Received By</label>
+    <input type="text"
+           name="collector"
+           value="{{ donation.collector }}">
+
+    <br><br>
+
+    <label>Remarks</label>
+    <textarea name="remarks"
+              rows="4">{{ donation.remarks }}</textarea>
+
+    <br><br>
+
+    <button type="submit">
+        💾 Save Changes
+    </button>
+
+</form>
+
+<br>
+
+<a href="{{ url_for('dashboard') }}">
+    ← Back to Dashboard
+</a>
+
+</body>
+</html>
