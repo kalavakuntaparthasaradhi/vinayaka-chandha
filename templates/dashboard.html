@@ -661,10 +661,17 @@ th{
     background: #eeeeee;
     margin: 5px 0;
 }
+/* Fix greeting position */
 .welcome-message {
-    margin: 25px 30px 10px;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    clear: both;
+    margin: 25px 0 15px;
+    padding: 0 30px;
 }
 
+/* Keep greeting above dashboard content */
 .welcome-message h2 {
     margin: 0;
     font-size: 28px;
@@ -673,9 +680,15 @@ th{
 }
 
 .welcome-message p {
-    margin: 5px 0 0;
+    margin: 6px 0 0;
     font-size: 15px;
     color: #777;
+}
+
+/* Prevent flex/grid positioning from putting greeting beside content */
+.welcome-message {
+    flex-basis: 100%;
+    align-self: stretch;
 }
 </style>
 <body>
