@@ -181,48 +181,47 @@
 
 </div>
 <script>
-    
-function togglePassword() {
-    const password = document.getElementById("password");
-    const eye = document.querySelector(".eye-icon");
+    function togglePassword() {
+        const password = document.getElementById("password");
+        const eye = document.querySelector(".eye-icon");
 
-    if (password.type === "password") {
-        password.type = "text";
-        eye.textContent = "🙈";
-    } else {
-        password.type = "password";
-        eye.textContent = "👁";
+        if (password.type === "password") {
+            password.type = "text";
+            eye.textContent = "🙈";
+        } else {
+            password.type = "password";
+            eye.textContent = "👁";
+        }
     }
-}
  </script>
     <script>
-    function createFlower() {
+        function createFlower() {
 
-        const flower = document.createElement("div");
+            const flower = document.createElement("div");
 
-        flower.className = "flower";
+            flower.className = "flower";
 
-        const flowers = ["🌸", "🌺", "🌼", "🌷"];
+            const flowers = ["🌸", "🌺", "🌼", "🌷"];
 
-        flower.innerHTML =
-            flowers[Math.floor(Math.random() * flowers.length)];
+            flower.innerHTML =
+                flowers[Math.floor(Math.random() * flowers.length)];
 
-        flower.style.left = Math.random() * 100 + "vw";
+            flower.style.left = Math.random() * 100 + "vw";
 
-        flower.style.fontSize =
-            (15 + Math.random() * 20) + "px";
+            flower.style.fontSize =
+                (15 + Math.random() * 20) + "px";
 
-        flower.style.animationDuration =
-            (5 + Math.random() * 5) + "s";
+            flower.style.animationDuration =
+                (5 + Math.random() * 5) + "s";
 
-        document.body.appendChild(flower);
+            document.body.appendChild(flower);
 
-        setTimeout(function() {
-            flower.remove();
-        }, 10000);
-    }
+            setTimeout(function() {
+                flower.remove();
+            }, 10000);
+        }
 
-    setInterval(createFlower, 500);
+        setInterval(createFlower, 500);
 </script>
 </body>
 </html>

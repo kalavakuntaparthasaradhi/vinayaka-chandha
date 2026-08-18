@@ -503,6 +503,14 @@ th{
     border-radius: 8px;
     font-size: 14px;
 }
+.profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f26500;
+    display: block;
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -515,10 +523,28 @@ th{
     </div>
 
     <div class="admin-profile">
-        <span class="admin-icon">👤</span>
-        <span>Welcome, <strong>{{ name }}</strong></span>
-        <span class="dropdown-arrow">▼</span>
-    </div>
+
+    {% if name == "Pardhu" %}
+        <img src="{{ url_for('static', filename='pardhu.jpg') }}"
+             class="profile-image"
+             alt="Pardhu">
+
+    {% elif name == "Deepak" %}
+        <img src="{{ url_for('static', filename='deepak.jpg') }}"
+             class="profile-image"
+             alt="Deepak">
+
+    {% elif name == "Sai" %}
+        <img src="{{ url_for('static', filename='sai.jpg') }}"
+             class="profile-image"
+             alt="Sai">
+
+    {% endif %}
+
+    <span>Welcome, <strong>{{ name }}</strong></span>
+    <span class="dropdown-arrow">▼</span>
+
+</div>
 </div>
 
 <div class="container">
