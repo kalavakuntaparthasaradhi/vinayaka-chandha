@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Annadhanam Donor</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #FF9933,
+                    #FFD54F,
+                    #FFF8DC
+                );
+
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+
+            margin: 30px auto;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0, 0, 0, 0.20);
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #E65100;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #666;
+
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            color: #444;
+
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 13px;
+
+            border: 2px solid #ddd;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #FF9800;
+
+            box-shadow:
+                0 0 8px
+                rgba(255, 152, 0, 0.25);
+        }
+
+        .required {
+            color: red;
+        }
+
+        .image-info {
+            margin-top: 6px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+        .buttons {
+            display: flex;
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            text-align: center;
+        }
+
+        .save-btn {
+            background:
+                linear-gradient(
+                    to right,
+                    #FF6F00,
+                    #FF9800
+                );
+
+            color: white;
+        }
+
+        .back-btn {
+            background: #0d1b3d;
+
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .note {
+            margin-top: 25px;
+
+            padding: 15px;
+
+            background: #FFF8DC;
+
+            border-radius: 10px;
+
+            color: #666;
+
+            font-size: 14px;
+
+            text-align: center;
+        }
+
+        @media(max-width:600px) {
+
+            .container {
+                padding: 25px 18px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h1>
+        🍚 Annadhanam Donor
+    </h1>
+
+
+    <div class="subtitle">
+
+        Enter Annadhanam donor information
+
+    </div>
+
+
+    <!-- Flash Messages -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div style="
+                    background:#d9f5df;
+                    color:#198754;
+                    padding:12px;
+                    border-radius:8px;
+                    margin-bottom:20px;
+                    text-align:center;
+                ">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Annadhanam Form -->
+
+    <form
+        method="POST"
+        enctype="multipart/form-data">
+
+
+        <!-- Name -->
+
+        <div class="form-group">
+
+            <label>
+                Name <span class="required">*</span>
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter donor name"
+                required>
+
+        </div>
+
+
+        <!-- Gothram -->
+
+        <div class="form-group">
+
+            <label>
+                Gothram
+            </label>
+
+            <input
+                type="text"
+                name="gothram"
+                placeholder="Enter Gothram">
+
+        </div>
+
+
+        <!-- Mobile Number -->
+
+        <div class="form-group">
+
+            <label>
+                Mobile Number
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="tel"
+                name="mobile"
+                placeholder="Enter 10-digit mobile number"
+                maxlength="10"
+                minlength="10"
+                pattern="[6-9][0-9]{9}"
+                inputmode="numeric"
+                required
+                oninput="
+                    this.value =
+                    this.value
+                    .replace(/[^0-9]/g, '')
+                    .slice(0, 10);
+                ">
+
+            <div class="image-info">
+                Enter exactly 10 digits.
+            </div>
+
+        </div>
+
+
+        <!-- Date -->
+
+        <div class="form-group">
+
+            <label>
+                Date
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="date"
+                name="donation_date"
+                id="donation_date"
+                required>
+
+        </div>
+
+
+        <!-- Slot -->
+
+        <div class="form-group">
+
+            <label>
+                Slot
+                <span class="required">*</span>
+            </label>
+
+            <select
+                name="slot"
+                required>
+
+                <option value="">
+                    Select Slot
+                </option>
+
+                <option value="Morning">
+                    Morning
+                </option>
+
+                <option value="Afternoon">
+                    Afternoon
+                </option>
+
+                <option value="Evening">
+                    Evening
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Image -->
+
+        <div class="form-group">
+
+            <label>
+                Donor Image
+            </label>
+
+            <input
+                type="file"
+                name="image"
+                id="image"
+                accept=".jpg,.jpeg,.png,.gif,.webp">
+
+            <div class="image-info">
+
+                JPG, JPEG, PNG, GIF or WEBP.
+                Maximum size: 5 MB.
+
+            </div>
+
+        </div>
+
+
+        <!-- Buttons -->
+
+        <div class="buttons">
+
+
+            <button
+                type="submit"
+                class="btn save-btn">
+
+                💾 Save Donor
+
+            </button>
+
+
+            <a
+                href="{{ url_for('admin_annadhanam') }}"
+                class="btn back-btn">
+
+                ← Back
+
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+
+    <div class="note">
+
+        ℹ️ New donors will be saved as
+        <strong>Pending</strong>.
+
+        An administrator must approve the donor
+        before the information appears on the
+        public dashboard.
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    // Automatically select today's date
+
+    document.getElementById("donation_date").valueAsDate =
+        new Date();
+
+
+    // Validate image size before submission
+
+    document.querySelector("form").addEventListener(
+        "submit",
+        function(event) {
+
+            const image =
+                document.getElementById("image");
+
+            if (image.files.length > 0) {
+
+                const file = image.files[0];
+
+                const maxSize =
+                    5 * 1024 * 1024;
+
+                if (file.size > maxSize) {
+
+                    alert(
+                        "Image size must be 5 MB or less."
+                    );
+
+                    event.preventDefault();
+
+                }
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Annadhanam Donors</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #FF9933,
+                    #FFD54F,
+                    #FFF8DC
+                );
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,0.20);
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #E65100;
+
+            margin-bottom: 25px;
+        }
+
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-weight: bold;
+
+            border: none;
+
+            cursor: pointer;
+        }
+
+        .back {
+            background: #0d1b3d;
+        }
+
+        .add {
+            background: #16a34a;
+        }
+
+        .status-buttons {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+        .status-buttons a {
+            display: inline-block;
+
+            padding: 8px 15px;
+
+            margin: 5px;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-weight: bold;
+        }
+
+        .all {
+            background: #2563eb;
+        }
+
+        .pending {
+            background: #f59e0b;
+        }
+
+        .approved {
+            background: #16a34a;
+        }
+
+        .rejected {
+            background: #dc2626;
+        }
+
+        .message {
+            background: #d9f5df;
+
+            color: #198754;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f4b400;
+
+            color: white;
+
+            padding: 13px;
+
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+
+            border-bottom: 1px solid #ddd;
+
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .donor-image {
+            width: 60px;
+
+            height: 60px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border: 2px solid #FF9800;
+        }
+
+        .status {
+            padding: 5px 10px;
+
+            border-radius: 15px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d9f5df;
+            color: #198754;
+        }
+
+        .status-rejected {
+            background: #ffe1e1;
+            color: #dc2626;
+        }
+
+        .action-form {
+            display: inline;
+        }
+
+        .action-btn {
+            padding: 6px 10px;
+
+            border: none;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            color: white;
+
+            font-weight: bold;
+
+            margin: 2px;
+        }
+
+        .approve-btn {
+            background: #16a34a;
+        }
+
+        .reject-btn {
+            background: #dc2626;
+        }
+
+        .delete-btn {
+            background: #6b7280;
+        }
+
+        @media(max-width:768px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .top-buttons {
+                flex-direction: column;
+
+                gap: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        🍚 Annadhanam Donors
+    </h1>
+
+
+    <!-- Buttons -->
+
+    <div class="top-buttons">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="btn back">
+
+            ← Dashboard
+
+        </a>
+
+
+        <a
+            href="{{ url_for('add_annadhanam') }}"
+            class="btn add">
+
+            + Add Donor
+
+        </a>
+
+    </div>
+
+
+    <!-- Status Filters -->
+
+    <div class="status-buttons">
+
+        <a
+            href="{{ url_for('admin_annadhanam', status='all') }}"
+            class="all">
+
+            All
+
+        </a>
+
+        <a
+            href="{{ url_for('admin_annadhanam', status='pending') }}"
+            class="pending">
+
+            Pending
+
+        </a>
+
+        <a
+            href="{{ url_for('admin_annadhanam', status='approved') }}"
+            class="approved">
+
+            Approved
+
+        </a>
+
+        <a
+            href="{{ url_for('admin_annadhanam', status='rejected') }}"
+            class="rejected">
+
+            Rejected
+
+        </a>
+
+    </div>
+
+
+    <!-- Flash Message -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            <div class="message">
+
+                {{ messages[0] }}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Donor Table -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Image</th>
+
+                    <th>Name</th>
+
+                    <th>Gothram</th>
+
+                    <th>Mobile</th>
+
+                    <th>Date</th>
+
+                    <th>Slot</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for donor in donors %}
+
+                <tr>
+
+                    <td>
+                        {{ donor.id }}
+                    </td>
+
+
+                    <td>
+
+                        {% if donor.image_url %}
+
+                            <img
+                                src="{{ donor.image_url }}"
+                                class="donor-image"
+                                alt="Donor">
+
+                        {% else %}
+
+                            🙏
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        {{ donor.name }}
+                    </td>
+
+
+                    <td>
+                        {{ donor.gothram or '-' }}
+                    </td>
+
+
+                    <td>
+                        {{ donor.mobile_number }}
+                    </td>
+
+
+                    <td>
+                        {{ donor.donation_date }}
+                    </td>
+
+
+                    <td>
+                        {{ donor.slot }}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status
+                            status-{{ donor.status }}">
+
+                            {{ donor.status }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if donor.status != 'approved' %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'update_annadhanam_status',
+                                id=donor.id
+                            ) }}"
+                            class="action-form">
+
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="approved">
+
+                            <button
+                                type="submit"
+                                class="action-btn approve-btn">
+
+                                Approve
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                        {% if donor.status != 'rejected' %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'update_annadhanam_status',
+                                id=donor.id
+                            ) }}"
+                            class="action-form">
+
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="rejected">
+
+                            <button
+                                type="submit"
+                                class="action-btn reject-btn">
+
+                                Reject
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'delete_annadhanam',
+                                id=donor.id
+                            ) }}"
+                            class="action-form"
+                            onsubmit="return confirm(
+                                'Delete this donor?'
+                            );">
+
+                            <button
+                                type="submit"
+                                class="action-btn delete-btn">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td colspan="9">
+
+                        No Annadhanam donors found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
