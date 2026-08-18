@@ -728,7 +728,7 @@ th{
                      alt="Sai">
 
             {% elif name == "Gopal" %}
-                <img src="{{ url_for('static', filename='gopal.jpg') }}"
+                <img src="{{ url_for('static', filename='gopal.jpeg') }}"
                      class="profile-image"
                      alt="Gopal">
             {% endif %}
@@ -829,8 +829,24 @@ th{
 </div>
 
 <div class="form-group">
-<label>Mobile Number</label>
-<input type="text" name="mobile" placeholder="Enter Mobile Number" required>
+    <label>Mobile Number</label>
+
+    <input
+        type="tel"
+        name="mobile"
+        id="mobile"
+        placeholder="Enter 10-digit Mobile Number"
+        maxlength="10"
+        minlength="10"
+        pattern="[6-9][0-9]{9}"
+        inputmode="numeric"
+        required
+        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
+    >
+
+    <small style="color:#777;">
+        Enter exactly 10 digits
+    </small>
 </div>
 
 </div>

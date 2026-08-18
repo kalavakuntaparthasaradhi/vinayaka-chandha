@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from urllib.parse import quote
 import mysql.connector
 from datetime import timedelta
+import re
 
 load_dotenv()
 app = Flask(__name__)
@@ -101,15 +102,22 @@ def logout():
     return redirect(url_for('login'))
 
 # ------------------ Dashboard ------------------
+# ------------------ Dashboard ------------------
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
 
     conn, cursor = get_db()
 
     if request.method == "POST":
+
         try:
             name = request.form["name"]
-            mobile = request.form["mobile"].replace("+91", "").replace(" ", "")
+            mobile = request.form["mobile"].strip()
+
+            # Mobile validation
+            if not re.fullmatch(r"[6-9][0-9]{9}", mobile):
+                return "Invalid mobile number. Please enter a valid 10-digit mobile number.", 400
+
             area = request.form["area"]
             house = request.form["house"]
             donation = float(request.form["donation"])
@@ -119,9 +127,10 @@ def dashboard():
             remarks = request.form["remarks"]
 
             sql = """
-            INSERT INTO donations
-            (name, mobile, area, house, donation, payment, collector, remarks, donation_date)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO donations
+                (name, mobile, area, house, donation, payment,
+                 collector, remarks, donation_date)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
 
             values = (
@@ -138,8 +147,6 @@ def dashboard():
 
             cursor.execute(sql, values)
             conn.commit()
-            cursor.close()
-            conn.close()
 
             flash("✅ Donation Saved Successfully!")
 
@@ -162,24 +169,27 @@ Thank you for your valuable contribution.
 """
 
             whatsapp_url = f"https://wa.me/91{mobile}?text={quote(message)}"
+
             return redirect(whatsapp_url)
 
         except Exception as e:
             conn.rollback()
             return f"Error: {e}"
 
-       
+        finally:
+            cursor.close()
+            conn.close()
 
     # Total Collection
     cursor.execute("""
-        SELECT IFNULL(SUM(donation),0) AS total
+        SELECT IFNULL(SUM(donation), 0) AS total
         FROM donations
     """)
     total_collection = cursor.fetchone()["total"]
 
     # Total Expenses
     cursor.execute("""
-        SELECT IFNULL(SUM(amount),0) AS total
+        SELECT IFNULL(SUM(amount), 0) AS total
         FROM expenses
     """)
     total_expenses = cursor.fetchone()["total"]
@@ -187,11 +197,11 @@ Thank you for your valuable contribution.
     # Balance
     balance = total_collection - total_expenses
 
-    # Donors
+    # Total Donors
     cursor.execute("""
-    SELECT COUNT(*) AS total_donors
-    FROM donations
-""")
+        SELECT COUNT(*) AS total_donors
+        FROM donations
+    """)
     total_donors = cursor.fetchone()["total_donors"]
 
     # Donation List
@@ -218,19 +228,19 @@ Thank you for your valuable contribution.
         ORDER BY id ASC
     """)
     expenses = cursor.fetchall()
-    print("EXPENSE DATA:", expenses)
 
     cursor.close()
     conn.close()
+
     return render_template(
         "dashboard.html",
-    total_collection=total_collection,
-    total_expenses=total_expenses,
-    balance=balance,
-    total_donors=total_donors,
-    members=members,
-    expenses=expenses,
-    name=session.get("name")
+        total_collection=total_collection,
+        total_expenses=total_expenses,
+        balance=balance,
+        total_donors=total_donors,
+        members=members,
+        expenses=expenses,
+        name=session.get("name")
     )
 
 @app.route("/add_expense", methods=["POST"])
