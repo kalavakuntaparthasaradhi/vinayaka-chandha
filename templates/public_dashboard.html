@@ -32,9 +32,9 @@
 
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
 
-            padding: 30px;
+            padding: 30px 15px;
         }
 
         .public-container {
@@ -88,7 +88,7 @@
             color: #555;
         }
 
-        /* Cards */
+        /* Financial Cards */
 
         .cards {
             display: grid;
@@ -142,6 +142,176 @@
             color: #222;
         }
 
+        /* Annadhanam Section */
+
+        .annadhanam-section {
+
+            margin-top: 40px;
+        }
+
+        .section-title {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #222;
+
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+
+            color: #666;
+
+            font-size: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .donor-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+            text-align: left;
+        }
+
+        .donor-card {
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            padding: 18px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.13);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            transition: 0.3s;
+        }
+
+        .donor-card:hover {
+
+            transform: translateY(-4px);
+
+        }
+
+        .donor-image {
+
+            width: 90px;
+
+            height: 90px;
+
+            min-width: 90px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 3px solid #FFD54F;
+
+            background: #fff8dc;
+
+        }
+
+        .donor-placeholder {
+
+            width: 90px;
+
+            height: 90px;
+
+            min-width: 90px;
+
+            border-radius: 50%;
+
+            background: #FFF3CD;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 38px;
+
+        }
+
+        .donor-details {
+
+            flex: 1;
+
+        }
+
+        .donor-name {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #222;
+
+            margin-bottom: 6px;
+
+        }
+
+        .donor-info {
+
+            font-size: 14px;
+
+            color: #555;
+
+            margin: 4px 0;
+
+        }
+
+        .slot {
+
+            display: inline-block;
+
+            margin-top: 6px;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            background: #FFF3CD;
+
+            color: #7A4B00;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+        }
+
+        .no-donors {
+
+            background: #ffffff;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            color: #666;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.10);
+
+        }
+
         .footer {
 
             margin-top: 35px;
@@ -149,6 +319,9 @@
             font-size: 14px;
 
             color: #666;
+
+            padding-bottom: 20px;
+
         }
 
         /* Mobile */
@@ -175,6 +348,25 @@
 
             .amount {
                 font-size: 26px;
+            }
+
+            .donor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .donor-card {
+                padding: 15px;
+            }
+
+            .donor-image,
+            .donor-placeholder {
+                width: 75px;
+                height: 75px;
+                min-width: 75px;
             }
 
         }
@@ -226,7 +418,7 @@
     </div>
 
 
-    <!-- Cards -->
+    <!-- Financial Cards -->
 
     <div class="cards">
 
@@ -297,10 +489,126 @@
     </div>
 
 
+    <!-- ============================= -->
+    <!-- ANNADHANAM DONORS -->
+    <!-- ============================= -->
+
+    <div class="annadhanam-section">
+
+        <div class="section-title">
+
+            🍚 Annadhanam Donors
+
+        </div>
+
+        <div class="section-subtitle">
+
+            🙏 Our respected donors who have supported Annadhanam
+
+        </div>
+
+
+        {% if annadhanam_donors %}
+
+        <div class="donor-grid">
+
+            {% for donor in annadhanam_donors %}
+
+            <div class="donor-card">
+
+
+                <!-- Donor Image -->
+
+                {% if donor.image_url %}
+
+                    <img
+                        src="{{ donor.image_url }}"
+                        class="donor-image"
+                        alt="{{ donor.name }}">
+
+                {% else %}
+
+                    <div class="donor-placeholder">
+                        🙏
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Donor Details -->
+
+                <div class="donor-details">
+
+                    <div class="donor-name">
+
+                        {{ donor.name }}
+
+                    </div>
+
+
+                    {% if donor.gothram %}
+
+                    <div class="donor-info">
+
+                        <strong>Gothram:</strong>
+                        {{ donor.gothram }}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="donor-info">
+
+                        <strong>Date:</strong>
+                        {{ donor.donation_date }}
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="slot">
+
+                            🕐 {{ donor.slot }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="no-donors">
+
+            🙏 Annadhanam donor information will be displayed here
+            after approval by the administrator.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Footer -->
+
     <div class="footer">
 
         🙏 Thank you for supporting our
         Vinayaka Chavithi celebrations.
+
+        <br><br>
+
+        🌺 May Lord Ganesha bless everyone 🌺
 
     </div>
 

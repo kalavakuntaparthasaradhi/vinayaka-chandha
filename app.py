@@ -290,13 +290,11 @@ def public_dashboard():
     conn, cursor = get_db()
 
     try:
-
         # Total Collection
         cursor.execute("""
             SELECT IFNULL(SUM(donation), 0) AS total
             FROM donations
         """)
-
         total_collection = cursor.fetchone()["total"]
 
         # Total Expenses
@@ -304,27 +302,42 @@ def public_dashboard():
             SELECT IFNULL(SUM(amount), 0) AS total
             FROM expenses
         """)
-
         total_expenses = cursor.fetchone()["total"]
 
         # Balance
         balance = total_collection - total_expenses
 
+        # ------------------ Approved Annadhanam Donors ------------------
+        cursor.execute("""
+            SELECT
+                id,
+                name,
+                gothram,
+                donation_date,
+                slot,
+                image_url
+            FROM annadhanam_donors
+            WHERE status = 'approved'
+            ORDER BY donation_date ASC, id ASC
+        """)
+
+        annadhanam_donors = cursor.fetchall()
+
         return render_template(
             "public_dashboard.html",
             total_collection=total_collection,
             total_expenses=total_expenses,
-            balance=balance
+            balance=balance,
+            annadhanam_donors=annadhanam_donors
         )
 
     except Exception as e:
-
         return f"Error: {e}"
 
     finally:
-
         cursor.close()
         conn.close()
+
 # ------------------ Public Dashboard End ------------------
 
 # ----------edit---------------
