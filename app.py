@@ -75,22 +75,20 @@ conn.close()
 def login():
 
     if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-        username = request.form["username"]
-        password = request.form["password"]
+        if username in USERS and USERS[username]["password"] == password:
+            session.permanent = True
+            session["username"] = username
+            session["name"] = USERS[username]["name"]
 
-    if username in USERS and USERS[username]["password"] == password:
-        session.permanent = True
-        session["username"] = username
-        session["name"] = USERS[username]["name"]
-        return redirect(url_for("dashboard"))
-    
-    return render_template(
-        "login.html",
-        msg="❌ Invalid Username or Password"
-    )
+            return redirect(url_for("dashboard"))
 
-    return render_template("login.html")
+        msg = "❌ Invalid Username or Password"
+
+    return render_template("login.html", msg=msg)
+
 # ------------------ Logout ------------------
 
 @app.route('/logout')
