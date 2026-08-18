@@ -661,6 +661,18 @@ th{
     background: #eeeeee;
     margin: 5px 0;
 }
+.header-profile-image {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    flex-shrink: 0;
+    border: 2px solid #f26500;
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -714,22 +726,22 @@ th{
 
             {% if name == "Pardhu" %}
                 <img src="{{ url_for('static', filename='pardhu.jpeg') }}"
-                     class="profile-image"
+                     class="header-profile-image"
                      alt="Pardhu">
 
             {% elif name == "Deepak" %}
                 <img src="{{ url_for('static', filename='deepak.jpeg') }}"
-                     class="profile-image"
+                     class="header-profile-image"
                      alt="Deepak">
 
             {% elif name == "Sai" %}
                 <img src="{{ url_for('static', filename='sai.jpeg') }}"
-                     class="profile-image"
+                     class="header-profile-image"
                      alt="Sai">
 
             {% elif name == "Gopal" %}
                 <img src="{{ url_for('static', filename='gopal.jpeg') }}"
-                     class="profile-image"
+                     class="header-profile-image"
                      alt="Gopal">
             {% endif %}
 
