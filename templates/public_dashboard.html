@@ -466,7 +466,48 @@
 .annadhanam-submit:hover {
     background: #BF360C;
 }
+/* ============================= */
+/* ANNADHANAM REGISTRATION CARD */
+/* ============================= */
 
+.annadhanam-card {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.annadhanam-card:hover {
+    transform: translateY(-5px);
+}
+
+.register-text {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.register-btn {
+    margin-top: 15px;
+
+    padding: 11px 25px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #E65100;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background: #BF360C;
+}
     </style>
 
 </head>
@@ -516,79 +557,68 @@
 
     <!-- Financial Cards -->
 
-    <div class="cards">
+    <!-- ============================= -->
+<!-- COLLECTION + ANNADHANAM -->
+<!-- ============================= -->
 
+<div class="cards">
 
-        <!-- Total Collection -->
+    <!-- Total Collection -->
 
-        <div class="card">
+    <div class="card">
 
-            <div class="icon">
-                💰
-            </div>
-
-            <div class="card-title">
-                Total Collection
-            </div>
-
-            <div class="amount">
-
-                ₹{{ "%.2f"|format(total_collection) }}
-
-            </div>
-
+        <div class="icon">
+            💰
         </div>
 
-
-        <!-- Total Expenses -->
-
-        <div class="card">
-
-            <div class="icon">
-                💸
-            </div>
-
-            <div class="card-title">
-                Total Expenses
-            </div>
-
-            <div class="amount">
-
-                ₹{{ "%.2f"|format(total_expenses) }}
-
-            </div>
-
+        <div class="card-title">
+            Total Collection
         </div>
 
-
-        <!-- Balance -->
-
-        <div class="card">
-
-            <div class="icon">
-                🏦
-            </div>
-
-            <div class="card-title">
-                Available Balance
-            </div>
-
-            <div class="amount">
-
-                ₹{{ "%.2f"|format(balance) }}
-
-            </div>
-
+        <div class="amount">
+            ₹{{ "%.2f"|format(total_collection) }}
         </div>
-
 
     </div>
+
+
+    <!-- Annadhanam Registration Button -->
+
+    <div
+        class="card annadhanam-card"
+        onclick="openAnnadhanamForm()">
+
+        <div class="icon">
+            🍚
+        </div>
+
+        <div class="card-title">
+            Annadhanam Registration
+        </div>
+
+        <div class="register-text">
+            🙏 Become an Annadhanam Donor
+        </div>
+
+        <button
+            type="button"
+            class="register-btn">
+
+            Register Now
+
+        </button>
+
+    </div>
+
+</div>
 <!-- ============================= -->
 <!-- ANNADHANAM REGISTRATION FORM -->
 <!-- ============================= -->
 
-<div class="annadhanam-form-section">
-
+<div
+    class="annadhanam-form-section"
+    id="annadhanamForm"
+    style="display: none;">
     <div class="section-title">
         🍚 Annadhanam Registration
     </div>
@@ -916,7 +946,33 @@ updateGreeting();
 
 </script>
 
+<script>
 
+function openAnnadhanamForm() {
+
+    const form =
+        document.getElementById("annadhanamForm");
+
+    form.style.display = "block";
+
+    form.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+function closeAnnadhanamForm() {
+
+    const form =
+        document.getElementById("annadhanamForm");
+
+    form.style.display = "none";
+
+}
+
+</script>
 </body>
 
 </html>
