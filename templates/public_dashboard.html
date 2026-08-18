@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Vinayaka Chavithi 2026</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #FF9933,
+                    #FFD54F,
+                    #FFF8DC
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+        }
+
+        .public-container {
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+
+            object-fit: contain;
+
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 30px;
+            font-weight: 700;
+
+            color: #222;
+
+            margin: 5px 0;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #555;
+
+            margin-bottom: 25px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            margin: 0;
+
+            font-size: 26px;
+
+            color: #222;
+        }
+
+        .welcome p {
+            margin: 6px 0 0;
+
+            font-size: 15px;
+
+            color: #555;
+        }
+
+        /* Cards */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+        }
+
+        .card {
+
+            background: #ffffff;
+
+            padding: 30px 20px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.15);
+
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            font-size: 38px;
+
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+
+            font-size: 16px;
+
+            color: #666;
+        }
+
+        .amount {
+
+            margin-top: 10px;
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color: #222;
+        }
+
+        .footer {
+
+            margin-top: 35px;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 20px 10px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+
+                gap: 15px;
+            }
+
+            .card {
+                padding: 25px 15px;
+            }
+
+            .amount {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="public-container">
+
+
+    <!-- Ganesh Logo -->
+
+    <img
+        src="{{ url_for('static', filename='ganesh.png') }}"
+        class="logo"
+        alt="Ganesh">
+
+
+    <!-- Title -->
+
+    <div class="title">
+
+        Lakshmi Ganapathi Youth 2026
+
+    </div>
+
+
+    <div class="subtitle">
+
+        🪔 Vinayaka Chavithi Chanda 🪔
+
+    </div>
+
+
+    <!-- Greeting -->
+
+    <div class="welcome">
+
+        <h2 id="greeting"></h2>
+
+        <p>
+            Welcome to our community dashboard 🙏
+        </p>
+
+    </div>
+
+
+    <!-- Cards -->
+
+    <div class="cards">
+
+
+        <!-- Total Collection -->
+
+        <div class="card">
+
+            <div class="icon">
+                💰
+            </div>
+
+            <div class="card-title">
+                Total Collection
+            </div>
+
+            <div class="amount">
+
+                ₹{{ "%.2f"|format(total_collection) }}
+
+            </div>
+
+        </div>
+
+
+        <!-- Total Expenses -->
+
+        <div class="card">
+
+            <div class="icon">
+                💸
+            </div>
+
+            <div class="card-title">
+                Total Expenses
+            </div>
+
+            <div class="amount">
+
+                ₹{{ "%.2f"|format(total_expenses) }}
+
+            </div>
+
+        </div>
+
+
+        <!-- Balance -->
+
+        <div class="card">
+
+            <div class="icon">
+                🏦
+            </div>
+
+            <div class="card-title">
+                Available Balance
+            </div>
+
+            <div class="amount">
+
+                ₹{{ "%.2f"|format(balance) }}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        🙏 Thank you for supporting our
+        Vinayaka Chavithi celebrations.
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+function updateGreeting() {
+
+    const hour = new Date().getHours();
+
+    let greeting;
+
+
+    if (hour >= 5 && hour < 12) {
+
+        greeting = "🌅 Good Morning!";
+
+    }
+
+    else if (hour >= 12 && hour < 17) {
+
+        greeting = "☀️ Good Afternoon!";
+
+    }
+
+    else if (hour >= 17 && hour < 21) {
+
+        greeting = "🌆 Good Evening!";
+
+    }
+
+    else {
+
+        greeting = "🌙 Good Night!";
+
+    }
+
+
+    document.getElementById("greeting").textContent =
+        greeting;
+
+}
+
+
+updateGreeting();
+
+</script>
+
+
+</body>
+
+</html>

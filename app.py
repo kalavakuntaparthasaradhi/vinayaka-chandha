@@ -17,7 +17,7 @@ app.permanent_session_lifetime = timedelta(minutes=5)
 @app.before_request
 def check_session():
 
-    if request.endpoint not in ["login", "static"]:
+    if request.endpoint not in ["login","public_dashboard","static"]:
 
         if "username" not in session:
             return redirect(url_for("login"))
@@ -282,6 +282,95 @@ def add_expense():
     finally:
         cursor.close()
         conn.close()
+
+
+# ------------------ Public Dashboard ------------------
+
+@app.route("/public")
+def public_dashboard():
+
+    conn, cursor = get_db()
+
+    try:
+
+        # Total Collection
+        cursor.execute("""
+            SELECT IFNULL(SUM(donation), 0) AS total
+            FROM donations
+        """)
+
+        total_collection = cursor.fetchone()["total"]
+
+        # Total Expenses
+        cursor.execute("""
+            SELECT IFNULL(SUM(amount), 0) AS total
+            FROM expenses
+        """)
+
+        total_expenses = cursor.fetchone()["total"]
+
+        # Balance
+        balance = total_collection - total_expenses
+
+        return render_template(
+            "public_dashboard.html",
+            total_collection=total_collection,
+            total_expenses=total_expenses,
+            balance=balance
+        )
+
+    except Exception as e:
+
+        return f"Error: {e}"
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+# ------------------ Public Dashboard ------------------
+@app.route("/public")
+def public_dashboard():
+
+    conn, cursor = get_db()
+
+    try:
+
+        # Total Collection
+        cursor.execute("""
+            SELECT IFNULL(SUM(donation), 0) AS total
+            FROM donations
+        """)
+
+        total_collection = cursor.fetchone()["total"]
+
+        # Total Expenses
+        cursor.execute("""
+            SELECT IFNULL(SUM(amount), 0) AS total
+            FROM expenses
+        """)
+
+        total_expenses = cursor.fetchone()["total"]
+
+        # Balance
+        balance = total_collection - total_expenses
+
+        return render_template(
+            "public_dashboard.html",
+            total_collection=total_collection,
+            total_expenses=total_expenses,
+            balance=balance
+        )
+
+    except Exception as e:
+
+        return f"Error: {e}"
+
+    finally:
+
+        cursor.close()
+        conn.close()
+# ------------------ Public Dashboard End ------------------
 
 # ----------edit---------------
 
