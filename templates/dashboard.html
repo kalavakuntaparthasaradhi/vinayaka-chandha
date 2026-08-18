@@ -487,6 +487,23 @@ th{
     font-weight: bold;
     font-size: 13px;
 }
+.search-box {
+    margin: 20px 0;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 8px rgba(255,152,0,0.3);
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -718,7 +735,15 @@ placeholder="Enter Remarks"></textarea>
     <a href="javascript:void(0);" onclick="showList('expenseList'); return false;">Expense List</a>
 </div>
 </div>
-
+<!-- Search Donors -->
+<div class="search-box">
+    <input
+        type="text"
+        id="donorSearch"
+        placeholder="🔍 Search by Name or Mobile..."
+        onkeyup="searchDonors()"
+    >
+</div>
 <div id="donationList" class="table-container">
     <table>
         <thead>
@@ -912,6 +937,33 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("expenseSection").style.display = "none";
     document.getElementById("reportSection").style.display = "none";
 });
+function searchDonors() {
+
+    const search = document
+        .getElementById("donorSearch")
+        .value
+        .toLowerCase();
+
+    const rows = document.querySelectorAll(
+        "#donationList tbody tr"
+    );
+
+    rows.forEach(function(row) {
+
+        const name = row.cells[1].textContent.toLowerCase();
+        const mobile = row.cells[2].textContent.toLowerCase();
+
+        if (
+            name.includes(search) ||
+            mobile.includes(search)
+        ) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+}
 </script>
 <script>
 function showList(list) {
