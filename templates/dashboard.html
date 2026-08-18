@@ -723,7 +723,7 @@ placeholder="Enter Remarks"></textarea>
         </thead>
 
         <tbody>
-            {% for member in members %}
+            {% for member in members|sort(attribute='id') % %}
             <tr>
                 <td>{{ member.id }}</td>
                 <td>{{ member.name }}</td>
