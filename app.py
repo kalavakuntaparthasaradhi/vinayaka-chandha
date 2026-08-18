@@ -168,7 +168,7 @@ Thank you for your valuable contribution.
             donation,
             'paid' AS status
         FROM donations
-        ORDER BY id DESC
+        ORDER BY id ASC
     """)
     members = cursor.fetchall()
 
@@ -180,7 +180,7 @@ Thank you for your valuable contribution.
             amount,
             spent_by
         FROM expenses
-        ORDER BY id DESC
+        ORDER BY id ASC
     """)
     expenses = cursor.fetchall()
     print("EXPENSE DATA:", expenses)
