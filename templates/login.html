@@ -125,7 +125,27 @@
 .eye-icon:hover {
     color: #f36f21;
 }
+/* 🌸 Falling Flowers */
 
+.flower {
+    position: fixed;
+    top: -50px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: flowerFall linear forwards;
+}
+
+@keyframes flowerFall {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0.8;
+    }
+}
     </style>
 
 </head>
@@ -174,7 +194,35 @@ function togglePassword() {
         eye.textContent = "👁";
     }
 }
+ </script>
+    <script>
+    function createFlower() {
 
+        const flower = document.createElement("div");
+
+        flower.className = "flower";
+
+        const flowers = ["🌸", "🌺", "🌼", "🌷"];
+
+        flower.innerHTML =
+            flowers[Math.floor(Math.random() * flowers.length)];
+
+        flower.style.left = Math.random() * 100 + "vw";
+
+        flower.style.fontSize =
+            (15 + Math.random() * 20) + "px";
+
+        flower.style.animationDuration =
+            (5 + Math.random() * 5) + "s";
+
+        document.body.appendChild(flower);
+
+        setTimeout(function() {
+            flower.remove();
+        }, 10000);
+    }
+
+    setInterval(createFlower, 500);
 </script>
 </body>
 </html>
