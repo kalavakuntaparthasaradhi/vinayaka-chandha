@@ -283,31 +283,353 @@ def add_expense():
         cursor.close()
         conn.close()
 
+# ================= ANNADHANAM =================
+
+@app.route("/admin/annadhanam")
+def admin_annadhanam():
+
+    conn, cursor = get_db()
+
+    try:
+
+        cursor.execute("""
+            SELECT
+                id,
+                name,
+                gothram,
+                mobile_number,
+                donation_date,
+                slot,
+                image_url,
+                status
+            FROM annadhanam_donors
+            ORDER BY id DESC
+        """)
+
+        donors = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT status, COUNT(*) AS total
+            FROM annadhanam_donors
+            GROUP BY status
+        """)
+
+        counts = {
+            "pending": 0,
+            "approved": 0,
+            "rejected": 0
+        }
+
+        for row in cursor.fetchall():
+
+            if row["status"] in counts:
+                counts[row["status"]] = row["total"]
+
+        return render_template(
+            "admin_annadhanam.html",
+            donors=donors,
+            counts=counts
+        )
+
+    except Exception as e:
+
+        return f"""
+        <h2>Annadhanam Error</h2>
+        <pre>{e}</pre>
+        """
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# ================= ADD ANNADHANAM =================
+
+@app.route("/admin/annadhanam/add", methods=["GET", "POST"])
+def add_annadhanam():
+
+    if request.method == "GET":
+
+        return render_template(
+            "annadhanam.html"
+        )
+
+    conn, cursor = get_db()
+
+    try:
+
+        name = request.form.get("name", "").strip()
+
+        gothram = request.form.get(
+            "gothram", ""
+        ).strip()
+
+        mobile = request.form.get(
+            "mobile", ""
+        ).strip()
+
+        donation_date = request.form.get(
+            "donation_date", ""
+        ).strip()
+
+        slot = request.form.get(
+            "slot", ""
+        ).strip()
+
+        if not name or not mobile or not donation_date or not slot:
+
+            return "Please fill all required fields.", 400
+
+        cursor.execute("""
+            INSERT INTO annadhanam_donors
+            (
+                name,
+                gothram,
+                mobile_number,
+                donation_date,
+                slot,
+                image_url,
+                status
+            )
+            VALUES
+            (%s, %s, %s, %s, %s, %s, 'pending')
+        """, (
+            name,
+            gothram,
+            mobile,
+            donation_date,
+            slot,
+            None
+        ))
+
+        conn.commit()
+
+        return redirect(
+            url_for("admin_annadhanam")
+        )
+
+    except Exception as e:
+
+        conn.rollback()
+
+        return f"""
+        <h2>Error</h2>
+        <pre>{e}</pre>
+        """
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# ================= APPROVE / REJECT =================
+
+@app.route(
+    "/admin/annadhanam/<int:id>/status",
+    methods=["POST"]
+)
+def update_annadhanam_status(id):
+
+    status = request.form.get("status")
+
+    if status not in [
+        "pending",
+        "approved",
+        "rejected"
+    ]:
+
+        return "Invalid status", 400
+
+    conn, cursor = get_db()
+
+    try:
+
+        cursor.execute("""
+            UPDATE annadhanam_donors
+            SET status = %s
+            WHERE id = %s
+        """, (
+            status,
+            id
+        ))
+
+        conn.commit()
+
+        return redirect(
+            url_for("admin_annadhanam")
+        )
+
+    except Exception as e:
+
+        conn.rollback()
+
+        return f"""
+        <h2>Error</h2>
+        <pre>{e}</pre>
+        """
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# ================= DELETE =================
+
+@app.route(
+    "/admin/annadhanam/<int:id>/delete",
+    methods=["POST"]
+)
+def delete_annadhanam(id):
+
+    conn, cursor = get_db()
+
+    try:
+
+        cursor.execute("""
+            DELETE FROM annadhanam_donors
+            WHERE id = %s
+        """, (id,))
+
+        conn.commit()
+
+        return redirect(
+            url_for("admin_annadhanam")
+        )
+
+    except Exception as e:
+
+        conn.rollback()
+
+        return f"""
+        <h2>Error</h2>
+        <pre>{e}</pre>
+        """
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
 # ------------------ Public Dashboard ------------------
-@app.route("/public")
+
+@app.route("/public", methods=["GET", "POST"])
 def public_dashboard():
 
     conn, cursor = get_db()
 
     try:
-        # Total Collection
+
+        # ================= PUBLIC ANNADHANAM SUBMISSION =================
+
+        if request.method == "POST":
+
+            name = request.form.get("name", "").strip()
+            gothram = request.form.get("gothram", "").strip()
+            mobile = request.form.get("mobile", "").strip()
+            donation_date = request.form.get("donation_date", "").strip()
+            slot = request.form.get("slot", "").strip()
+
+            # Validate required fields
+            if not name or not mobile or not donation_date or not slot:
+                return "Please fill all required fields.", 400
+
+            # Validate mobile
+            if not re.fullmatch(r"[6-9][0-9]{9}", mobile):
+                return "Invalid mobile number.", 400
+
+            # ---------------- Image ----------------
+
+            image_url = None
+
+            image = request.files.get("image")
+
+            if image and image.filename:
+
+                import base64
+
+                image_bytes = image.read()
+
+                # Maximum 5 MB
+                if len(image_bytes) > 5 * 1024 * 1024:
+                    return "Image must be less than 5 MB.", 400
+
+                extension = image.filename.rsplit(".", 1)[-1].lower()
+
+                mime_types = {
+                    "jpg": "image/jpeg",
+                    "jpeg": "image/jpeg",
+                    "png": "image/png",
+                    "gif": "image/gif",
+                    "webp": "image/webp"
+                }
+
+                if extension not in mime_types:
+                    return "Invalid image format.", 400
+
+                encoded = base64.b64encode(
+                    image_bytes
+                ).decode("utf-8")
+
+                image_url = (
+                    f"data:{mime_types[extension]};base64,{encoded}"
+                )
+
+            # ---------------- Save ----------------
+
+            cursor.execute("""
+                INSERT INTO annadhanam_donors
+                (
+                    name,
+                    gothram,
+                    mobile_number,
+                    donation_date,
+                    slot,
+                    image_url,
+                    status
+                )
+                VALUES
+                (%s, %s, %s, %s, %s, %s, 'pending')
+            """, (
+                name,
+                gothram,
+                mobile,
+                donation_date,
+                slot,
+                image_url
+            ))
+
+            conn.commit()
+
+            return redirect(
+                url_for("public_dashboard")
+            )
+
+        # ================= FINANCIAL DATA =================
+
         cursor.execute("""
             SELECT IFNULL(SUM(donation), 0) AS total
             FROM donations
         """)
+
         total_collection = cursor.fetchone()["total"]
 
-        # Total Expenses
+
         cursor.execute("""
             SELECT IFNULL(SUM(amount), 0) AS total
             FROM expenses
         """)
+
         total_expenses = cursor.fetchone()["total"]
 
-        # Balance
+
         balance = total_collection - total_expenses
 
-        # ------------------ Approved Annadhanam Donors ------------------
+
+        # ================= APPROVED ANNADHANAM =================
+
         cursor.execute("""
             SELECT
                 id,
@@ -323,6 +645,7 @@ def public_dashboard():
 
         annadhanam_donors = cursor.fetchall()
 
+
         return render_template(
             "public_dashboard.html",
             total_collection=total_collection,
@@ -332,13 +655,15 @@ def public_dashboard():
         )
 
     except Exception as e:
+
+        conn.rollback()
+
         return f"Error: {e}"
 
     finally:
+
         cursor.close()
         conn.close()
-
-# ------------------ Public Dashboard End ------------------
 
 # ----------edit---------------
 

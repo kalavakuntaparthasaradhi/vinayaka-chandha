@@ -370,6 +370,102 @@
             }
 
         }
+        /* Annadhanam Registration Form */
+
+.annadhanam-form-section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    background: #ffffff;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.15);
+}
+
+.annadhanam-form {
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    font-weight: bold;
+
+    color: #444;
+
+    margin-bottom: 7px;
+}
+
+.form-group label span {
+    color: red;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #FF9800;
+}
+
+.form-group small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 12px;
+}
+
+.annadhanam-submit {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #E65100;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.annadhanam-submit:hover {
+    background: #BF360C;
+}
 
     </style>
 
@@ -487,7 +583,167 @@
 
 
     </div>
+<!-- ============================= -->
+<!-- ANNADHANAM REGISTRATION FORM -->
+<!-- ============================= -->
 
+<div class="annadhanam-form-section">
+
+    <div class="section-title">
+        🍚 Annadhanam Registration
+    </div>
+
+    <div class="section-subtitle">
+        🙏 Support our Annadhanam and become a donor
+    </div>
+
+    <form
+        method="POST"
+        action="{{ url_for('public_dashboard') }}"
+        enctype="multipart/form-data"
+        class="annadhanam-form">
+
+        <!-- Name -->
+
+        <div class="form-group">
+
+            <label for="name">
+                Name <span>*</span>
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                required>
+
+        </div>
+
+
+        <!-- Gothram -->
+
+        <div class="form-group">
+
+            <label for="gothram">
+                Gothram
+            </label>
+
+            <input
+                type="text"
+                id="gothram"
+                name="gothram"
+                placeholder="Enter your Gothram">
+
+        </div>
+
+
+        <!-- Mobile -->
+
+        <div class="form-group">
+
+            <label for="mobile">
+                Mobile Number <span>*</span>
+            </label>
+
+            <input
+                type="tel"
+                id="mobile"
+                name="mobile"
+                placeholder="Enter 10-digit mobile number"
+                maxlength="10"
+                pattern="[6-9][0-9]{9}"
+                inputmode="numeric"
+                required>
+
+        </div>
+
+
+        <!-- Date -->
+
+        <div class="form-group">
+
+            <label for="donation_date">
+                Date <span>*</span>
+            </label>
+
+            <input
+                type="date"
+                id="donation_date"
+                name="donation_date"
+                required>
+
+        </div>
+
+
+        <!-- Slot -->
+
+        <div class="form-group">
+
+            <label for="slot">
+                Slot <span>*</span>
+            </label>
+
+            <select
+                id="slot"
+                name="slot"
+                required>
+
+                <option value="">
+                    Select Slot
+                </option>
+
+                <option value="Morning">
+                    Morning
+                </option>
+
+                <option value="Afternoon">
+                    Afternoon
+                </option>
+
+                <option value="Evening">
+                    Evening
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Image -->
+
+        <div class="form-group">
+
+            <label for="image">
+                Donor Image
+            </label>
+
+            <input
+                type="file"
+                id="image"
+                name="image"
+                accept=".jpg,.jpeg,.png,.gif,.webp">
+
+            <small>
+                Maximum image size: 5 MB
+            </small>
+
+        </div>
+
+
+        <!-- Submit -->
+
+        <button
+            type="submit"
+            class="annadhanam-submit">
+
+            🙏 Submit Annadhanam
+
+        </button>
+
+    </form>
+
+</div>
 
     <!-- ============================= -->
     <!-- ANNADHANAM DONORS -->
