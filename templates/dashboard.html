@@ -511,6 +511,156 @@ th{
     border: 2px solid #f26500;
     display: block;
 }
+/* ---------- Professional Profile ---------- */
+
+.admin-profile-wrapper {
+    position: relative;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 12px 6px 7px;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+    user-select: none;
+}
+
+.admin-profile:hover {
+    box-shadow: 0 5px 18px rgba(0,0,0,0.16);
+    transform: translateY(-1px);
+}
+
+.profile-image {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border: 2px solid #f26500;
+}
+
+.profile-name {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.profile-name strong {
+    color: #111;
+}
+
+.dropdown-arrow {
+    font-size: 11px;
+    color: #666;
+    transition: transform 0.25s ease;
+}
+
+.admin-profile-wrapper.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* ---------- Profile Dropdown ---------- */
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 230px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    border: 1px solid #eeeeee;
+    overflow: hidden;
+    display: none;
+    z-index: 2000;
+    animation: profileDropdown 0.2s ease;
+}
+
+.admin-profile-wrapper.active .profile-dropdown {
+    display: block;
+}
+
+@keyframes profileDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Profile header */
+
+.profile-dropdown-header {
+    padding: 18px;
+    text-align: center;
+    background: linear-gradient(135deg, #fff7ed, #ffffff);
+}
+
+.profile-dropdown-header .profile-image {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 10px;
+}
+
+.profile-dropdown-header h4 {
+    margin: 0;
+    color: #222;
+    font-size: 16px;
+}
+
+.profile-dropdown-header p {
+    margin: 4px 0 0;
+    color: #888;
+    font-size: 12px;
+}
+
+/* Dropdown links */
+
+.profile-menu {
+    padding: 8px;
+}
+
+.profile-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #444;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.profile-menu a:hover {
+    background: #fff3e8;
+    color: #f26500;
+}
+
+.profile-menu .logout-link {
+    color: #dc2626;
+}
+
+.profile-menu .logout-link:hover {
+    background: #fff1f2;
+    color: #dc2626;
+}
+
+.profile-divider {
+    height: 1px;
+    background: #eeeeee;
+    margin: 5px 0;
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -522,27 +672,95 @@ th{
         <h2>Lakshmi Ganapathi Youth 2026</h2>
     </div>
 
-    <div class="admin-profile">
+    <div class="admin-profile-wrapper" id="profileWrapper">
 
-    {% if name == "Pardhu" %}
-        <img src="{{ url_for('static', filename='pardhu.jpeg') }}"
-             class="profile-image"
-             alt="Pardhu">
+    <!-- Profile Button -->
+    <div class="admin-profile" onclick="toggleProfileDropdown()">
 
-    {% elif name == "Deepak" %}
-        <img src="{{ url_for('static', filename='deepak.jpg') }}"
-             class="profile-image"
-             alt="Deepak">
+        {% if name == "Pardhu" %}
+            <img src="{{ url_for('static', filename='pardhu.jpg') }}"
+                 class="profile-image"
+                 alt="Pardhu">
 
-    {% elif name == "Sai" %}
-        <img src="{{ url_for('static', filename='sai.jpg') }}"
-             class="profile-image"
-             alt="Sai">
+        {% elif name == "Deepak" %}
+            <img src="{{ url_for('static', filename='deepak.jpg') }}"
+                 class="profile-image"
+                 alt="Deepak">
 
-    {% endif %}
+        {% elif name == "Sai" %}
+            <img src="{{ url_for('static', filename='sai.jpg') }}"
+                 class="profile-image"
+                 alt="Sai">
 
-    <span>Welcome, <strong>{{ name }}</strong></span>
-    <span class="dropdown-arrow">▼</span>
+        {% elif name == "Gopal" %}
+            <img src="{{ url_for('static', filename='gopal.jpg') }}"
+                 class="profile-image"
+                 alt="Gopal">
+        {% endif %}
+
+        <span class="profile-name">
+            Welcome, <strong>{{ name }}</strong>
+        </span>
+
+        <span class="dropdown-arrow">▼</span>
+
+    </div>
+
+
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown">
+
+        <div class="profile-dropdown-header">
+
+            {% if name == "Pardhu" %}
+                <img src="{{ url_for('static', filename='pardhu.jpg') }}"
+                     class="profile-image"
+                     alt="Pardhu">
+
+            {% elif name == "Deepak" %}
+                <img src="{{ url_for('static', filename='deepak.jpg') }}"
+                     class="profile-image"
+                     alt="Deepak">
+
+            {% elif name == "Sai" %}
+                <img src="{{ url_for('static', filename='sai.jpg') }}"
+                     class="profile-image"
+                     alt="Sai">
+
+            {% elif name == "Gopal" %}
+                <img src="{{ url_for('static', filename='gopal.jpg') }}"
+                     class="profile-image"
+                     alt="Gopal">
+            {% endif %}
+
+            <h4>{{ name }}</h4>
+            <p>Administrator</p>
+
+        </div>
+
+
+        <div class="profile-menu">
+
+            <a href="#">
+                👤
+                <span>My Profile</span>
+            </a>
+
+            <a href="#">
+                🔐
+                <span>Security</span>
+            </a>
+
+            <div class="profile-divider"></div>
+
+            <a href="{{ url_for('logout') }}" class="logout-link">
+                🚪
+                <span>Logout</span>
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
 </div>
@@ -1003,6 +1221,23 @@ function showList(list) {
         document.querySelector(".dropdown-btn").textContent = "Expense List ▾";
     }
 }
+function toggleProfileDropdown() {
+    const wrapper = document.getElementById("profileWrapper");
+
+    wrapper.classList.toggle("active");
+}
+
+
+// Close dropdown when clicking outside
+document.addEventListener("click", function(event) {
+
+    const wrapper = document.getElementById("profileWrapper");
+
+    if (!wrapper.contains(event.target)) {
+        wrapper.classList.remove("active");
+    }
+
+});
 </script>
 </body>
 </html>
