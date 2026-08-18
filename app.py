@@ -4,10 +4,22 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from urllib.parse import quote
 import mysql.connector
+from datetime import timedelta
 
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = "vinayaka123"
+app.permanent_session_lifetime = timedelta(minutes=5)
+
+# Sleep Mode
+@app.before_request
+def check_session():
+
+    if request.endpoint not in ["login", "static"]:
+
+        if "username" not in session:
+            return redirect(url_for("login"))
+# Sleep Mode End
 
 USERS = {
     "Sai": {
@@ -67,15 +79,16 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        if username in USERS and USERS[username]["password"] == password:
-            session["username"] = username
-            session["name"] = USERS[username]["name"]
-            return redirect(url_for("dashboard"))
-
-        return render_template(
-            "login.html",
-            msg="❌ Invalid Username or Password"
-        )
+    if username in USERS and USERS[username]["password"] == password:
+        session.permanent = True
+        session["username"] = username
+        session["name"] = USERS[username]["name"]
+        return redirect(url_for("dashboard"))
+    
+    return render_template(
+        "login.html",
+        msg="❌ Invalid Username or Password"
+    )
 
     return render_template("login.html")
 # ------------------ Logout ------------------
