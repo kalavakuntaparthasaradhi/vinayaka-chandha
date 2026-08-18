@@ -271,5 +271,75 @@ def add_expense():
         cursor.close()
         conn.close()
 
+# ----------edit---------------
+
+@app.route("/edit_donation/<int:id>", methods=["GET", "POST"])
+def edit_donation(id):
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute(
+            "SELECT * FROM donations WHERE id = %s",
+            (id,)
+        )
+
+        donation = cursor.fetchone()
+
+        if not donation:
+            return "Donation not found", 404
+
+        if request.method == "POST":
+
+            name = request.form["name"]
+            mobile = request.form["mobile"].replace("+91", "").replace(" ", "")
+            area = request.form["area"]
+            house = request.form["house"]
+            payment = request.form["payment"]
+            collector = request.form["collector"]
+            remarks = request.form["remarks"]
+            donation_date = request.form["donation_date"]
+
+            cursor.execute("""
+                UPDATE donations
+                SET
+                    name = %s,
+                    mobile = %s,
+                    area = %s,
+                    house = %s,
+                    payment = %s,
+                    collector = %s,
+                    remarks = %s,
+                    donation_date = %s
+                WHERE id = %s
+            """, (
+                name,
+                mobile,
+                area,
+                house,
+                payment,
+                collector,
+                remarks,
+                donation_date,
+                id
+            ))
+
+            conn.commit()
+
+            return redirect(url_for("dashboard"))
+
+        return render_template(
+            "edit_donation.html",
+            donation=donation
+        )
+
+    except Exception as e:
+        conn.rollback()
+        return f"Error: {e}"
+
+    finally:
+        cursor.close()
+        conn.close()
+
 if __name__ == "__main__":
     app.run(debug=True)

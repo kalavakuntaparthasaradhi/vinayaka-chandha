@@ -478,6 +478,15 @@ th{
 .list-dropdown:hover .dropdown-menu {
     display: block;
 }
+.edit-btn {
+    background: #2563eb;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -719,6 +728,7 @@ placeholder="Enter Remarks"></textarea>
                 <th>Mobile Number</th>
                 <th>Donation</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -731,6 +741,12 @@ placeholder="Enter Remarks"></textarea>
                 <td>{{ member.donation }}</td>
                 <td>
                     <span class="paid-status">{{ member.status }}</span>
+                </td>
+                <td>
+                    <a href="{{ url_for('edit_donation', id=member.id) }}"
+                    class="edit-btn">
+                        ✏️ Edit
+                    </a>
                 </td>
             </tr>
             {% endfor %}
