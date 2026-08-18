@@ -9,8 +9,27 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = "vinayaka123"
 
-USERNAME = "admin"
-PASSWORD = "12345"
+USERS = {
+    "Sai": {
+        "password": "6281085945",
+        "name": "Sai"
+    },
+    "Deepak": {
+        "password": "7090430530",
+        "name": "Deepak"
+    },
+    "Pardhu": {
+        "password": "6305777042",
+        "name": "Pardhu"
+    },
+    "Gopal": {
+        "password": "9177981391",
+        "name": "Gopal"
+    }
+}
+
+
+
 print(os.getenv("MYSQLHOST"))
 print(os.getenv("MYSQLPORT"))
 print(os.getenv("MYSQLUSER"))
@@ -48,7 +67,9 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        if username == USERNAME and password == PASSWORD:
+        if username in USERS and USERS[username]["password"] == password:
+            session["username"] = username
+            session["name"] = USERS[username]["name"]
             return redirect(url_for("dashboard"))
 
         return render_template(
@@ -57,7 +78,6 @@ def login():
         )
 
     return render_template("login.html")
-
 # ------------------ Logout ------------------
 
 @app.route('/logout')
@@ -194,7 +214,8 @@ Thank you for your valuable contribution.
     balance=balance,
     total_donors=total_donors,
     members=members,
-    expenses=expenses
+    expenses=expenses,
+    name=session.get("name")
     )
 
 @app.route("/add_expense", methods=["POST"])
