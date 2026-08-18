@@ -70,15 +70,19 @@ print("Total donations:", cursor.fetchone())
 cursor.close()
 conn.close()
 
+
 # ------------------ Login ------------------
 @app.route("/", methods=["GET", "POST"])
 def login():
+
+    msg = ""   # Initialize message first
 
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
 
         if username in USERS and USERS[username]["password"] == password:
+
             session.permanent = True
             session["username"] = username
             session["name"] = USERS[username]["name"]
