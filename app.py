@@ -13,6 +13,7 @@ app.secret_key = "vinayaka123"
 app.permanent_session_lifetime = timedelta(minutes=5)
 
 # Sleep Mode
+
 @app.before_request
 def check_session():
 
@@ -20,6 +21,7 @@ def check_session():
 
         if "username" not in session:
             return redirect(url_for("login"))
+        
 # Sleep Mode End
 
 USERS = {
@@ -101,7 +103,7 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
-# ------------------ Dashboard ------------------
+
 # ------------------ Dashboard ------------------
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
