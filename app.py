@@ -602,7 +602,10 @@ def public_dashboard():
             ))
 
             conn.commit()
-
+            flash(
+            "✅ Annadhanam registration submitted successfully! "
+            "🙏 Your request is pending admin approval."
+            )
             return redirect(
                 url_for("public_dashboard")
             )
