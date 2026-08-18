@@ -661,6 +661,22 @@ th{
     background: #eeeeee;
     margin: 5px 0;
 }
+.welcome-message {
+    margin: 25px 30px 10px;
+}
+
+.welcome-message h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+}
+
+.welcome-message p {
+    margin: 5px 0 0;
+    font-size: 15px;
+    color: #777;
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -762,7 +778,13 @@ th{
 
     </div>
 
+    </div>
 </div>
+
+<!-- Greeting -->
+<div class="welcome-message">
+    <h2 id="greeting"></h2>
+    <p>Welcome back to your dashboard, <strong>{{ name }}</strong> 👋</p>
 </div>
 
 <div class="container">
@@ -1254,6 +1276,32 @@ document.addEventListener("click", function(event) {
     }
 
 });
+</script>
+<script>
+function updateGreeting() {
+
+    const hour = new Date().getHours();
+
+    let greeting;
+
+    if (hour >= 5 && hour < 12) {
+        greeting = "🌅 Good Morning";
+    }
+    else if (hour >= 12 && hour < 17) {
+        greeting = "☀️ Good Afternoon";
+    }
+    else if (hour >= 17 && hour < 21) {
+        greeting = "🌆 Good Evening";
+    }
+    else {
+        greeting = "🌙 Good Night";
+    }
+
+    document.getElementById("greeting").textContent =
+        greeting + ", {{ name }}!";
+}
+
+updateGreeting();
 </script>
 </body>
 </html>
