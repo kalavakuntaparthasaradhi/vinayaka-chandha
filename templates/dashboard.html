@@ -14,21 +14,29 @@
     font-family:'Segoe UI',sans-serif;
 }
 
-body{
-    background:linear-gradient(135deg,#FF9933,#FFD54F,#FFF8DC);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    padding:30px;
+body {
+    background: linear-gradient(135deg, #FF9933, #FFD54F, #FFF8DC);
+
+    display: block;
+
+    min-height: 100vh;
+
+    padding-top: 90px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
 }
 
-.container{
-    width:950px;
-    background:#fff;
-    border-radius:20px;
-    padding:35px;
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
+.container {
+    width: 950px;
+    max-width: 100%;
+    margin: 20px auto 50px;
+
+    background: #fff;
+    border-radius: 20px;
+    padding: 35px;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,.25);
 }
 
 h2{
@@ -661,34 +669,31 @@ th{
     background: #eeeeee;
     margin: 5px 0;
 }
-/* Fix greeting position */
 .welcome-message {
-    width: 100%;
+    width: 950px;
+    max-width: 100%;
+
+    margin: 10px auto 20px;
+
+    padding: 10px 0;
+
     box-sizing: border-box;
-    display: block;
-    clear: both;
-    margin: 25px 0 15px;
-    padding: 0 30px;
 }
 
-/* Keep greeting above dashboard content */
 .welcome-message h2 {
     margin: 0;
+
     font-size: 28px;
     font-weight: 700;
+
     color: #222;
 }
 
 .welcome-message p {
     margin: 6px 0 0;
+
     font-size: 15px;
     color: #777;
-}
-
-/* Prevent flex/grid positioning from putting greeting beside content */
-.welcome-message {
-    flex-basis: 100%;
-    align-self: stretch;
 }
 </style>
 <body>
