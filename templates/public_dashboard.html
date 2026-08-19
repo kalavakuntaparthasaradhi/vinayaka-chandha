@@ -933,6 +933,92 @@
 
     cursor: pointer;
 }
+/* =========================
+   GALLERY OVERVIEW
+========================= */
+
+.gallery-overview-modal {
+    display: none;
+    position: fixed;
+    z-index: 9998;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    padding: 25px 15px;
+    overflow-y: auto;
+}
+
+.gallery-overview-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.gallery-overview-title {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.gallery-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.gallery-overview-item {
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #111;
+    cursor: pointer;
+}
+
+.gallery-overview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.gallery-overview-item img:hover {
+    transform: scale(1.03);
+}
+
+.gallery-overview-close {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    background: #E65100;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+
+    .gallery-overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .gallery-overview-item {
+        height: 150px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .gallery-overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gallery-overview-item {
+        height: 130px;
+    }
+}
 </style>
 
 </head>
@@ -1077,24 +1163,38 @@
 
     <div class="gallery-image-box">
 
-       <div class="gallery-slider">
+    <div class="gallery-slider">
 
-    {% if gallery_images %}
+        {% if gallery_images %}
 
-        {% for image in gallery_images %}
+            {% for image in gallery_images %}
 
-            <img
-                src="{{ url_for('static', filename='gallery/' + image) }}"
-                class="gallery-image {% if loop.first %}active{% endif %}"
-                alt="Event Photo {{ loop.index }}">
+                <img
+                    src="{{ url_for('static', filename='gallery/' + image) }}"
+                    class="gallery-image {% if loop.first %}active{% endif %}"
+                    alt="Event Photo {{ loop.index }}">
 
-        {% endfor %}
+            {% endfor %}
 
-    {% endif %}
+        {% endif %}
+
+    </div>
 
 </div>
 
-    </div>
+<!-- GALLERY IMAGE DATA -->
+
+<div id="galleryData" style="display:none;">
+
+    {% for image in gallery_images %}
+
+        <span
+            data-image="{{ url_for('static', filename='gallery/' + image) }}">
+        </span>
+
+    {% endfor %}
+
+</div>
 
 
     <!-- BUTTON -->
@@ -2127,6 +2227,51 @@ function resetAnnadhanamForm() {
 }
 </script>
 <!-- =========================
+     GALLERY OVERVIEW
+========================= -->
+
+<div id="galleryOverview"
+     class="gallery-overview-modal">
+
+    <div class="gallery-overview-content">
+
+        <div class="gallery-overview-title">
+            📸 Event Gallery
+        </div>
+
+        <div class="gallery-overview-grid">
+
+            {% for image in gallery_images %}
+
+                <div class="gallery-overview-item"
+                     onclick="openLargeFromGallery({{ loop.index0 }})">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='gallery/' + image
+                        ) }}"
+                        alt="Event Photo {{ loop.index }}">
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <button
+            type="button"
+            class="gallery-overview-close"
+            onclick="closeGalleryOverview()">
+
+            ✕ Close Gallery
+
+        </button>
+
+    </div>
+
+</div>
+<!-- =========================
      LARGE GALLERY MODAL
 ========================= -->
 
@@ -2147,9 +2292,9 @@ function resetAnnadhanamForm() {
 ========================= */
 
 const images = Array.from(
-    document.querySelectorAll(".gallery-image")
+    document.querySelectorAll("#galleryData span")
 ).map(function(element) {
-    return element.src;
+    return element.getAttribute("data-image");
 });
 
 
@@ -2167,17 +2312,28 @@ let currentImageIndex = 0;
 function openGallery() {
 
     if (images.length === 0) {
-
         alert("No event photos available.");
-
         return;
     }
 
-    currentImageIndex = 0;
+    document.getElementById("galleryOverview").style.display = "block";
+}
+
+
+function closeGalleryOverview() {
+
+    document.getElementById("galleryOverview").style.display = "none";
+}
+
+
+function openLargeFromGallery(index) {
+
+    document.getElementById("galleryOverview").style.display = "none";
+
+    currentImageIndex = index;
 
     showLargeImage(currentImageIndex);
 }
-
 
 /* =========================
    SHOW LARGE IMAGE
