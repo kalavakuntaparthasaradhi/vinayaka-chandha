@@ -1075,18 +1075,45 @@ updateGreeting();
 
 function openAnnadhanamForm() {
 
-    const form =
-        document.getElementById("annadhanamForm");
+    // Remember that the form should open
+    sessionStorage.setItem(
+        "openAnnadhanam",
+        "true"
+    );
 
-    form.style.display = "block";
-
-    form.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+    // Refresh the entire webpage
+    window.location.reload();
 
 }
+window.addEventListener("load", function () {
 
+    if (
+        sessionStorage.getItem("openAnnadhanam")
+        === "true"
+    ) {
+
+        // Remove the flag
+        sessionStorage.removeItem(
+            "openAnnadhanam"
+        );
+
+        // Open the form
+        const form =
+            document.getElementById(
+                "annadhanamForm"
+            );
+
+        form.style.display = "block";
+
+        // Scroll to form
+        form.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+});
 
 function closeAnnadhanamForm() {
 
@@ -1517,7 +1544,7 @@ function formatDate(dateString) {
 // AUTO REFRESH
 // ==========================================
 
-// Check every 10 seconds
+// Check every 30 seconds
 
 setInterval(function() {
 
