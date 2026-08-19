@@ -2138,76 +2138,25 @@ function resetAnnadhanamForm() {
 
 }
 </script>
+<!-- =========================
+     LARGE GALLERY MODAL
+========================= -->
+
+    <div id="imageModal"
+        class="image-modal"
+        onclick="closeLargeImage()">
+
+        <img id="largeImage"
+            src=""
+            alt="Gallery Image"
+            onclick="event.stopPropagation()">
+
+    </div>
+
 <script>
-
 /* =========================
-   EVENT GALLERY SLIDER
+   GALLERY IMAGES
 ========================= */
-
-const galleryImages =
-    document.querySelectorAll(
-        ".gallery-image"
-    );
-
-let galleryIndex = 0;
-
-
-function showGalleryImage(index) {
-
-    galleryImages.forEach(
-        function(image) {
-
-            image.classList.remove(
-                "active"
-            );
-
-        }
-    );
-
-
-    if (galleryImages.length > 0) {
-
-        galleryImages[index]
-            .classList.add("active");
-
-    }
-
-}
-
-
-/* Change image every 3 seconds */
-
-setInterval(function() {
-
-    if (galleryImages.length === 0) {
-        return;
-    }
-
-
-    galleryIndex++;
-
-    if (
-        galleryIndex >=
-        galleryImages.length
-    ) {
-
-        galleryIndex = 0;
-
-    }
-
-
-    showGalleryImage(
-        galleryIndex
-    );
-
-}, 3000);
-
-
-/* =========================
-   OPEN GALLERY
-========================= */
-
-function openGallery() {
 
     const images = [
         "{{ url_for('static', filename='gallery/event1.jpeg') }}",
@@ -2217,340 +2166,201 @@ function openGallery() {
         "{{ url_for('static', filename='gallery/event5.jpeg') }}"
     ];
 
-    let galleryWindow = window.open("", "_blank");
 
-    galleryWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
+    /* =========================
+    CURRENT IMAGE
+    ========================= */
 
-        <head>
+    let currentImageIndex = 0;
 
-            <title>Event Gallery</title>
 
-            <style>
+    /* =========================
+    OPEN GALLERY
+    ========================= */
 
-                body {
-                    margin: 0;
-                    padding: 30px;
+    function openGallery() {
 
-                    font-family: Arial, sans-serif;
+        currentImageIndex = 0;
 
-                    background:
-                        linear-gradient(
-                            135deg,
-                            #FF9933,
-                            #FFD54F,
-                            #FFF8DC
-                        );
-
-                    text-align: center;
-                }
-
-
-                h1 {
-                    color: #0F1329;
-                    margin-bottom: 25px;
-                }
-
-
-                .gallery-grid {
-
-                    display: grid;
-
-                    grid-template-columns:
-                        repeat(
-                            auto-fit,
-                            minmax(250px, 1fr)
-                        );
-
-                    gap: 20px;
-
-                    max-width: 1100px;
-
-                    margin: auto;
-                }
-
-
-                .gallery-item {
-
-                    background: #0F1329;
-
-                    padding: 10px;
-
-                    border-radius: 15px;
-
-                    height: 220px;
-
-                    display: flex;
-
-                    align-items: center;
-
-                    justify-content: center;
-
-                    overflow: hidden;
-
-                    cursor: pointer;
-
-                    transition: 0.3s;
-                }
-
-
-                .gallery-item:hover {
-
-                    transform: scale(1.03);
-
-                }
-
-
-                .gallery-item img {
-
-                    width: 100%;
-
-                    height: 100%;
-
-                    object-fit: contain;
-
-                    border-radius: 10px;
-
-                }
-
-
-                .close-btn {
-
-                    margin-top: 25px;
-
-                    padding: 10px 20px;
-
-                    border: none;
-
-                    border-radius: 8px;
-
-                    background: #E65100;
-
-                    color: white;
-
-                    font-size: 14px;
-
-                    font-weight: bold;
-
-                    cursor: pointer;
-
-                }
-
-
-                /* =========================
-                   LARGE IMAGE VIEW
-                ========================= */
-
-                .image-modal {
-
-                    display: none;
-
-                    position: fixed;
-
-                    z-index: 9999;
-
-                    top: 0;
-
-                    left: 0;
-
-                    width: 100%;
-
-                    height: 100%;
-
-                    background: rgba(0, 0, 0, 0.90);
-
-                    align-items: center;
-
-                    justify-content: center;
-
-                }
-
-
-                .image-modal img {
-
-                    max-width: 90%;
-
-                    max-height: 90%;
-
-                    object-fit: contain;
-
-                    border-radius: 10px;
-
-                    box-shadow:
-                        0 10px 40px
-                        rgba(0,0,0,0.5);
-
-                }
-
-
-                .modal-close {
-
-                    position: absolute;
-
-                    top: 20px;
-
-                    right: 30px;
-
-                    color: white;
-
-                    font-size: 40px;
-
-                    font-weight: bold;
-
-                    cursor: pointer;
-
-                }
-
-            </style>
-
-        </head>
-
-
-        <body>
-
-            <h1>
-                📸 Event Gallery
-            </h1>
-
-
-            <div class="gallery-grid">
-
-                ${images.map(function(image) {
-
-                    return `
-                        <div
-                            class="gallery-item"
-                            onclick="showLargeImage('${image}')">
-
-                            <img
-                                src="${image}"
-                                alt="">
-
-                        </div>
-                    `;
-
-                }).join("")}
-
-            </div>
-
-
-            <button
-                class="close-btn"
-                onclick="window.close()">
-
-                ← Close Gallery
-
-            </button>
-
-
-            <!-- LARGE IMAGE MODAL -->
-
-            <div
-                id="imageModal"
-                class="image-modal"
-                onclick="closeLargeImage()">
-
-                <span
-                    class="modal-close">
-
-                    ×
-
-                </span>
-
-
-                <img
-                    id="largeImage"
-                    src=""
-                    alt=""
-                    onclick="event.stopPropagation()">
-
-            </div>
-
-
-            <script>
-
-                function showLargeImage(image) {
-
-                    document.getElementById(
-                        "largeImage"
-                    ).src = image;
-
-                    document.getElementById(
-                        "imageModal"
-                    ).style.display = "flex";
-
-                }
-
-
-                function closeLargeImage() {
-
-                    document.getElementById(
-                        "imageModal"
-                    ).style.display = "none";
-
-                }
-
-
-                document.addEventListener(
-                    "keydown",
-                    function(event) {
-
-                        if (event.key === "Escape") {
-
-                            closeLargeImage();
-
-                        }
-
-                    }
-                );
-
-            <\/script>
-
-        </body>
-
-        </html>
-    `);
-
-    galleryWindow.document.close();
-}
-function handleSwipe() {
-
-    const swipeDistance = touchEndX - touchStartX;
-
-    // 👉 Swipe RIGHT = Next Image
-    if (swipeDistance > 50) {
-        nextImage();
+        showLargeImage(currentImageIndex);
     }
 
-    // 👈 Swipe LEFT = Previous Image
-    else if (swipeDistance < -50) {
-        previousImage();
+
+    /* =========================
+    SHOW LARGE IMAGE
+    ========================= */
+
+    function showLargeImage(index) {
+
+        if (index < 0) {
+            index = images.length - 1;
+        }
+
+        if (index >= images.length) {
+            index = 0;
+        }
+
+        currentImageIndex = index;
+
+        const largeImage =
+            document.getElementById("largeImage");
+
+        const imageModal =
+            document.getElementById("imageModal");
+
+        largeImage.src =
+            images[currentImageIndex];
+
+        imageModal.style.display = "flex";
     }
-}
-let touchStartX = 0;
-let touchEndX = 0;
 
-const imageModal =
-    document.getElementById("imageModal");
 
-imageModal.addEventListener("touchstart", function(event) {
+    /* =========================
+    NEXT IMAGE
+    SWIPE RIGHT 👉
+    ========================= */
 
-    touchStartX =
-        event.changedTouches[0].screenX;
+    function nextImage() {
 
-});
+        currentImageIndex++;
 
-imageModal.addEventListener("touchend", function(event) {
+        if (currentImageIndex >= images.length) {
+            currentImageIndex = 0;
+        }
 
-    touchEndX =
-        event.changedTouches[0].screenX;
+        showLargeImage(currentImageIndex);
+    }
 
-    handleSwipe();
 
-});
+    /* =========================
+    PREVIOUS IMAGE
+    SWIPE LEFT 👈
+    ========================= */
+
+    function previousImage() {
+
+        currentImageIndex--;
+
+        if (currentImageIndex < 0) {
+            currentImageIndex = images.length - 1;
+        }
+
+        showLargeImage(currentImageIndex);
+    }
+
+
+    /* =========================
+    CLOSE LARGE IMAGE
+    ========================= */
+
+    function closeLargeImage() {
+
+        const imageModal =
+            document.getElementById("imageModal");
+
+        imageModal.style.display = "none";
+    }
+
+
+    /* =========================
+    MOBILE SWIPE
+    ========================= */
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    const imageModal =
+        document.getElementById("imageModal");
+
+
+    imageModal.addEventListener(
+        "touchstart",
+        function(event) {
+
+            touchStartX =
+                event.touches[0].clientX;
+
+        },
+        { passive: true }
+    );
+
+
+    imageModal.addEventListener(
+        "touchend",
+        function(event) {
+
+            touchEndX =
+                event.changedTouches[0].clientX;
+
+            const swipeDistance =
+                touchEndX - touchStartX;
+
+
+            /* =====================
+            SWIPE RIGHT 👉
+            NEXT IMAGE
+            ===================== */
+
+            if (swipeDistance > 60) {
+
+                nextImage();
+
+            }
+
+
+            /* =====================
+            SWIPE LEFT 👈
+            PREVIOUS IMAGE
+            ===================== */
+
+            else if (swipeDistance < -60) {
+
+                previousImage();
+
+            }
+
+        },
+        { passive: true }
+    );
+
+
+    /* =========================
+    KEYBOARD SUPPORT
+    ========================= */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            /* ESC = CLOSE */
+
+            if (event.key === "Escape") {
+
+                closeLargeImage();
+
+            }
+
+
+            /* RIGHT ARROW = NEXT */
+
+            if (event.key === "ArrowRight") {
+
+                nextImage();
+
+            }
+
+
+            /* LEFT ARROW = PREVIOUS */
+
+            if (event.key === "ArrowLeft") {
+
+                previousImage();
+
+            }
+
+        }
+    );
+
 </script>
-
 </body>
-
 </html>
