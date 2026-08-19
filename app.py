@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from urllib.parse import quote
 import mysql.connector
-from datetime import timedelta
+from datetime import timedelta, datetime
 import re
 
 load_dotenv()
@@ -29,22 +29,35 @@ def check_session():
 # Sleep Mode End
 
 USERS = {
+
     "Sai": {
         "password": "6281085945",
-        "name": "Sai"
+        "name": "Sai",
+        "mobile": "6281085945",
+        "email": ""
     },
+
     "Deepak": {
         "password": "7090430530",
-        "name": "Deepak"
+        "name": "Deepak",
+        "mobile": "7090430530",
+        "email": ""
     },
+
     "Pardhu": {
         "password": "6305777042",
-        "name": "Pardhu"
+        "name": "Pardhu",
+        "mobile": "6305777042",
+        "email": ""
     },
+
     "Gopal": {
         "password": "9177981391",
-        "name": "Gopal"
+        "name": "Gopal",
+        "mobile": "9177981391",
+        "email": ""
     }
+
 }
 
 
@@ -91,11 +104,16 @@ def login():
         if username in USERS and USERS[username]["password"] == password:
 
             session.permanent = True
+
             session["username"] = username
             session["name"] = USERS[username]["name"]
 
-            return redirect(url_for("dashboard"))
+            # Store last login
+            session["last_login"] = datetime.now().strftime(
+                "%d-%m-%Y %I:%M:%S %p"
+            )
 
+            return redirect(url_for("dashboard"))
         msg = "❌ Invalid Username or Password"
 
     return render_template("login.html", msg=msg)
@@ -106,6 +124,31 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+# ================= MY PROFILE =================
+
+@app.route("/my-profile")
+def my_profile():
+
+    username = session.get("username")
+
+    if not username:
+        return redirect(url_for("login"))
+
+    user = USERS.get(username)
+
+    if not user:
+        return redirect(url_for("logout"))
+
+    return render_template(
+        "my_profile.html",
+        username=username,
+        user=user,
+        last_login=session.get(
+            "last_login",
+            "Not available"
+        )
+    )
 
 
 # ------------------ Dashboard ------------------
