@@ -657,10 +657,6 @@
    EVENT GALLERY
 ========================= */
 
-/* =========================
-   GALLERY SECTION
-========================= */
-
 .gallery-section {
     width: 306.67px;
     text-align: center;
@@ -669,7 +665,7 @@
 
 
 /* =========================
-   TEXT OUTSIDE DARK CARD
+   TEXT - OUTSIDE CARD
 ========================= */
 
 .gallery-heading {
@@ -695,17 +691,16 @@
 
 
 /* =========================
-   GALLERY DARK CARD
-   SAME SIZE AS ANNADHANAM
+   IMAGE CARD ONLY
 ========================= */
 
 .gallery-card {
     width: 306.67px;
-    height: 239px;
+    height: 170px;
+
+    padding: 15px 20px;
 
     box-sizing: border-box;
-
-    padding: 20px;
 
     background: #0F1329;
 
@@ -720,12 +715,12 @@
 
 
 /* =========================
-   IMAGE
+   IMAGE BOX
 ========================= */
 
 .gallery-image-box {
-    width: 266px;
-    height: 190px;
+    width: 265px;
+    height: 140px;
 
     border-radius: 9px;
 
@@ -735,6 +730,10 @@
 }
 
 
+/* =========================
+   IMAGE SLIDER
+========================= */
+
 .gallery-slider {
     position: relative;
 
@@ -742,6 +741,10 @@
     height: 100%;
 }
 
+
+/* =========================
+   IMAGES
+========================= */
 
 .gallery-image {
     position: absolute;
@@ -759,14 +762,13 @@
     transition: opacity 0.8s ease;
 }
 
-
 .gallery-image.active {
     opacity: 1;
 }
 
 
 /* =========================
-   BUTTON OUTSIDE DARK CARD
+   BUTTON - OUTSIDE CARD
 ========================= */
 
 .gallery-btn {
@@ -787,6 +789,10 @@
     font-weight: bold;
 
     cursor: pointer;
+}
+
+.gallery-btn:hover {
+    background: #E65100;
 }
 </style>
 
