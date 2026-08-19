@@ -520,6 +520,34 @@
         0 6px 20px
         rgba(0, 0, 0, 0.20);
 }
+.reset-form-btn,
+.close-form-btn {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.reset-form-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.reset-form-btn:hover {
+    background: #5a6268;
+}
+
+.close-form-btn {
+    background: #0d1b3d;
+    color: white;
+}
+
+.close-form-btn:hover {
+    background: #08132d;
+}
     </style>
 
 </head>
@@ -839,14 +867,34 @@
             🙏 Submit Annadhanam
 
         </button>
-        <button
-    type="button"
-    class="close-form-btn"
-    onclick="closeAnnadhanamForm()">
+       <!-- Reset + Close Buttons -->
 
-    ✕ Close Form
+<div style="
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+">
 
-</button>
+    <button
+        type="reset"
+        class="reset-form-btn"
+        onclick="resetAnnadhanamForm()">
+
+        🔄 Reset
+
+    </button>
+
+
+    <button
+        type="button"
+        class="close-form-btn"
+        onclick="closeAnnadhanamForm()">
+
+        ✕ Close Form
+
+    </button>
+
+</div>
 
     </form>
 
@@ -1483,8 +1531,61 @@ setInterval(function() {
     }
 
 }, 30000);
+function resetAnnadhanamForm() {
 
+    const form =
+        document.querySelector(".annadhanam-form");
+
+    form.reset();
+
+
+    // Reset slot dropdown
+
+    const slot =
+        document.getElementById("slot");
+
+    slot.innerHTML = `
+        <option value="">
+            First select a date
+        </option>
+    `;
+
+
+    slot.disabled = false;
+
+
+    // Hide live availability
+
+    const liveBox =
+        document.getElementById("live-slot-box");
+
+    if (liveBox) {
+        liveBox.style.display = "none";
+    }
+
+
+    // Clear availability
+
+    const availability =
+        document.getElementById("slot-availability");
+
+    if (availability) {
+        availability.innerHTML = "";
+    }
+
+
+    // Clear last updated
+
+    const lastUpdated =
+        document.getElementById("last-updated");
+
+    if (lastUpdated) {
+        lastUpdated.innerHTML = "";
+    }
+
+}
 </script>
+
 </body>
 
 </html>
