@@ -333,53 +333,48 @@
 
         </div>
 
+<!-- Slot -->
 
-     <!-- Slot -->
+<div class="form-group">
 
-        <div class="form-group">
+    <label>
+        Slot <span class="required">*</span>
+    </label>
 
-            <label>
-                Slot
-                <span class="required">*</span>
-            </label>
+    <div id="live-slot-box"
+         style="
+            display:none;
+            margin-bottom:10px;
+            padding:12px;
+            border-radius:10px;
+            background:#f8f9fa;
+            border:1px solid #ddd;
+         ">
 
-            <div id="live-status"
-                style="
-                    display:none;
-                    margin-bottom:10px;
-                    padding:8px 12px;
-                    border-radius:8px;
-                    background:#e8f5e9;
-                    color:#198754;
-                    font-weight:bold;
-                    font-size:13px;
-                ">
+        <div style="
+            font-weight:bold;
+            color:#198754;
+            margin-bottom:8px;
+        ">
             🟢 LIVE SLOT AVAILABILITY
-            </div>
-
-            <select
-                name="slot"
-                id="slot"
-                required
-                disabled>
-
-                <option value="">
-                    First select a date
-                </option>
-
-            </select>
-
-            <div
-                id="slot-message"
-                style="
-                    margin-top:8px;
-                    font-size:13px;
-                    color:#777;
-                ">
-            </div>
-
         </div>
 
+        <div id="slot-availability"></div>
+
+    </div>
+
+    <select
+        name="slot"
+        id="slot"
+        required>
+
+        <option value="">
+            Select Date First
+        </option>
+
+    </select>
+
+</div>
         <!-- Image -->
 
         <div class="form-group">
@@ -675,9 +670,187 @@ async function loadSlotAvailability() {
         }
 
     }, 10000);
+    
 
 </script>
+<script>
 
+const liveDateInput = document.getElementById("donation_date");
+const liveSlotDropdown = document.getElementById("slot");
+const liveSlotBoxElement = document.getElementById("live-slot-box");
+const liveSlotAvailabilityElement =
+    document.getElementById("slot-availability");
+
+
+const liveSlotData = {
+
+    "2026-09-14": {
+        "Morning": 0
+    },
+
+    "2026-09-15": {
+        "Afternoon": 2,
+        "Evening": 2
+    },
+
+    "2026-09-16": {
+        "Afternoon": 2
+    }
+
+};
+
+
+if (liveDateInput && liveSlotDropdown) {
+
+    liveDateInput.addEventListener(
+        "change",
+        updateLiveSlots
+    );
+
+}
+
+
+function updateLiveSlots() {
+
+    const selectedDate =
+        liveDateInput.value;
+
+
+    liveSlotDropdown.innerHTML = "";
+
+    liveSlotAvailabilityElement.innerHTML = "";
+
+
+    liveSlotBoxElement.style.display =
+        "block";
+
+
+    if (!selectedDate) {
+
+        liveSlotDropdown.innerHTML = `
+            <option value="">
+                Select Date First
+            </option>
+        `;
+
+        liveSlotBoxElement.style.display =
+            "none";
+
+        return;
+    }
+
+
+    const selectedSlots =
+        liveSlotData[selectedDate];
+
+
+    if (!selectedSlots) {
+
+        liveSlotDropdown.innerHTML = `
+            <option value="">
+                No Slots Available
+            </option>
+        `;
+
+
+        liveSlotAvailabilityElement.innerHTML = `
+            <div style="
+                color:#dc3545;
+                font-weight:bold;
+                padding:8px 0;
+            ">
+                🔴 No Annadhanam slots available
+                for this date.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    liveSlotDropdown.innerHTML = `
+        <option value="">
+            Select Slot
+        </option>
+    `;
+
+
+    Object.entries(selectedSlots).forEach(
+        function ([slotName, remainingSlots]) {
+
+
+            // Dropdown option
+
+            const liveOption =
+                document.createElement("option");
+
+
+            liveOption.value =
+                slotName;
+
+
+            if (remainingSlots > 0) {
+
+                liveOption.textContent =
+                    `🟢 ${slotName} — ${remainingSlots} slots available`;
+
+            } else {
+
+                liveOption.textContent =
+                    `🔴 ${slotName} — 0 slots available (FULL)`;
+
+                liveOption.disabled = true;
+
+            }
+
+
+            liveSlotDropdown.appendChild(
+                liveOption
+            );
+
+
+            // Live availability display
+
+            const liveSlotRow =
+                document.createElement("div");
+
+
+            liveSlotRow.style.padding =
+                "7px 0";
+
+            liveSlotRow.style.fontWeight =
+                "bold";
+
+
+            if (remainingSlots > 0) {
+
+                liveSlotRow.style.color =
+                    "#198754";
+
+                liveSlotRow.innerHTML =
+                    `🟢 ${slotName} — ${remainingSlots} slots available`;
+
+            } else {
+
+                liveSlotRow.style.color =
+                    "#dc3545";
+
+                liveSlotRow.innerHTML =
+                    `🔴 ${slotName} — 0 slots available (FULL)`;
+
+            }
+
+
+            liveSlotAvailabilityElement.appendChild(
+                liveSlotRow
+            );
+
+        }
+    );
+
+}
+
+</script>
 
 </body>
 
