@@ -2514,7 +2514,20 @@ function openGallery() {
 
     galleryWindow.document.close();
 }
+function handleSwipe() {
 
+    const swipeDistance = touchEndX - touchStartX;
+
+    // 👉 Swipe RIGHT = Next Image
+    if (swipeDistance > 50) {
+        nextImage();
+    }
+
+    // 👈 Swipe LEFT = Previous Image
+    else if (swipeDistance < -50) {
+        previousImage();
+    }
+}
 </script>
 
 </body>
