@@ -334,7 +334,7 @@
         </div>
 
 
-        <!-- Slot -->
+     <!-- Slot -->
 
         <div class="form-group">
 
@@ -343,30 +343,42 @@
                 <span class="required">*</span>
             </label>
 
+            <div id="live-status"
+                style="
+                    display:none;
+                    margin-bottom:10px;
+                    padding:8px 12px;
+                    border-radius:8px;
+                    background:#e8f5e9;
+                    color:#198754;
+                    font-weight:bold;
+                    font-size:13px;
+                ">
+            🟢 LIVE SLOT AVAILABILITY
+            </div>
+
             <select
                 name="slot"
-                required>
+                id="slot"
+                required
+                disabled>
 
                 <option value="">
-                    Select Slot
-                </option>
-
-                <option value="Morning">
-                    Morning
-                </option>
-
-                <option value="Afternoon">
-                    Afternoon
-                </option>
-
-                <option value="Evening">
-                    Evening
+                    First select a date
                 </option>
 
             </select>
 
-        </div>
+            <div
+                id="slot-message"
+                style="
+                    margin-top:8px;
+                    font-size:13px;
+                    color:#777;
+                ">
+            </div>
 
+        </div>
 
         <!-- Image -->
 
@@ -474,6 +486,195 @@
 
         }
     );
+    // ================= LIVE ANNADHANAM SLOT AVAILABILITY =================
+
+const dateInput = document.getElementById("donation_date");
+const slotSelect = document.getElementById("slot");
+const slotMessage = document.getElementById("slot-message");
+const liveStatus = document.getElementById("live-status");
+
+
+// Load slots when date changes
+dateInput.addEventListener("change", loadSlotAvailability);
+
+
+// Function to load slot availability
+async function loadSlotAvailability() {
+
+    const selectedDate = dateInput.value;
+
+    // Clear previous slots
+    slotSelect.innerHTML = "";
+
+    slotSelect.disabled = true;
+
+    liveStatus.style.display = "none";
+
+    slotMessage.innerHTML = "";
+
+
+    // If date is not selected
+    if (!selectedDate) {
+
+        slotSelect.innerHTML = `
+            <option value="">
+                First select a date
+            </option>
+        `;
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `/annadhanam/slot-availability?date=${selectedDate}`
+        );
+
+
+        if (!response.ok) {
+            throw new Error("Failed to load availability");
+        }
+
+
+        const data = await response.json();
+
+
+        // Show LIVE indicator
+        liveStatus.style.display = "block";
+
+
+        // No slots configured
+        if (!data.slots || data.slots.length === 0) {
+
+            slotSelect.innerHTML = `
+                <option value="">
+                    No slots available
+                </option>
+            `;
+
+            slotMessage.innerHTML =
+                "🔴 No Annadhanam slots are available for this date.";
+
+            return;
+        }
+
+
+        // Default option
+        slotSelect.innerHTML = `
+            <option value="">
+                Select Slot
+            </option>
+        `;
+
+
+        let availableCount = 0;
+
+
+        // Create slot options
+        data.slots.forEach(function(item) {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value = item.slot;
+
+
+            // Available
+            if (item.remaining > 0) {
+
+                option.textContent =
+                    `🟢 ${item.slot} — ${item.remaining} slots available`;
+
+                option.disabled = false;
+
+                availableCount++;
+
+            }
+
+            // Full
+            else {
+
+                option.textContent =
+                    `🔴 ${item.slot} — 0 slots available (FULL)`;
+
+                option.disabled = true;
+            }
+
+
+            slotSelect.appendChild(option);
+
+        });
+
+
+        // Enable dropdown if at least one slot exists
+        slotSelect.disabled =
+            data.slots.length === 0;
+
+
+        // Message
+        if (availableCount > 0) {
+
+            slotMessage.innerHTML =
+                "🟢 Slot availability is LIVE.";
+
+            slotMessage.style.color =
+                "#198754";
+
+        } else {
+
+            slotMessage.innerHTML =
+                "🔴 All slots are FULL for this date.";
+
+            slotMessage.style.color =
+                "#dc3545";
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Slot availability error:",
+            error
+        );
+
+
+        slotSelect.innerHTML = `
+            <option value="">
+                Unable to load slots
+            </option>
+        `;
+
+
+        slotSelect.disabled = true;
+
+
+        liveStatus.style.display = "none";
+
+
+        slotMessage.innerHTML =
+            "⚠️ Unable to load slot availability. Please try again.";
+
+        slotMessage.style.color =
+            "#dc3545";
+    }
+}
+
+
+    // ================= AUTO REFRESH =================
+
+    // Refresh availability every 10 seconds
+    setInterval(function() {
+
+        if (dateInput.value) {
+
+            loadSlotAvailability();
+
+        }
+
+    }, 10000);
 
 </script>
 

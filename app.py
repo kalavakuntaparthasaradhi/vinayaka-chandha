@@ -282,6 +282,82 @@ def add_expense():
     finally:
         cursor.close()
         conn.close()
+# ================= ANNADHANAM SLOT CONFIG =================
+
+ANNADHANAM_SLOT_CAPACITY = 2
+
+ANNADHANAM_SLOTS = {
+    "2026-09-14": ["Morning"],
+    "2026-09-15": ["Afternoon", "Evening"],
+    "2026-09-16": ["Afternoon"]
+}
+
+
+def get_slot_availability(cursor, donation_date):
+
+    slots = ANNADHANAM_SLOTS.get(
+        donation_date,
+        []
+    )
+
+    result = []
+
+    for slot in slots:
+
+        cursor.execute("""
+            SELECT COUNT(*) AS booked
+            FROM annadhanam_donors
+            WHERE donation_date = %s
+              AND slot = %s
+              AND status IN ('pending', 'approved')
+        """, (
+            donation_date,
+            slot
+        ))
+
+        row = cursor.fetchone()
+
+        booked = row["booked"]
+
+        remaining = max(
+            ANNADHANAM_SLOT_CAPACITY - booked,
+            0
+        )
+
+        result.append({
+            "slot": slot,
+            "capacity": ANNADHANAM_SLOT_CAPACITY,
+            "booked": booked,
+            "remaining": remaining
+        })
+
+    return result
+@app.route("/annadhanam/slot-availability")
+def annadhanam_slot_availability():
+
+    donation_date = request.args.get(
+        "date",
+        ""
+    ).strip()
+
+    conn, cursor = get_db()
+
+    try:
+
+        slots = get_slot_availability(
+            cursor,
+            donation_date
+        )
+
+        return {
+            "date": donation_date,
+            "slots": slots
+        }
+
+    finally:
+
+        cursor.close()
+        conn.close()
 
 # ================= ANNADHANAM =================
 
