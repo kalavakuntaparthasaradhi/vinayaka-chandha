@@ -1077,34 +1077,22 @@
 
     <div class="gallery-image-box">
 
-        <div class="gallery-slider">
+       <div class="gallery-slider">
+
+    {% if gallery_images %}
+
+        {% for image in gallery_images %}
 
             <img
-                src="{{ url_for('static', filename='gallery/event1.jpeg') }}"
-                class="gallery-image active"
-                alt="Event Photo 1">
+                src="{{ url_for('static', filename='gallery/' + image) }}"
+                class="gallery-image {% if loop.first %}active{% endif %}"
+                alt="Event Photo {{ loop.index }}">
 
-            <img
-                src="{{ url_for('static', filename='gallery/event2.jpeg') }}"
-                class="gallery-image"
-                alt="Event Photo 2">
+        {% endfor %}
 
-            <img
-                src="{{ url_for('static', filename='gallery/event3.jpeg') }}"
-                class="gallery-image"
-                alt="Event Photo 3">
+    {% endif %}
 
-            <img
-                src="{{ url_for('static', filename='gallery/event4.jpeg') }}"
-                class="gallery-image"
-                alt="Event Photo 4">
-
-            <img
-                src="{{ url_for('static', filename='gallery/event5.jpeg') }}"
-                class="gallery-image"
-                alt="Event Photo 5">
-
-        </div>
+</div>
 
     </div>
 
@@ -2152,126 +2140,177 @@ function resetAnnadhanamForm() {
             onclick="event.stopPropagation()">
 
     </div>
-
 <script>
+
 /* =========================
    GALLERY IMAGES
 ========================= */
 
-    const images = [
-        "{{ url_for('static', filename='gallery/event1.jpeg') }}",
-        "{{ url_for('static', filename='gallery/event2.jpeg') }}",
-        "{{ url_for('static', filename='gallery/event3.jpeg') }}",
-        "{{ url_for('static', filename='gallery/event4.jpeg') }}",
-        "{{ url_for('static', filename='gallery/event5.jpeg') }}"
-    ];
+const images = Array.from(
+    document.querySelectorAll(".gallery-image")
+).map(function(element) {
+    return element.src;
+});
 
 
-    /* =========================
-    CURRENT IMAGE
-    ========================= */
+/* =========================
+   CURRENT IMAGE
+========================= */
 
-    let currentImageIndex = 0;
+let currentImageIndex = 0;
 
 
-    /* =========================
-    OPEN GALLERY
-    ========================= */
+/* =========================
+   OPEN GALLERY
+========================= */
 
-    function openGallery() {
+function openGallery() {
 
-        currentImageIndex = 0;
+    if (images.length === 0) {
 
-        showLargeImage(currentImageIndex);
+        alert("No event photos available.");
+
+        return;
+    }
+
+    currentImageIndex = 0;
+
+    showLargeImage(currentImageIndex);
+}
+
+
+/* =========================
+   SHOW LARGE IMAGE
+========================= */
+
+function showLargeImage(index) {
+
+    if (images.length === 0) {
+        return;
     }
 
 
-    /* =========================
-    SHOW LARGE IMAGE
-    ========================= */
+    if (index < 0) {
 
-    function showLargeImage(index) {
-
-        if (index < 0) {
-            index = images.length - 1;
-        }
-
-        if (index >= images.length) {
-            index = 0;
-        }
-
-        currentImageIndex = index;
-
-        const largeImage =
-            document.getElementById("largeImage");
-
-        const imageModal =
-            document.getElementById("imageModal");
-
-        largeImage.src =
-            images[currentImageIndex];
-
-        imageModal.style.display = "flex";
+        index = images.length - 1;
     }
 
 
-    /* =========================
-    NEXT IMAGE
-    SWIPE RIGHT 👉
-    ========================= */
+    if (index >= images.length) {
 
-    function nextImage() {
-
-        currentImageIndex++;
-
-        if (currentImageIndex >= images.length) {
-            currentImageIndex = 0;
-        }
-
-        showLargeImage(currentImageIndex);
+        index = 0;
     }
 
 
-    /* =========================
-    PREVIOUS IMAGE
-    SWIPE LEFT 👈
-    ========================= */
-
-    function previousImage() {
-
-        currentImageIndex--;
-
-        if (currentImageIndex < 0) {
-            currentImageIndex = images.length - 1;
-        }
-
-        showLargeImage(currentImageIndex);
-    }
+    currentImageIndex = index;
 
 
-    /* =========================
-    CLOSE LARGE IMAGE
-    ========================= */
+    const largeImage =
+        document.getElementById("largeImage");
 
-    function closeLargeImage() {
-
-        const imageModal =
-            document.getElementById("imageModal");
-
-        imageModal.style.display = "none";
-    }
-
-
-    /* =========================
-    MOBILE SWIPE
-    ========================= */
-
-    let touchStartX = 0;
-    let touchEndX = 0;
 
     const imageModal =
         document.getElementById("imageModal");
 
+
+    largeImage.src =
+        images[currentImageIndex];
+
+
+    imageModal.style.display =
+        "flex";
+}
+
+
+/* =========================
+   NEXT IMAGE
+   SWIPE RIGHT 👉
+========================= */
+
+function nextImage() {
+
+    if (images.length === 0) {
+        return;
+    }
+
+
+    currentImageIndex++;
+
+
+    if (currentImageIndex >= images.length) {
+
+        currentImageIndex = 0;
+    }
+
+
+    showLargeImage(
+        currentImageIndex
+    );
+}
+
+
+/* =========================
+   PREVIOUS IMAGE
+   SWIPE LEFT 👈
+========================= */
+
+function previousImage() {
+
+    if (images.length === 0) {
+        return;
+    }
+
+
+    currentImageIndex--;
+
+
+    if (currentImageIndex < 0) {
+
+        currentImageIndex =
+            images.length - 1;
+    }
+
+
+    showLargeImage(
+        currentImageIndex
+    );
+}
+
+
+/* =========================
+   CLOSE LARGE IMAGE
+========================= */
+
+function closeLargeImage() {
+
+    const imageModal =
+        document.getElementById("imageModal");
+
+
+    imageModal.style.display =
+        "none";
+}
+
+
+/* =========================
+   MOBILE SWIPE
+========================= */
+
+let touchStartX = 0;
+
+let touchEndX = 0;
+
+
+const imageModal =
+    document.getElementById("imageModal");
+
+
+if (imageModal) {
+
+
+    /* =========================
+       TOUCH START
+    ========================= */
 
     imageModal.addEventListener(
         "touchstart",
@@ -2281,9 +2320,15 @@ function resetAnnadhanamForm() {
                 event.touches[0].clientX;
 
         },
-        { passive: true }
+        {
+            passive: true
+        }
     );
 
+
+    /* =========================
+       TOUCH END
+    ========================= */
 
     imageModal.addEventListener(
         "touchend",
@@ -2292,13 +2337,14 @@ function resetAnnadhanamForm() {
             touchEndX =
                 event.changedTouches[0].clientX;
 
+
             const swipeDistance =
                 touchEndX - touchStartX;
 
 
             /* =====================
-            SWIPE RIGHT 👉
-            NEXT IMAGE
+               SWIPE RIGHT 👉
+               NEXT IMAGE
             ===================== */
 
             if (swipeDistance > 60) {
@@ -2309,8 +2355,8 @@ function resetAnnadhanamForm() {
 
 
             /* =====================
-            SWIPE LEFT 👈
-            PREVIOUS IMAGE
+               SWIPE LEFT 👈
+               PREVIOUS IMAGE
             ===================== */
 
             else if (swipeDistance < -60) {
@@ -2320,46 +2366,51 @@ function resetAnnadhanamForm() {
             }
 
         },
-        { passive: true }
-    );
-
-
-    /* =========================
-    KEYBOARD SUPPORT
-    ========================= */
-
-    document.addEventListener(
-        "keydown",
-        function(event) {
-
-            /* ESC = CLOSE */
-
-            if (event.key === "Escape") {
-
-                closeLargeImage();
-
-            }
-
-
-            /* RIGHT ARROW = NEXT */
-
-            if (event.key === "ArrowRight") {
-
-                nextImage();
-
-            }
-
-
-            /* LEFT ARROW = PREVIOUS */
-
-            if (event.key === "ArrowLeft") {
-
-                previousImage();
-
-            }
-
+        {
+            passive: true
         }
     );
+
+}
+
+
+/* =========================
+   KEYBOARD SUPPORT
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+
+        /* ESC = CLOSE */
+
+        if (event.key === "Escape") {
+
+            closeLargeImage();
+
+        }
+
+
+        /* RIGHT ARROW = NEXT */
+
+        if (event.key === "ArrowRight") {
+
+            nextImage();
+
+        }
+
+
+        /* LEFT ARROW = PREVIOUS */
+
+        if (event.key === "ArrowLeft") {
+
+            previousImage();
+
+        }
+
+    }
+);
 
 </script>
 </body>
