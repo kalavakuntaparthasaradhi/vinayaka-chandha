@@ -2166,9 +2166,162 @@ setInterval(function() {
 
 function openGallery() {
 
-    alert(
-        "Event Gallery will be opened here."
-    );
+    const images = [
+        "{{ url_for('static', filename='gallery/event1.jpeg') }}",
+        "{{ url_for('static', filename='gallery/event2.jpeg') }}",
+        "{{ url_for('static', filename='gallery/event3.jpeg') }}",
+        "{{ url_for('static', filename='gallery/event4.jpeg') }}",
+        "{{ url_for('static', filename='gallery/event5.jpeg') }}"
+    ];
+
+    let galleryWindow = window.open("", "_blank");
+
+    galleryWindow.document.write(`
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>Event Gallery</title>
+
+            <style>
+
+                body {
+                    margin: 0;
+                    padding: 30px;
+
+                    font-family: Arial, sans-serif;
+
+                    background:
+                        linear-gradient(
+                            135deg,
+                            #FF9933,
+                            #FFD54F,
+                            #FFF8DC
+                        );
+
+                    text-align: center;
+                }
+
+                h1 {
+                    color: #0F1329;
+                    margin-bottom: 25px;
+                }
+
+                .gallery-grid {
+
+                    display: grid;
+
+                    grid-template-columns:
+                        repeat(
+                            auto-fit,
+                            minmax(250px, 1fr)
+                        );
+
+                    gap: 20px;
+
+                    max-width: 1100px;
+
+                    margin: auto;
+                }
+
+                .gallery-item {
+
+                    background: #0F1329;
+
+                    padding: 10px;
+
+                    border-radius: 15px;
+
+                    height: 220px;
+
+                    display: flex;
+
+                    align-items: center;
+
+                    justify-content: center;
+
+                    overflow: hidden;
+                }
+
+                .gallery-item img {
+
+                    width: 100%;
+
+                    height: 100%;
+
+                    object-fit: contain;
+
+                    border-radius: 10px;
+                }
+
+                .close-btn {
+
+                    margin-top: 25px;
+
+                    padding: 10px 20px;
+
+                    border: none;
+
+                    border-radius: 8px;
+
+                    background: #E65100;
+
+                    color: white;
+
+                    font-size: 14px;
+
+                    font-weight: bold;
+
+                    cursor: pointer;
+                }
+
+            </style>
+
+        </head>
+
+
+        <body>
+
+            <h1>
+                📸 Event Gallery
+            </h1>
+
+
+            <div class="gallery-grid">
+
+                ${images.map(function(image) {
+
+                    return `
+                        <div class="gallery-item">
+
+                            <img
+                                src="${image}"
+                                alt="">
+
+                        </div>
+                    `;
+
+                }).join("")}
+
+            </div>
+
+
+            <button
+                class="close-btn"
+                onclick="window.close()">
+
+                ← Close Gallery
+
+            </button>
+
+        </body>
+
+        </html>
+    `);
+
+    galleryWindow.document.close();
 
 }
 
