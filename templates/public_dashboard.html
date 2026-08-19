@@ -651,17 +651,23 @@
    GALLERY CARD
 ========================= */
 
+/* =========================
+   GALLERY CARD
+========================= */
+
 .gallery-card {
     width: 220px;
     height: 180px;
 
-    padding: 15px;
-    border-radius: 15px;
+    padding: 12px;
 
     background: #0d122d;
 
-    text-align: center;
+    border-radius: 15px;
+
     color: white;
+
+    text-align: center;
 
     display: flex;
     flex-direction: column;
@@ -671,26 +677,58 @@
 }
 
 
-/* Gallery image */
+/* =========================
+   GALLERY TITLE
+========================= */
+
+.gallery-card .card-icon {
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.gallery-card .card-title {
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.gallery-card .card-subtitle {
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 2px;
+}
+
+
+/* =========================
+   FIXED IMAGE BOX
+========================= */
 
 .gallery-slider {
-    width: 100%;
-    height: 75px;
+    position: relative;
 
-    margin: 8px 0;
+    width: 170px;
+    height: 55px;
 
-    border-radius: 8px;
+    margin-top: 7px;
+
+    border-radius: 7px;
 
     overflow: hidden;
 
     background: #111;
 
-    position: relative;
+    flex-shrink: 0;
 }
 
 
+/* =========================
+   IMAGES
+========================= */
+
 .gallery-image {
     position: absolute;
+
+    top: 0;
+    left: 0;
 
     width: 100%;
     height: 100%;
@@ -702,18 +740,19 @@
     transition: opacity 0.8s ease;
 }
 
-
 .gallery-image.active {
     opacity: 1;
 }
 
 
-/* Button */
+/* =========================
+   BUTTON AT BOTTOM
+========================= */
 
 .gallery-btn {
     margin-top: auto;
 
-    padding: 7px 12px;
+    padding: 7px 14px;
 
     border: none;
 
@@ -728,6 +767,12 @@
     font-weight: bold;
 
     cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+.gallery-btn:hover {
+    background: #E65100;
 }
 </style>
 
