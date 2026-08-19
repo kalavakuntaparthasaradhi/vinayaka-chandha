@@ -651,40 +651,46 @@
    GALLERY CARD
 ========================= */
 
-/* =========================
-   GALLERY CARD
-========================= */
-
 .gallery-card {
+    width: 220px;
+    height: 180px;
+
+    padding: 15px;
+    border-radius: 15px;
+
+    background: #0d122d;
+
+    text-align: center;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     overflow: hidden;
 }
 
 
-/* Full photo area */
+/* Gallery image */
 
 .gallery-slider {
-    position: relative;
-
     width: 100%;
-    height: 120px;
+    height: 75px;
 
-    margin: 12px 0;
+    margin: 8px 0;
 
-    border-radius: 10px;
+    border-radius: 8px;
 
     overflow: hidden;
 
     background: #111;
+
+    position: relative;
 }
 
 
-/* Images */
-
 .gallery-image {
     position: absolute;
-
-    top: 0;
-    left: 0;
 
     width: 100%;
     height: 100%;
@@ -697,37 +703,31 @@
 }
 
 
-/* Active image */
-
 .gallery-image.active {
     opacity: 1;
 }
 
-/* Gallery button */
+
+/* Button */
 
 .gallery-btn {
-    margin-top: 10px;
+    margin-top: auto;
 
-    padding: 9px 16px;
+    padding: 7px 12px;
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 7px;
 
     background: #FF6F00;
 
     color: white;
 
-    font-size: 13px;
+    font-size: 12px;
 
     font-weight: bold;
 
     cursor: pointer;
-}
-
-
-.gallery-btn:hover {
-    background: #E65100;
 }
 </style>
 
