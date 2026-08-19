@@ -2528,6 +2528,27 @@ function handleSwipe() {
         previousImage();
     }
 }
+let touchStartX = 0;
+let touchEndX = 0;
+
+const imageModal =
+    document.getElementById("imageModal");
+
+imageModal.addEventListener("touchstart", function(event) {
+
+    touchStartX =
+        event.changedTouches[0].screenX;
+
+});
+
+imageModal.addEventListener("touchend", function(event) {
+
+    touchEndX =
+        event.changedTouches[0].screenX;
+
+    handleSwipe();
+
+});
 </script>
 
 </body>
