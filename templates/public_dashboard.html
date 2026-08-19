@@ -365,7 +365,7 @@
             }
 
         }
-        /* Annadhanam Registration Form */
+/* Annadhanam Registration Form */
 
 .annadhanam-form-section {
     margin-top: 40px;
@@ -886,6 +886,49 @@
 
     font-size: 13px;
 
+    font-weight: bold;
+
+    cursor: pointer;
+}
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.92);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.image-modal img {
+    max-width: 95vw;
+    max-height: 85vh;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+.modal-close {
+    position: absolute;
+
+    top: 10px;
+    right: 18px;
+
+    color: white;
+
+    font-size: 35px;
     font-weight: bold;
 
     cursor: pointer;
@@ -2178,7 +2221,6 @@ function openGallery() {
 
     galleryWindow.document.write(`
         <!DOCTYPE html>
-
         <html>
 
         <head>
@@ -2204,10 +2246,12 @@ function openGallery() {
                     text-align: center;
                 }
 
+
                 h1 {
                     color: #0F1329;
                     margin-bottom: 25px;
                 }
+
 
                 .gallery-grid {
 
@@ -2226,6 +2270,7 @@ function openGallery() {
                     margin: auto;
                 }
 
+
                 .gallery-item {
 
                     background: #0F1329;
@@ -2243,7 +2288,19 @@ function openGallery() {
                     justify-content: center;
 
                     overflow: hidden;
+
+                    cursor: pointer;
+
+                    transition: 0.3s;
                 }
+
+
+                .gallery-item:hover {
+
+                    transform: scale(1.03);
+
+                }
+
 
                 .gallery-item img {
 
@@ -2254,7 +2311,9 @@ function openGallery() {
                     object-fit: contain;
 
                     border-radius: 10px;
+
                 }
+
 
                 .close-btn {
 
@@ -2275,6 +2334,72 @@ function openGallery() {
                     font-weight: bold;
 
                     cursor: pointer;
+
+                }
+
+
+                /* =========================
+                   LARGE IMAGE VIEW
+                ========================= */
+
+                .image-modal {
+
+                    display: none;
+
+                    position: fixed;
+
+                    z-index: 9999;
+
+                    top: 0;
+
+                    left: 0;
+
+                    width: 100%;
+
+                    height: 100%;
+
+                    background: rgba(0, 0, 0, 0.90);
+
+                    align-items: center;
+
+                    justify-content: center;
+
+                }
+
+
+                .image-modal img {
+
+                    max-width: 90%;
+
+                    max-height: 90%;
+
+                    object-fit: contain;
+
+                    border-radius: 10px;
+
+                    box-shadow:
+                        0 10px 40px
+                        rgba(0,0,0,0.5);
+
+                }
+
+
+                .modal-close {
+
+                    position: absolute;
+
+                    top: 20px;
+
+                    right: 30px;
+
+                    color: white;
+
+                    font-size: 40px;
+
+                    font-weight: bold;
+
+                    cursor: pointer;
+
                 }
 
             </style>
@@ -2294,7 +2419,9 @@ function openGallery() {
                 ${images.map(function(image) {
 
                     return `
-                        <div class="gallery-item">
+                        <div
+                            class="gallery-item"
+                            onclick="showLargeImage('${image}')">
 
                             <img
                                 src="${image}"
@@ -2316,13 +2443,76 @@ function openGallery() {
 
             </button>
 
+
+            <!-- LARGE IMAGE MODAL -->
+
+            <div
+                id="imageModal"
+                class="image-modal"
+                onclick="closeLargeImage()">
+
+                <span
+                    class="modal-close">
+
+                    ×
+
+                </span>
+
+
+                <img
+                    id="largeImage"
+                    src=""
+                    alt=""
+                    onclick="event.stopPropagation()">
+
+            </div>
+
+
+            <script>
+
+                function showLargeImage(image) {
+
+                    document.getElementById(
+                        "largeImage"
+                    ).src = image;
+
+                    document.getElementById(
+                        "imageModal"
+                    ).style.display = "flex";
+
+                }
+
+
+                function closeLargeImage() {
+
+                    document.getElementById(
+                        "imageModal"
+                    ).style.display = "none";
+
+                }
+
+
+                document.addEventListener(
+                    "keydown",
+                    function(event) {
+
+                        if (event.key === "Escape") {
+
+                            closeLargeImage();
+
+                        }
+
+                    }
+                );
+
+            <\/script>
+
         </body>
 
         </html>
     `);
 
     galleryWindow.document.close();
-
 }
 
 </script>
