@@ -17,8 +17,12 @@ app.permanent_session_lifetime = timedelta(minutes=5)
 @app.before_request
 def check_session():
 
-    if request.endpoint not in ["login","public_dashboard","static"]:
-
+   if request.endpoint not in [
+    "login",
+    "public_dashboard",
+    "annadhanam_slot_availability",
+    "static"
+    ]:
         if "username" not in session:
             return redirect(url_for("login"))
         
