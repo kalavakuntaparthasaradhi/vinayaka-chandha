@@ -6,9 +6,41 @@ from urllib.parse import quote
 import mysql.connector
 from datetime import timedelta, datetime
 import re
+from werkzeug.utils import secure_filename
+
 
 load_dotenv()
 app = Flask(__name__)
+# =========================
+# EVENT GALLERY
+# =========================
+
+GALLERY_FOLDER = os.path.join(
+    app.static_folder,
+    "gallery"
+)
+
+os.makedirs(
+    GALLERY_FOLDER,
+    exist_ok=True
+)
+
+
+ALLOWED_GALLERY_EXTENSIONS = {
+    "jpg",
+    "jpeg",
+    "png",
+    "webp"
+}
+
+
+def allowed_gallery_file(filename):
+
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower()
+        in ALLOWED_GALLERY_EXTENSIONS
+    )
 app.secret_key = "vinayaka123"
 app.permanent_session_lifetime = timedelta(minutes=5)
 
@@ -720,6 +752,103 @@ def delete_annadhanam(id):
         cursor.close()
         conn.close()
 
+# =========================
+# ADMIN EVENT GALLERY
+# =========================
+
+@app.route("/admin/gallery", methods=["GET", "POST"])
+def admin_gallery():
+
+    if request.method == "POST":
+
+        if "image" not in request.files:
+            flash("Please select an image.", "error")
+            return redirect(url_for("admin_gallery"))
+
+        image = request.files["image"]
+
+        if image.filename == "":
+            flash("Please select an image.", "error")
+            return redirect(url_for("admin_gallery"))
+
+        if not allowed_gallery_file(image.filename):
+            flash(
+                "Only JPG, JPEG, PNG and WEBP images are allowed.",
+                "error"
+            )
+            return redirect(url_for("admin_gallery"))
+
+        filename = secure_filename(image.filename)
+
+        image_path = os.path.join(
+            GALLERY_FOLDER,
+            filename
+        )
+
+        image.save(image_path)
+
+        flash(
+            "Event image uploaded successfully.",
+            "success"
+        )
+
+        return redirect(
+            url_for("admin_gallery")
+        )
+
+    # Get all gallery images
+    gallery_images = []
+
+    for filename in os.listdir(GALLERY_FOLDER):
+
+        if allowed_gallery_file(filename):
+            gallery_images.append(filename)
+
+    gallery_images.sort()
+
+    return render_template(
+        "admin_gallery.html",
+        gallery_images=gallery_images
+    )
+
+
+# =========================
+# DELETE GALLERY IMAGE
+# =========================
+
+@app.route(
+    "/admin/gallery/delete/<filename>",
+    methods=["POST"]
+)
+def delete_gallery_image(filename):
+
+    filename = secure_filename(filename)
+
+    image_path = os.path.join(
+        GALLERY_FOLDER,
+        filename
+    )
+
+    if os.path.exists(image_path):
+
+        os.remove(image_path)
+
+        flash(
+            "Event image deleted successfully.",
+            "success"
+        )
+
+    else:
+
+        flash(
+            "Image not found.",
+            "error"
+        )
+
+    return redirect(
+        url_for("admin_gallery")
+    )
+
 # ------------------ Public Dashboard ------------------
 
 @app.route("/public", methods=["GET", "POST"])
@@ -763,7 +892,9 @@ def public_dashboard():
                 if len(image_bytes) > 5 * 1024 * 1024:
                     return "Image must be less than 5 MB.", 400
 
-                extension = image.filename.rsplit(".", 1)[-1].lower()
+                extension = image.filename.rsplit(
+                    ".", 1
+                )[-1].lower()
 
                 mime_types = {
                     "jpg": "image/jpeg",
@@ -809,13 +940,16 @@ def public_dashboard():
             ))
 
             conn.commit()
+
             flash(
-            "✅ Annadhanam registration submitted successfully! "
-            "🙏 Your request is pending admin approval."
+                "✅ Annadhanam registration submitted successfully! "
+                "🙏 Your request is pending admin approval."
             )
+
             return redirect(
                 url_for("public_dashboard")
             )
+
 
         # ================= FINANCIAL DATA =================
 
@@ -835,7 +969,10 @@ def public_dashboard():
         total_expenses = cursor.fetchone()["total"]
 
 
-        balance = total_collection - total_expenses
+        balance = (
+            total_collection
+            - total_expenses
+        )
 
 
         # ================= APPROVED ANNADHANAM =================
@@ -856,13 +993,38 @@ def public_dashboard():
         annadhanam_donors = cursor.fetchall()
 
 
+        # =========================
+        # EVENT GALLERY IMAGES
+        # =========================
+
+        gallery_images = []
+
+        for filename in os.listdir(
+            GALLERY_FOLDER
+        ):
+
+            if allowed_gallery_file(filename):
+
+                gallery_images.append(
+                    filename
+                )
+
+        gallery_images.sort()
+
+
+        # =========================
+        # PUBLIC DASHBOARD
+        # =========================
+
         return render_template(
             "public_dashboard.html",
             total_collection=total_collection,
             total_expenses=total_expenses,
             balance=balance,
-            annadhanam_donors=annadhanam_donors
+            annadhanam_donors=annadhanam_donors,
+            gallery_images=gallery_images
         )
+
 
     except Exception as e:
 
@@ -870,9 +1032,11 @@ def public_dashboard():
 
         return f"Error: {e}"
 
+
     finally:
 
         cursor.close()
+
         conn.close()
 
 # ----------edit---------------
