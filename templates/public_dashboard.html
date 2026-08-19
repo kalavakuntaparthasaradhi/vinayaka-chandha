@@ -548,7 +548,93 @@
 .close-form-btn:hover {
     background: #08132d;
 }
-    </style>
+.announcement-bar {
+    display: flex;
+    align-items: center;
+    background: #fff3cd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 15px 0;
+    padding: 10px 0;
+}
+
+.announcement-title {
+    background: #dc3545;
+    color: white;
+    padding: 8px 12px;
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.announcement-scroll {
+    overflow: hidden;
+    flex: 1;
+    white-space: nowrap;
+}
+
+.announcement-scroll span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: announcementMove 12s linear infinite;
+    color: #b02a37;
+    font-weight: bold;
+}
+
+@keyframes announcementMove {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+
+}
+
+
+.events-section {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.events-section h2 {
+    margin: 0 0 12px;
+    color: #E65100;
+    font-size: 18px;
+}
+
+.events-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 5px;
+}
+
+.event-item {
+    min-width: 180px;
+    padding: 12px;
+    background: #FFF8DC;
+    border-left: 4px solid #FF9800;
+    border-radius: 8px;
+}
+
+.event-item strong {
+    display: block;
+    color: #E65100;
+    margin-bottom: 5px;
+}
+
+.event-item span {
+    color: #444;
+    font-size: 14px;
+}
+</style>
 
 </head>
 
@@ -663,6 +749,76 @@
             Register Now
 
         </button>
+
+    </div>
+
+</div>
+<!-- IMPORTANT ANNOUNCEMENT -->
+
+<div class="announcement-bar">
+
+    <span class="announcement-title">
+        📢 IMPORTANT ANNOUNCEMENT
+    </span>
+
+    <div class="announcement-scroll">
+
+        <span>
+            >>> Annadhanam slots available <<<
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- UPCOMING EVENTS -->
+
+<div class="events-section">
+
+    <h2>
+        📅 UPCOMING EVENTS
+    </h2>
+
+    <div class="events-scroll">
+
+        <div class="event-item">
+
+            <strong>
+                14 Sep
+            </strong>
+
+            <span>
+                Ganesh Chaturthi
+            </span>
+
+        </div>
+
+
+        <div class="event-item">
+
+            <strong>
+                15 Sep
+            </strong>
+
+            <span>
+                Annadhanam
+            </span>
+
+        </div>
+
+
+        <div class="event-item">
+
+            <strong>
+                16 Sep
+            </strong>
+
+            <span>
+                Visarjan
+            </span>
+
+        </div>
 
     </div>
 
