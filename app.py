@@ -150,6 +150,90 @@ def my_profile():
         )
     )
 
+@app.route("/security", methods=["GET", "POST"])
+def security():
+
+    username = session.get("username")
+
+    if not username:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        current_password = request.form.get(
+            "current_password",
+            ""
+        )
+
+        new_password = request.form.get(
+            "new_password",
+            ""
+        )
+
+        confirm_password = request.form.get(
+            "confirm_password",
+            ""
+        )
+
+
+        # Check current password
+
+        if USERS[username]["password"] != current_password:
+
+            flash(
+                "❌ Current password is incorrect."
+            )
+
+            return redirect(
+                url_for("security")
+            )
+
+
+        # Check password match
+
+        if new_password != confirm_password:
+
+            flash(
+                "❌ New passwords do not match."
+            )
+
+            return redirect(
+                url_for("security")
+            )
+
+
+        # Minimum length
+
+        if len(new_password) < 6:
+
+            flash(
+                "❌ Password must contain at least 6 characters."
+            )
+
+            return redirect(
+                url_for("security")
+            )
+
+
+        # Change password
+
+        USERS[username]["password"] = new_password
+
+
+        flash(
+            "✅ Password changed successfully."
+        )
+
+
+        return redirect(
+            url_for("security")
+        )
+
+
+    return render_template(
+        "security.html"
+    )
+
 
 # ------------------ Dashboard ------------------
 @app.route("/dashboard", methods=["GET", "POST"])

@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Security</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #FF9933,
+                    #FFD54F,
+                    #FFF8DC
+                );
+
+            padding: 20px 12px;
+
+        }
+
+
+        /* =========================
+           SECURITY CARD
+        ========================= */
+
+        .security-card {
+
+            width: 100%;
+
+            max-width: 380px;
+
+            margin: 25px auto;
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 6px 20px
+                rgba(0, 0, 0, 0.15);
+
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .security-header {
+
+            text-align: center;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .security-icon {
+
+            font-size: 28px;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        h2 {
+
+            margin: 0;
+
+            color: #E65100;
+
+            font-size: 20px;
+
+        }
+
+
+        .subtitle {
+
+            margin-top: 5px;
+
+            color: #777;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 12px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            color: #444;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        /* =========================
+           PASSWORD INPUT
+        ========================= */
+
+        .password-box {
+
+            position: relative;
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 9px 38px 9px 10px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            outline: none;
+
+            transition: 0.2s;
+
+        }
+
+
+        input:focus {
+
+            border-color: #FF9800;
+
+            box-shadow:
+                0 0 5px
+                rgba(255, 152, 0, 0.2);
+
+        }
+
+
+        /* =========================
+           SHOW / HIDE PASSWORD
+        ========================= */
+
+        .show-password {
+
+            position: absolute;
+
+            right: 10px;
+
+            top: 7px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            user-select: none;
+
+        }
+
+
+        /* =========================
+           PASSWORD STRENGTH
+        ========================= */
+
+        .strength-container {
+
+            margin-top: 5px;
+
+        }
+
+
+        .strength-bar {
+
+            width: 100%;
+
+            height: 4px;
+
+            background: #eee;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+        }
+
+
+        .strength-fill {
+
+            width: 0%;
+
+            height: 100%;
+
+            transition: 0.3s;
+
+        }
+
+
+        .strength-text {
+
+            margin-top: 3px;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           PASSWORD MATCH
+        ========================= */
+
+        .match-message {
+
+            margin-top: 4px;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .buttons {
+
+            display: flex;
+
+            gap: 8px;
+
+            margin-top: 17px;
+
+        }
+
+
+        .btn {
+
+            flex: 1;
+
+            padding: 9px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            text-align: center;
+
+        }
+
+
+        .change-btn {
+
+            background:
+                linear-gradient(
+                    to right,
+                    #FF6F00,
+                    #FF9800
+                );
+
+            color: white;
+
+        }
+
+
+        .back-btn {
+
+            background: #0d1b3d;
+
+            color: white;
+
+        }
+
+
+        .btn:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        /* =========================
+           FLASH MESSAGE
+        ========================= */
+
+        .message {
+
+            padding: 8px;
+
+            margin-bottom: 12px;
+
+            border-radius: 7px;
+
+            background: #d9f5df;
+
+            color: #198754;
+
+            text-align: center;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:450px) {
+
+            .security-card {
+
+                max-width: 350px;
+
+                padding: 18px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="security-card">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="security-header">
+
+        <div class="security-icon">
+            🔐
+        </div>
+
+        <h2>
+            Security
+        </h2>
+
+        <div class="subtitle">
+            Manage your account password
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================== -->
+
+    {% with messages =
+        get_flashed_messages()
+    %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="message">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =========================
+         PASSWORD FORM
+    ========================== -->
+
+    <form
+        method="POST"
+        onsubmit="return validatePasswordForm();">
+
+
+        <!-- CURRENT PASSWORD -->
+
+        <div class="form-group">
+
+            <label for="current_password">
+
+                Current Password
+
+            </label>
+
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="current_password"
+                    name="current_password"
+                    placeholder="Enter current password"
+                    required>
+
+
+                <span
+                    class="show-password"
+                    onclick="
+                        togglePassword(
+                            'current_password',
+                            this
+                        );
+                    ">
+
+                    👁️
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEW PASSWORD -->
+
+        <div class="form-group">
+
+            <label for="new_password">
+
+                New Password
+
+            </label>
+
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="new_password"
+                    name="new_password"
+                    placeholder="Enter new password"
+                    required
+                    minlength="6"
+                    oninput="checkStrength();">
+
+
+                <span
+                    class="show-password"
+                    onclick="
+                        togglePassword(
+                            'new_password',
+                            this
+                        );
+                    ">
+
+                    👁️
+
+                </span>
+
+            </div>
+
+
+            <!-- STRENGTH -->
+
+            <div class="strength-container">
+
+                <div class="strength-bar">
+
+                    <div
+                        id="strength-fill"
+                        class="strength-fill">
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="strength-text"
+                    class="strength-text">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFIRM PASSWORD -->
+
+        <div class="form-group">
+
+            <label for="confirm_password">
+
+                Confirm New Password
+
+            </label>
+
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Confirm new password"
+                    required
+                    oninput="checkPasswordMatch();">
+
+
+                <span
+                    class="show-password"
+                    onclick="
+                        togglePassword(
+                            'confirm_password',
+                            this
+                        );
+                    ">
+
+                    👁️
+
+                </span>
+
+            </div>
+
+
+            <div
+                id="match-message"
+                class="match-message">
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            <button
+                type="submit"
+                class="btn change-btn">
+
+                🔑 Change Password
+
+            </button>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn back-btn">
+
+                ← Back
+
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+<script>
+
+
+// ==========================================
+// SHOW / HIDE PASSWORD
+// ==========================================
+
+function togglePassword(
+    inputId,
+    icon
+) {
+
+    const input =
+        document.getElementById(inputId);
+
+
+    if (
+        input.type === "password"
+    ) {
+
+        input.type = "text";
+
+        icon.textContent = "🙈";
+
+    }
+
+    else {
+
+        input.type = "password";
+
+        icon.textContent = "👁️";
+
+    }
+
+}
+
+
+
+// ==========================================
+// PASSWORD STRENGTH
+// ==========================================
+
+function checkStrength() {
+
+
+    const password =
+        document.getElementById(
+            "new_password"
+        ).value;
+
+
+    const fill =
+        document.getElementById(
+            "strength-fill"
+        );
+
+
+    const text =
+        document.getElementById(
+            "strength-text"
+        );
+
+
+    let score = 0;
+
+
+    if (
+        password.length >= 6
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        password.length >= 8
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[A-Z]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[0-9]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[^A-Za-z0-9]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    if (!password) {
+
+        fill.style.width = "0%";
+
+        text.textContent = "";
+
+        return;
+
+    }
+
+
+    if (score <= 2) {
+
+        fill.style.width = "35%";
+
+        text.textContent =
+            "🔴 Weak password";
+
+        text.style.color =
+            "#dc3545";
+
+    }
+
+    else if (score <= 4) {
+
+        fill.style.width = "70%";
+
+        text.textContent =
+            "🟠 Medium password";
+
+        text.style.color =
+            "#f57c00";
+
+    }
+
+    else {
+
+        fill.style.width = "100%";
+
+        text.textContent =
+            "🟢 Strong password";
+
+        text.style.color =
+            "#198754";
+
+    }
+
+}
+
+
+
+// ==========================================
+// PASSWORD MATCH
+// ==========================================
+
+function checkPasswordMatch() {
+
+
+    const newPassword =
+        document.getElementById(
+            "new_password"
+        ).value;
+
+
+    const confirmPassword =
+        document.getElementById(
+            "confirm_password"
+        ).value;
+
+
+    const message =
+        document.getElementById(
+            "match-message"
+        );
+
+
+    if (!confirmPassword) {
+
+        message.textContent = "";
+
+        return;
+
+    }
+
+
+    if (
+        newPassword ===
+        confirmPassword
+    ) {
+
+        message.textContent =
+            "🟢 Passwords match";
+
+        message.style.color =
+            "#198754";
+
+    }
+
+    else {
+
+        message.textContent =
+            "🔴 Passwords do not match";
+
+        message.style.color =
+            "#dc3545";
+
+    }
+
+}
+
+
+
+// ==========================================
+// FORM VALIDATION
+// ==========================================
+
+function validatePasswordForm() {
+
+
+    const newPassword =
+        document.getElementById(
+            "new_password"
+        ).value;
+
+
+    const confirmPassword =
+        document.getElementById(
+            "confirm_password"
+        ).value;
+
+
+    if (
+        newPassword !==
+        confirmPassword
+    ) {
+
+        alert(
+            "New password and confirm password do not match."
+        );
+
+        return false;
+
+    }
+
+
+    if (
+        newPassword.length < 6
+    ) {
+
+        alert(
+            "Password must contain at least 6 characters."
+        );
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+</script>
+
+
+</body>
+
+</html>
