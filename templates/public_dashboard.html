@@ -734,39 +734,54 @@
         </div>
 
 
-        <!-- Slot -->
+       <!-- Slot -->
 
-        <div class="form-group">
+<div class="form-group">
 
-            <label for="slot">
-                Slot <span>*</span>
-            </label>
+    <label for="slot">
+        Slot <span>*</span>
+    </label>
 
-            <select
-                id="slot"
-                name="slot"
-                required>
+    <!-- Live Availability -->
 
-                <option value="">
-                    Select Slot
-                </option>
+    <div id="live-slot-box"
+         style="
+            display:none;
+            margin-bottom:10px;
+            padding:12px 15px;
+            border-radius:10px;
+            background:#f8f9fa;
+            border:1px solid #ddd;
+            text-align:left;
+         ">
 
-                <option value="Morning">
-                    Morning
-                </option>
-
-                <option value="Afternoon">
-                    Afternoon
-                </option>
-
-                <option value="Evening">
-                    Evening
-                </option>
-
-            </select>
-
+        <div style="
+            font-weight:bold;
+            color:#198754;
+            margin-bottom:8px;
+        ">
+            🟢 LIVE SLOT AVAILABILITY
         </div>
 
+        <div id="slot-availability"></div>
+
+    </div>
+
+
+    <!-- Slot Dropdown -->
+
+    <select
+        id="slot"
+        name="slot"
+        required>
+
+        <option value="">
+            First select a date
+        </option>
+
+    </select>
+
+</div>
 
         <!-- Image -->
 
@@ -1007,6 +1022,441 @@ function closeAnnadhanamForm() {
     form.style.display = "none";
 
 }
+
+</script>
+<script>
+
+// ==========================================
+// ANNADHANAM LIVE SLOT AVAILABILITY
+// ==========================================
+
+const annadhanamDate =
+    document.getElementById("donation_date");
+
+const annadhanamSlot =
+    document.getElementById("slot");
+
+const liveSlotBox =
+    document.getElementById("live-slot-box");
+
+const slotAvailability =
+    document.getElementById("slot-availability");
+
+
+// ------------------------------------------
+// Date changed
+// ------------------------------------------
+
+annadhanamDate.addEventListener(
+    "change",
+    loadAnnadhanamSlots
+);
+
+
+// ------------------------------------------
+// Load slots
+// ------------------------------------------
+
+async function loadAnnadhanamSlots() {
+
+    const selectedDate =
+        annadhanamDate.value;
+
+
+    // Clear old data
+
+    annadhanamSlot.innerHTML = "";
+
+    slotAvailability.innerHTML = "";
+
+
+    // No date
+
+    if (!selectedDate) {
+
+        liveSlotBox.style.display = "none";
+
+        annadhanamSlot.innerHTML = `
+            <option value="">
+                First select a date
+            </option>
+        `;
+
+        return;
+    }
+
+
+    // Show loading
+
+    liveSlotBox.style.display = "block";
+
+    slotAvailability.innerHTML = `
+        <div style="
+            color:#666;
+            padding:5px 0;
+        ">
+            ⏳ Checking slot availability...
+        </div>
+    `;
+
+
+    annadhanamSlot.disabled = true;
+
+
+    try {
+
+        const response = await fetch(
+            `/annadhanam/slot-availability?date=${encodeURIComponent(selectedDate)}`
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to get slot availability"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        // Clear
+
+        annadhanamSlot.innerHTML = `
+            <option value="">
+                Select Slot
+            </option>
+        `;
+
+        slotAvailability.innerHTML = "";
+
+
+        // No slots
+
+        if (
+            !data.slots ||
+            data.slots.length === 0
+        ) {
+
+            slotAvailability.innerHTML = `
+                <div style="
+                    color:#dc3545;
+                    font-weight:bold;
+                    padding:5px 0;
+                ">
+                    🔴 No Annadhanam slots available
+                    for ${formatDate(selectedDate)}.
+                </div>
+            `;
+
+            annadhanamSlot.innerHTML = `
+                <option value="">
+                    No slots available
+                </option>
+            `;
+
+            annadhanamSlot.disabled = true;
+
+            return;
+        }
+
+
+        let availableSlots = 0;
+
+
+        // ----------------------------------
+        // Display each slot
+        // ----------------------------------
+
+        data.slots.forEach(function(item) {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value =
+                item.slot;
+
+
+            // AVAILABLE
+
+            if (item.remaining > 0) {
+
+                option.textContent =
+                    `🟢 ${item.slot} — ${item.remaining} slots available`;
+
+                option.disabled = false;
+
+                availableSlots++;
+
+
+                // Live display
+
+                const row =
+                    document.createElement("div");
+
+                row.style.padding = "5px 0";
+
+                row.style.fontWeight = "bold";
+
+                row.style.color = "#198754";
+
+                row.innerHTML =
+                    `🟢 ${item.slot} — <strong>${item.remaining}</strong> slots available`;
+
+                slotAvailability.appendChild(row);
+
+            }
+
+
+            // FULL
+
+            else {
+
+                option.textContent =
+                    `🔴 ${item.slot} — 0 slots available (FULL)`;
+
+                option.disabled = true;
+
+
+                // Live display
+
+                const row =
+                    document.createElement("div");
+
+                row.style.padding = "5px 0";
+
+                row.style.fontWeight = "bold";
+
+                row.style.color = "#dc3545";
+
+                row.innerHTML =
+                    `🔴 ${item.slot} — <strong>0</strong> slots available (FULL)`;
+
+                slotAvailability.appendChild(row);
+
+            }
+
+
+            annadhanamSlot.appendChild(option);
+
+        });
+
+
+        // Enable dropdown
+
+        if (availableSlots > 0) {
+
+            annadhanamSlot.disabled = false;
+
+        }
+        else {
+
+            annadhanamSlot.disabled = true;
+
+            slotAvailability.innerHTML += `
+                <div style="
+                    color:#dc3545;
+                    font-weight:bold;
+                    margin-top:5px;
+                ">
+                    🔴 All slots are FULL.
+                </div>
+            `;
+
+        }
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Slot availability error:",
+            error
+        );
+
+
+        // Fallback fixed availability
+        // if API cannot be reached
+
+        loadFixedSlots(selectedDate);
+
+    }
+
+}
+
+
+// ==========================================
+// FALLBACK SLOT DATA
+// ==========================================
+
+function loadFixedSlots(selectedDate) {
+
+
+    const fixedSlots = {
+
+        "2026-09-14": {
+            "Morning": 0
+        },
+
+        "2026-09-15": {
+            "Afternoon": 2,
+            "Evening": 2
+        },
+
+        "2026-09-16": {
+            "Afternoon": 2
+        }
+
+    };
+
+
+    const slots =
+        fixedSlots[selectedDate];
+
+
+    annadhanamSlot.innerHTML = `
+        <option value="">
+            Select Slot
+        </option>
+    `;
+
+    slotAvailability.innerHTML = "";
+
+
+    if (!slots) {
+
+        annadhanamSlot.innerHTML = `
+            <option value="">
+                No slots available
+            </option>
+        `;
+
+        annadhanamSlot.disabled = true;
+
+        slotAvailability.innerHTML = `
+            <div style="
+                color:#dc3545;
+                font-weight:bold;
+            ">
+                🔴 No slots available for this date.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let available = 0;
+
+
+    Object.entries(slots).forEach(
+        function([slotName, count]) {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value =
+                slotName;
+
+
+            if (count > 0) {
+
+                option.textContent =
+                    `🟢 ${slotName} — ${count} slots available`;
+
+                available++;
+
+
+            }
+            else {
+
+                option.textContent =
+                    `🔴 ${slotName} — 0 slots available (FULL)`;
+
+                option.disabled = true;
+
+            }
+
+
+            annadhanamSlot.appendChild(option);
+
+
+            const row =
+                document.createElement("div");
+
+            row.style.padding = "5px 0";
+
+            row.style.fontWeight = "bold";
+
+
+            if (count > 0) {
+
+                row.style.color = "#198754";
+
+                row.innerHTML =
+                    `🟢 ${slotName} — <strong>${count}</strong> slots available`;
+
+            }
+            else {
+
+                row.style.color = "#dc3545";
+
+                row.innerHTML =
+                    `🔴 ${slotName} — <strong>0</strong> slots available (FULL)`;
+
+            }
+
+
+            slotAvailability.appendChild(row);
+
+        }
+    );
+
+
+    annadhanamSlot.disabled =
+        available === 0;
+
+}
+
+
+// ==========================================
+// DATE FORMAT
+// ==========================================
+
+function formatDate(dateString) {
+
+    const parts =
+        dateString.split("-");
+
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+}
+
+
+// ==========================================
+// AUTO REFRESH
+// ==========================================
+
+// Check every 10 seconds
+
+setInterval(function() {
+
+    if (
+        annadhanamDate.value &&
+        liveSlotBox.style.display !== "none"
+    ) {
+
+        loadAnnadhanamSlots();
+
+    }
+
+}, 10000);
 
 </script>
 </body>
