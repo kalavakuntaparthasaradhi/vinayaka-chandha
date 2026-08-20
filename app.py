@@ -397,7 +397,7 @@ Thank you for your valuable contribution.
     """)
     expenses = cursor.fetchall()
 
-# ================= PAYMENT HISTORY =================
+ # ================= PAYMENT HISTORY =================
 
     cursor.execute("""
         SELECT
@@ -420,6 +420,8 @@ Thank you for your valuable contribution.
     cursor.close()
     conn.close()
 
+
+
     return render_template(
         "dashboard.html",
         total_collection=total_collection,
@@ -431,6 +433,40 @@ Thank you for your valuable contribution.
         payments=payments,
         name=session.get("name")
     )
+
+@app.route("/payment-history")
+def payment_history():
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute("""
+            SELECT
+                id,
+                donor_name,
+                mobile,
+                amount,
+                transaction_id,
+                payment_method,
+                payment_date,
+                status,
+                remarks,
+                created_at
+            FROM payment_history
+            ORDER BY created_at DESC
+        """)
+
+        payments = cursor.fetchall()
+
+        return render_template(
+            "payment_history.html",
+            payments=payments
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
+
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
