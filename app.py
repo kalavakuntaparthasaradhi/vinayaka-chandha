@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 load_dotenv()
 app = Flask(__name__)
-UPI_ID = "6305777042@ybl"
+UPI_ID = "6305777042@axl"
 # =========================
 # EVENT GALLERY
 # =========================
