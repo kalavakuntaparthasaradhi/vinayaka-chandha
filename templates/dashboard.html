@@ -692,6 +692,48 @@ th{
      color: #000000;
     text-align: center;
 }
+/* =========================
+   WEBSITE VISITORS
+========================= */
+
+.visitor-box {
+    width: fit-content;
+    min-width: 190px;
+
+    margin: 10px auto 20px;
+
+    padding: 10px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.12);
+
+    color: #333;
+
+    font-size: 14px;
+}
+
+.visitor-icon {
+    font-size: 18px;
+}
+
+.visitor-label {
+    font-weight: 600;
+}
+
+.visitor-box strong {
+    color: #E65100;
+    font-size: 18px;
+}
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -819,13 +861,23 @@ th{
     </a>
 </div>
 
-<div class="live-indicator">
-    <span class="live-dot"></span>
-    LIVE
+<!-- =========================
+     WEBSITE VISITORS
+========================= -->
+
+<div class="visitor-box">
+
+    <span class="visitor-icon">👥</span>
+
+    <span class="visitor-label">
+        Website Visitors
+    </span>
+
+    <strong>
+        {{ total_visitors }}
+    </strong>
+
 </div>
-<marquee behaviour="scroll" direction="left" scrollamount="5" style="color: red; font-weight: bold;">
-    Note: Do Not Enter the Same Entry Twice
-</marquee>
 <div class="cards">
 
     <div class="card collection-card">

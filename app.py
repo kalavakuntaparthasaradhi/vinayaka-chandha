@@ -1109,5 +1109,20 @@ def edit_donation(id):
         cursor.close()
         conn.close()
 
+# =========================
+# PHONEPE DONATION
+# =========================
+
+@app.route("/donate")
+def donate():
+
+    phonepe_url = os.getenv("PHONEPE_UPI_URL")
+
+    if not phonepe_url:
+        flash("Payment option is currently unavailable.", "error")
+        return redirect(url_for("public_dashboard"))
+
+    return redirect(phonepe_url)
+
 if __name__ == "__main__":
     app.run(debug=True)
