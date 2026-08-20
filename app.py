@@ -909,16 +909,6 @@ def delete_gallery_image(filename):
         url_for("admin_gallery")
     )
 
-@app.route(
-    "/admin/gallery/delete/<filename>",
-    methods=["POST"]
-)
-def delete_gallery_image(filename):
-    ...
-    return redirect(
-        url_for("admin_gallery")
-    )
-
 
 # =========================
 # SERVE EVENT GALLERY IMAGES
