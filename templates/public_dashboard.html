@@ -2841,35 +2841,23 @@ function resetAnnadhanamForm() {
      GALLERY OVERVIEW
 ========================= -->
 
-<div id="galleryOverview"
-     class="gallery-overview-modal">
+<div class="gallery-overview-grid">
 
-    <div class="gallery-overview-content">
+    {% for image in gallery_images %}
 
-        <div class="gallery-overview-title">
-            📸 Event Gallery
-        </div>
+        <div class="gallery-overview-item"
+             onclick="openLargeFromGallery(this.dataset.index)"
+             data-index="{{ loop.index0 }}">
 
-        <div class="gallery-overview-grid">
-
-            {% for image in gallery_images %}
-
-                <div class="gallery-overview-item"
-                     onclick="openLargeFromGallery(this.dataset.index)"
-                    data-index="{{ loop.index0 }}"
-
-                    <img
-                        src="{{ url_for(
-                            'static',
-                            filename='gallery/' + image
-                        ) }}"
-                        alt="Event Photo {{ loop.index }}">
-
-                </div>
-
-            {% endfor %}
+            <img
+                src="{{ url_for('serve_gallery_image', filename=image) }}"
+                alt="Event Photo {{ loop.index }}">
 
         </div>
+
+    {% endfor %}
+
+</div>
 
         <button
             type="button"
