@@ -450,54 +450,68 @@ body {
 }
 
 
-/* =========================================================
-   DONATE
-========================================================= */
-
-.donate-btn {
-    display: block;
-
-    width: fit-content;
-
-    margin: 22px auto 0;
-
-    padding: 12px 30px;
-
-    background: #0d1b3d;
-
-    color: #fff;
-
-    border: 2px solid #294475;
-
-    border-radius: 25px;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    text-decoration: none;
-
-    cursor: pointer;
-
-    transition: 0.3s;
+.donate-qr-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-.donate-btn:hover {
-    background: #162a5a;
-
-    transform: translateY(-2px);
-}
-
-.payment-note {
-    margin-top: 10px;
-
-    font-size: 12px;
-
-    color: #777;
-
+.donate-qr-box {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 25px;
+    border-radius: 18px;
     text-align: center;
+    position: relative;
 }
 
+.donate-close-btn {
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    border: none;
+    background: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.upi-qr-image {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    margin: 15px auto;
+    display: block;
+}
+
+.donate-qr-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.donate-qr-box input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.donate-qr-box form button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #f36f21;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
 
 /* =========================================================
    IMPORTANT ANNOUNCEMENT
@@ -2945,16 +2959,16 @@ document.addEventListener(
 );
 
 </script>
-<!-- DONATE QR MODAL -->
-<div id="donateQRModal" class="donate-qr-modal" style="display:none;">
+<!-- ================= DONATE QR + PAYMENT FORM ================= -->
+
+<div id="donateQRModal" class="donate-qr-modal">
 
     <div class="donate-qr-box">
 
         <button type="button"
-                class="donate-btn"
-                disabled
-                style="opacity:0.5; cursor:not-allowed;">
-            💳 Donate Now
+                class="donate-close-btn"
+                onclick="closeDonateQR()">
+            ✕
         </button>
 
         <div class="donate-qr-title">
@@ -2962,34 +2976,64 @@ document.addEventListener(
         </div>
 
         <div class="donate-qr-subtitle">
-            Scan the QR code to donate through PhonePe
+            Scan the QR code using PhonePe
         </div>
-        <img
-            src="{{ url_for('static', filename='.png') }}"
-            class="donate-qr-image"
-            alt="UPI Payment QR">
 
-        <div class="donate-qr-note">
-            🔒 Secure payment through UPI
-        </div>
+        <!-- YOUR QR -->
+        <img src="{{ url_for('static', filename='qr.jpeg') }}"
+             class="qr-image"
+             alt="UPI QR Code">
+
+        <p class="payment-note">
+            After completing the payment, fill in your transaction details below.
+        </p>
+
+        <!-- PAYMENT FORM -->
+        <form action="{{ url_for('submit_payment') }}"
+              method="POST"
+              class="payment-submit-form">
+
+            <input type="text"
+                   name="name"
+                   placeholder="Donor Name"
+                   required>
+
+            <input type="tel"
+                   name="mobile"
+                   placeholder="Mobile Number"
+                   pattern="[6-9][0-9]{9}"
+                   maxlength="10"
+                   required>
+
+            <input type="number"
+                   name="amount"
+                   placeholder="Amount"
+                   min="1"
+                   step="0.01"
+                   required>
+
+            <input type="text"
+                   name="utr"
+                   placeholder="Transaction ID / UTR"
+                   required>
+
+            <button type="submit"
+                    class="payment-submit-btn">
+                ✅ Submit Payment
+            </button>
+
+        </form>
 
     </div>
-
 </div>
 <script>
-
 function openDonateQR() {
-
     document.getElementById("donateQRModal").style.display = "flex";
-
 }
 
 function closeDonateQR() {
-
     document.getElementById("donateQRModal").style.display = "none";
-
 }
-
 </script>
 </body>
 </html>
