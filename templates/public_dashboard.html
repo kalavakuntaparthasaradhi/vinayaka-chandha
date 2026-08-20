@@ -12,199 +12,1251 @@
 
     <style>
 
-    /* ================================
-   CENTER EVERYTHING
-================================ */
+      /* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     margin: 0;
     min-height: 100vh;
+
     font-family: Arial, sans-serif;
 
     background:
         linear-gradient(
             135deg,
-            #FF9933,
-            #FFD54F,
-            #FFF8DC
+            #FF9933 0%,
+            #FFD54F 50%,
+            #FFF8DC 100%
         );
 
     padding: 25px 15px;
+
+    color: #222;
 }
 
-/* Main page */
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
 .public-container {
     width: 100%;
     max-width: 1180px;
+
     margin: 0 auto;
+
     text-align: center;
 }
 
-/* Header */
+
+/* =========================================================
+   HEADER
+========================================================= */
+
 .logo {
+    width: 90px;
+    height: 90px;
+
+    object-fit: contain;
+
     display: block;
+
     margin: 0 auto 10px;
 }
 
-.title,
+.title {
+    font-size: 30px;
+    font-weight: 700;
+
+    color: #222;
+
+    margin: 5px 0;
+}
+
 .subtitle {
-    text-align: center;
+    font-size: 17px;
+
+    color: #555;
+
+    margin: 0 0 20px;
 }
 
-/* Announcement */
-.announcement-bar {
+
+/* =========================================================
+   CONTACT MARQUEE
+========================================================= */
+
+.marquee-container {
     width: 100%;
-    max-width: 900px;
-    margin: 20px auto;
+    overflow: hidden;
+
+    margin: 15px 0 25px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0d1b3d,
+            #162a5a,
+            #0d1b3d
+        );
+
+    border-radius: 12px;
+
+    padding: 12px 0;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.20);
 }
 
-/* Upcoming events */
-.events-section {
+.marquee {
+    display: inline-block;
+
+    white-space: nowrap;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    padding-left: 100%;
+
+    animation: marquee 18s linear infinite;
+}
+
+@keyframes marquee {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+/* =========================================================
+   FLASH MESSAGE
+========================================================= */
+
+.flash-message {
     width: 100%;
-    max-width: 900px;
-    margin: 20px auto;
-    text-align: center;
+    max-width: 700px;
+
+    margin: 15px auto 25px;
+
+    padding: 14px 20px;
+
+    background: #0d1b3d;
+
+    color: #fff;
+
+    border-radius: 12px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.20);
 }
 
-.events-section h2 {
-    text-align: center;
-}
 
-.events-scroll {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
+/* =========================================================
+   WELCOME
+========================================================= */
 
-.event-item {
-    flex: 1;
-    max-width: 250px;
-    text-align: left;
-}
-
-/* Welcome */
 .welcome {
-    width: 100%;
+    margin: 25px auto 30px;
+
     text-align: center;
-    margin: 30px auto;
 }
 
-/* Dashboard cards */
+.welcome h2 {
+    margin: 0;
+
+    font-size: 26px;
+
+    color: #222;
+}
+
+.welcome p {
+    margin: 6px 0 0;
+
+    font-size: 15px;
+
+    color: #555;
+}
+
+
+/* =========================================================
+   DASHBOARD CARDS
+========================================================= */
+
 .cards {
     width: 100%;
     max-width: 900px;
+
     margin: 25px auto;
 
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
     gap: 20px;
+
+    align-items: stretch;
 }
 
-/* Cards */
+
+/* =========================================================
+   NORMAL CARD
+========================================================= */
+
 .card {
     width: 100%;
     min-height: 220px;
 
+    background: #0f1329;
+
+    padding: 25px 20px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.18);
+
     display: flex;
+
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
+
+    transition: 0.3s;
 }
 
-/* Gallery */
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.icon {
+    font-size: 38px;
+
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-size: 17px;
+
+    font-weight: bold;
+
+    color: #fff;
+}
+
+.amount {
+    margin-top: 10px;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    color: #FFD54F;
+}
+
+
+/* =========================================================
+   ANNADHANAM CARD
+========================================================= */
+
+.annadhanam-card {
+    cursor: pointer;
+}
+
+.register-text {
+    margin-top: 10px;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    color: #aaa;
+}
+
+.register-btn {
+    margin-top: 15px;
+
+    padding: 11px 25px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #E65100;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background: #BF360C;
+}
+
+
+/* =========================================================
+   EVENT GALLERY CARD
+========================================================= */
+
 .gallery-wrapper {
     width: 100%;
+
+    min-width: 0;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
+
     text-align: center;
 }
 
-/* Donate */
+.gallery-heading {
+    width: 100%;
+
+    color: #fff;
+
+    margin-bottom: 8px;
+}
+
+.gallery-icon {
+    font-size: 18px;
+}
+
+.gallery-title {
+    font-size: 17px;
+
+    font-weight: bold;
+}
+
+.gallery-subtitle {
+    font-size: 13px;
+
+    margin-top: 3px;
+}
+
+
+/* =========================================================
+   GALLERY IMAGE BOX
+========================================================= */
+
+.gallery-image-box {
+    width: 100%;
+
+    max-width: 245px;
+
+    height: 125px;
+
+    margin: 0 auto;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    background: #111;
+
+    position: relative;
+}
+
+.gallery-slider {
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow: hidden;
+}
+
+.gallery-image {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    opacity: 0;
+
+    transition:
+        opacity 0.8s ease;
+}
+
+.gallery-image.active {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   GALLERY BUTTON
+========================================================= */
+
+.gallery-btn {
+    margin-top: 10px;
+
+    padding: 8px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #FF6F00;
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.gallery-btn:hover {
+    background: #E65100;
+}
+
+
+/* =========================================================
+   DONATE
+========================================================= */
+
 .donate-btn {
     display: block;
+
     width: fit-content;
+
     margin: 22px auto 0;
+
+    padding: 12px 30px;
+
+    background: #0d1b3d;
+
+    color: #fff;
+
+    border: 2px solid #294475;
+
+    border-radius: 25px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.donate-btn:hover {
+    background: #162a5a;
+
+    transform: translateY(-2px);
 }
 
 .payment-note {
+    margin-top: 10px;
+
+    font-size: 12px;
+
+    color: #777;
+
     text-align: center;
 }
 
-/* Annadhanam form */
-.annadhanam-form-section {
+
+/* =========================================================
+   IMPORTANT ANNOUNCEMENT
+========================================================= */
+
+.announcement-bar {
     width: 100%;
-    max-width: 760px;
-    margin: 35px auto;
+
+    max-width: 900px;
+
+    margin: 25px auto;
+
+    display: flex;
+
+    align-items: center;
+
+    background: #fff3cd;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    padding: 10px 0;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.08);
+}
+
+.announcement-title {
+    flex-shrink: 0;
+
+    background: #dc3545;
+
+    color: #fff;
+
+    padding: 8px 12px;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+.announcement-scroll {
+    overflow: hidden;
+
+    flex: 1;
+
+    white-space: nowrap;
+}
+
+.announcement-scroll span {
+    display: inline-block;
+
+    padding-left: 100%;
+
+    animation:
+        announcementMove 12s linear infinite;
+
+    color: #b02a37;
+
+    font-weight: bold;
+}
+
+@keyframes announcementMove {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+
+/* =========================================================
+   UPCOMING EVENTS
+========================================================= */
+
+.events-section {
+    width: 100%;
+
+    max-width: 900px;
+
+    margin: 25px auto;
+
+    padding: 18px;
+
+    background: #fff;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.10);
+
     text-align: center;
 }
 
-.annadhanam-form {
-    margin: 0 auto;
+.events-section h2 {
+    margin: 0 0 15px;
+
+    color: #E65100;
+
+    font-size: 20px;
+
+    text-align: center;
+}
+
+.events-scroll {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.event-item {
+    padding: 14px;
+
+    background: #FFF8DC;
+
+    border-left: 4px solid #FF9800;
+
+    border-radius: 8px;
+
     text-align: left;
 }
 
-/* Donors */
+.event-item strong {
+    display: block;
+
+    color: #E65100;
+
+    margin-bottom: 5px;
+}
+
+.event-item span {
+    color: #444;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   ANNADHANAM FORM
+========================================================= */
+
+.annadhanam-form-section {
+    width: 100%;
+
+    max-width: 760px;
+
+    margin: 40px auto;
+
+    padding: 30px;
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.15);
+
+    text-align: center;
+}
+
+.section-title {
+    font-size: 26px;
+
+    font-weight: bold;
+
+    color: #222;
+
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    color: #666;
+
+    font-size: 15px;
+
+    margin-bottom: 25px;
+}
+
+.annadhanam-form {
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    font-weight: bold;
+
+    color: #444;
+
+    margin-bottom: 7px;
+}
+
+.form-group label span {
+    color: red;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    background: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #FF9800;
+
+    box-shadow:
+        0 0 0 3px rgba(255,152,0,0.12);
+}
+
+.form-group small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   LIVE SLOT
+========================================================= */
+
+#live-slot-box {
+    display: none;
+
+    margin-bottom: 10px;
+
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    background: #f8f9fa;
+
+    border: 1px solid #ddd;
+
+    text-align: left;
+}
+
+#slot-availability {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.annadhanam-submit {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #E65100;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.annadhanam-submit:hover {
+    background: #BF360C;
+}
+
+.reset-form-btn,
+.close-form-btn {
+    flex: 1;
+
+    padding: 11px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.reset-form-btn {
+    background: #6c757d;
+
+    color: #fff;
+}
+
+.close-form-btn {
+    background: #0d1b3d;
+
+    color: #fff;
+}
+
+
+/* =========================================================
+   ANNADHANAM DONORS
+========================================================= */
+
 .annadhanam-section {
     width: 100%;
+
     max-width: 1000px;
+
     margin: 40px auto;
+
     text-align: center;
 }
 
 .donor-grid {
     width: 100%;
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
     gap: 20px;
+
     text-align: left;
 }
 
-/* No donors message */
+.donor-card {
+    background: #fff;
+
+    border-radius: 18px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.13);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    transition: 0.3s;
+}
+
+.donor-card:hover {
+    transform: translateY(-4px);
+}
+
+.donor-image,
+.donor-placeholder {
+    width: 85px;
+
+    height: 85px;
+
+    min-width: 85px;
+
+    border-radius: 50%;
+}
+
+.donor-image {
+    object-fit: cover;
+
+    border: 3px solid #FFD54F;
+}
+
+.donor-placeholder {
+    background: #FFF3CD;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 38px;
+}
+
+.donor-details {
+    flex: 1;
+}
+
+.donor-name {
+    font-size: 19px;
+
+    font-weight: bold;
+
+    color: #222;
+
+    margin-bottom: 6px;
+}
+
+.donor-info {
+    font-size: 14px;
+
+    color: #555;
+
+    margin: 4px 0;
+}
+
+.slot {
+    display: inline-block;
+
+    margin-top: 6px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #FFF3CD;
+
+    color: #7A4B00;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
 .no-donors {
+    background: #fff;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
+    color: #666;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.10);
+
     text-align: center;
 }
 
-/* Footer */
+
+/* =========================================================
+   GALLERY OVERVIEW
+========================================================= */
+
+.gallery-overview-modal {
+    display: none;
+
+    position: fixed;
+
+    z-index: 9998;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.92);
+
+    padding: 25px 15px;
+
+    overflow-y: auto;
+}
+
+.gallery-overview-content {
+    width: 100%;
+
+    max-width: 1000px;
+
+    margin: 0 auto;
+}
+
+.gallery-overview-title {
+    color: #fff;
+
+    text-align: center;
+
+    font-size: 24px;
+
+    margin-bottom: 20px;
+}
+
+.gallery-overview-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.gallery-overview-item {
+    width: 100%;
+
+    height: 200px;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    background: #111;
+
+    cursor: pointer;
+}
+
+.gallery-overview-item img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+.gallery-overview-close {
+    display: block;
+
+    margin: 20px auto 0;
+
+    padding: 10px 25px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #E65100;
+
+    color: #fff;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   LARGE IMAGE
+========================================================= */
+
+.image-modal {
+    display: none;
+
+    position: fixed;
+
+    z-index: 9999;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.92);
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 15px;
+}
+
+.image-modal img {
+    max-width: 95vw;
+
+    max-height: 85vh;
+
+    width: auto;
+
+    height: auto;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
 .footer {
     width: 100%;
-    text-align: center;
+
     margin: 35px auto;
+
+    padding-bottom: 25px;
+
+    font-size: 14px;
+
+    color: #666;
+
+    text-align: center;
 }
 
 
-/* ================================
-   MOBILE
-================================ */
+/* =========================================================
+   TABLET
+========================================================= */
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
 
     .cards {
-        grid-template-columns: 1fr;
-        max-width: 450px;
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        max-width: 700px;
     }
 
     .events-scroll {
-        justify-content: flex-start;
-        overflow-x: auto;
-    }
+        grid-template-columns:
+            repeat(3, minmax(160px, 1fr));
 
-    .event-item {
-        min-width: 180px;
-        flex: 0 0 180px;
+        overflow-x: auto;
     }
 
     .donor-grid {
         grid-template-columns: 1fr;
     }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 15px 10px;
+    }
+
+    .logo {
+        width: 75px;
+        height: 75px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+
+        max-width: 450px;
+
+        gap: 15px;
+    }
+
+    .card {
+        min-height: 190px;
+    }
+
+    .announcement-bar {
+        flex-direction: column;
+    }
+
+    .announcement-title {
+        width: 100%;
+
+        text-align: center;
+    }
+
+    .events-section {
+        padding: 15px;
+    }
+
+    .events-scroll {
+        display: flex;
+
+        overflow-x: auto;
+
+        justify-content: flex-start;
+    }
+
+    .event-item {
+        min-width: 180px;
+
+        flex: 0 0 180px;
+    }
 
     .annadhanam-form-section {
         padding: 20px 15px;
+    }
+
+    .gallery-image-box {
+        height: 150px;
+    }
+
+    .gallery-overview-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .gallery-overview-item {
+        height: 140px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .title {
+        font-size: 21px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .card {
+        min-height: 175px;
+    }
+
+    .gallery-image-box {
+        height: 140px;
+    }
+
+    .donor-card {
+        gap: 12px;
+    }
+
+    .donor-image,
+    .donor-placeholder {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
     }
 }
 </style>
