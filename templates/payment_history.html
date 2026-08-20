@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment History</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .header {
+            background: #0d1b3d;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .add-btn {
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: #157347;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            margin: 0 0 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .summary-card strong {
+            font-size: 25px;
+            color: #0d1b3d;
+        }
+
+        .table-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th {
+            background: #0d1b3d;
+            color: white;
+            padding: 13px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .verified {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .rejected {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .action-form {
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 6px 9px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .verify-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .reject-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #212529;
+            color: white;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        .flash {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: #d1e7dd;
+            color: #0f5132;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <h1>💳 Payment History</h1>
+
+        <a href="{{ url_for('add_payment') }}" class="add-btn">
+            + Add Payment
+        </a>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="flash">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- SUMMARY -->
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <h3>Total Payments</h3>
+
+            <strong>
+                {{ payments|length }}
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>Verified Payments</h3>
+
+            <strong>
+                {{ payments|selectattr('status', 'equalto', 'Verified')|list|length }}
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>Total Amount</h3>
+
+            <strong>
+                ₹{{ "%.2f"|format(
+                    payments
+                    |selectattr('status', 'equalto', 'Verified')
+                    |sum(attribute='amount')
+                ) }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT TABLE -->
+    <div class="table-box">
+
+        {% if payments %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>#</th>
+                    <th>Donor</th>
+                    <th>Mobile</th>
+                    <th>Amount</th>
+                    <th>Transaction ID</th>
+                    <th>Method</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for payment in payments %}
+
+                <tr>
+
+                    <td>
+                        {{ payment.id }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ payment.donor_name }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ payment.mobile or "-" }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ₹{{ "%.2f"|format(payment.amount) }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ payment.transaction_id or "-" }}
+                    </td>
+
+                    <td>
+                        {{ payment.payment_method }}
+                    </td>
+
+                    <td>
+                        {{ payment.payment_date }}
+                    </td>
+
+                    <td>
+
+                        {% if payment.status == "Verified" %}
+
+                            <span class="status verified">
+                                ✅ Verified
+                            </span>
+
+                        {% elif payment.status == "Rejected" %}
+
+                            <span class="status rejected">
+                                ❌ Rejected
+                            </span>
+
+                        {% else %}
+
+                            <span class="status pending">
+                                ⏳ Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if payment.status != "Verified" %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('update_payment_status', id=payment.id) }}"
+                            class="action-form">
+
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="Verified">
+
+                            <button
+                                type="submit"
+                                class="action-btn verify-btn">
+
+                                Verify
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                        {% if payment.status != "Rejected" %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('update_payment_status', id=payment.id) }}"
+                            class="action-form">
+
+                            <input
+                                type="hidden"
+                                name="status"
+                                value="Rejected">
+
+                            <button
+                                type="submit"
+                                class="action-btn reject-btn">
+
+                                Reject
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('delete_payment', id=payment.id) }}"
+                            class="action-form"
+                            onsubmit="return confirm('Delete this payment?');">
+
+                            <button
+                                type="submit"
+                                class="action-btn delete-btn">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty">
+
+            <h3>💳 No Payments Yet</h3>
+
+            <p>
+                Payment records will appear here.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
