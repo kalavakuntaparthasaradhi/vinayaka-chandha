@@ -2850,25 +2850,12 @@ function resetAnnadhanamForm() {
              data-index="{{ loop.index0 }}">
 
             <img
-                src="{{ url_for('serve_gallery_image', filename=image) }}"
+                src="{{ url_for('static', filename='gallery/' + image) }}"
                 alt="Event Photo {{ loop.index }}">
 
         </div>
 
     {% endfor %}
-
-</div>
-
-        <button
-            type="button"
-            class="gallery-overview-close"
-            onclick="closeGalleryOverview()">
-
-            ✕ Close Gallery
-
-        </button>
-
-    </div>
 
 </div>
 <!-- =========================
