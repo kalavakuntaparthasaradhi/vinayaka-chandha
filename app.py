@@ -1285,5 +1285,32 @@ def update_payment_status(id):
         cursor.close()
         conn.close()
 
+# ================= DELETE PAYMENT =================
+
+@app.route("/delete_payment/<int:id>", methods=["POST"])
+def delete_payment(id):
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute("""
+            DELETE FROM payment_history
+            WHERE id = %s
+        """, (id,))
+
+        conn.commit()
+
+        flash("✅ Payment deleted successfully.")
+
+        return redirect(url_for("payment_history"))
+
+    except Exception as e:
+        conn.rollback()
+        return f"<h2>Error</h2><pre>{e}</pre>"
+
+    finally:
+        cursor.close()
+        conn.close()
+
 if __name__ == "__main__":
     app.run(debug=True)
