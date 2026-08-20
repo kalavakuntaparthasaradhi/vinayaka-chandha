@@ -396,6 +396,26 @@ Thank you for your valuable contribution.
     """)
     expenses = cursor.fetchall()
 
+# ================= PAYMENT HISTORY =================
+
+    cursor.execute("""
+        SELECT
+            id,
+            donor_name,
+            mobile,
+            amount,
+            transaction_id,
+            payment_method,
+            payment_date,
+            status,
+            remarks,
+            created_at
+        FROM payments
+        ORDER BY created_at DESC
+    """)
+
+    payments = cursor.fetchall()
+
     cursor.close()
     conn.close()
 
@@ -407,6 +427,7 @@ Thank you for your valuable contribution.
         total_donors=total_donors,
         members=members,
         expenses=expenses,
+        payments=payments,
         name=session.get("name")
     )
 
@@ -1111,75 +1132,39 @@ def edit_donation(id):
         cursor.close()
         conn.close()
 
-# =========================
-# PAYMENT HISTORY
-# =========================
-
-@app.route("/admin/payment-history")
-def payment_history():
+@app.route("/submit_payment", methods=["POST"])
+def submit_payment():
 
     conn, cursor = get_db()
 
     try:
-        cursor.execute("""
-            SELECT
-                id,
-                donor_name,
-                mobile,
-                amount,
-                transaction_id,
-                payment_method,
-                payment_date,
-                status,
-                remarks,
-                created_at
-            FROM payment_history
-            ORDER BY id DESC
-        """)
-
-        payments = cursor.fetchall()
-
-        return render_template(
-            "payment_history.html",
-            payments=payments
-        )
-
-    except Exception as e:
-        return f"Payment History Error: {e}"
-
-    finally:
-        cursor.close()
-        conn.close()
-
-
-# =========================
-# ADD PAYMENT
-# =========================
-
-@app.route("/admin/payment-history/add", methods=["GET", "POST"])
-def add_payment():
-
-    if request.method == "GET":
-        return render_template("add_payment.html")
-
-    conn, cursor = get_db()
-
-    try:
-        donor_name = request.form.get("donor_name", "").strip()
+        donor_name = request.form.get("name", "").strip()
         mobile = request.form.get("mobile", "").strip()
         amount = request.form.get("amount", "").strip()
-        transaction_id = request.form.get("transaction_id", "").strip()
-        payment_method = request.form.get("payment_method", "UPI").strip()
-        payment_date = request.form.get("payment_date", "").strip()
-        status = request.form.get("status", "Pending").strip()
-        remarks = request.form.get("remarks", "").strip()
+        transaction_id = request.form.get("utr", "").strip()
 
-        if not donor_name or not amount or not payment_date:
-            flash("Please fill all required fields.", "error")
-            return redirect(url_for("add_payment"))
+        if not donor_name or not mobile or not amount or not transaction_id:
+            return "All payment details are required.", 400
+
+        # Check duplicate transaction ID
+        cursor.execute("""
+            SELECT id
+            FROM payments
+            WHERE transaction_id = %s
+        """, (transaction_id,))
+
+        existing = cursor.fetchone()
+
+        if existing:
+            return """
+            <script>
+                alert("❌ This transaction ID has already been submitted.");
+                window.location.href = "/public";
+            </script>
+            """
 
         cursor.execute("""
-            INSERT INTO payment_history
+            INSERT INTO payments
             (
                 donor_name,
                 mobile,
@@ -1190,42 +1175,45 @@ def add_payment():
                 status,
                 remarks
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES
+            (
+                %s, %s, %s, %s, %s, NOW(), %s, %s
+            )
         """, (
             donor_name,
             mobile,
             float(amount),
             transaction_id,
-            payment_method,
-            payment_date,
-            status,
-            remarks
+            "PhonePe",
+            "Pending",
+            "Payment submitted by donor"
         ))
 
         conn.commit()
 
-        flash("✅ Payment added successfully.", "success")
-
-        return redirect(url_for("payment_history"))
+        return """
+        <script>
+            alert("✅ Payment details submitted successfully!\\n\\nAdmin will verify your transaction.");
+            window.location.href = "/public";
+        </script>
+        """
 
     except Exception as e:
+
         conn.rollback()
-        return f"Payment Error: {e}"
+
+        return f"<h2>Error</h2><pre>{e}</pre>"
 
     finally:
+
         cursor.close()
         conn.close()
 
-
-# =========================
-# UPDATE PAYMENT STATUS
-# =========================
-
-@app.route(
-    "/admin/payment-history/<int:id>/status",
-    methods=["POST"]
-)
+@app.route("/admin/payment/<int:id>/status", methods=["POST"])
 def update_payment_status(id):
+
+    if "username" not in session:
+        return redirect(url_for("login"))
 
     status = request.form.get("status")
 
@@ -1235,56 +1223,28 @@ def update_payment_status(id):
     conn, cursor = get_db()
 
     try:
+
         cursor.execute("""
-            UPDATE payment_history
+            UPDATE payments
             SET status = %s
             WHERE id = %s
-        """, (status, id))
+        """, (
+            status,
+            id
+        ))
 
         conn.commit()
 
-        flash("✅ Payment status updated.", "success")
-
-        return redirect(url_for("payment_history"))
+        return redirect(url_for("dashboard"))
 
     except Exception as e:
+
         conn.rollback()
-        return f"Status Error: {e}"
+
+        return f"<h2>Error</h2><pre>{e}</pre>"
 
     finally:
-        cursor.close()
-        conn.close()
 
-
-# =========================
-# DELETE PAYMENT
-# =========================
-
-@app.route(
-    "/admin/payment-history/<int:id>/delete",
-    methods=["POST"]
-)
-def delete_payment(id):
-
-    conn, cursor = get_db()
-
-    try:
-        cursor.execute("""
-            DELETE FROM payment_history
-            WHERE id = %s
-        """, (id,))
-
-        conn.commit()
-
-        flash("🗑️ Payment deleted successfully.", "success")
-
-        return redirect(url_for("payment_history"))
-
-    except Exception as e:
-        conn.rollback()
-        return f"Delete Error: {e}"
-
-    finally:
         cursor.close()
         conn.close()
 
