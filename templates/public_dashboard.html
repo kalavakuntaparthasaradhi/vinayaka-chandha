@@ -12,1067 +12,200 @@
 
     <style>
 
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-
-            font-family: Arial, sans-serif;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #FF9933,
-                    #FFD54F,
-                    #FFF8DC
-                );
-
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-
-            padding: 30px 15px;
-        }
-
-        .public-container {
-            width: 100%;
-            max-width: 1000px;
-            text-align: center;
-        }
-
-        .logo {
-            width: 90px;
-            height: 90px;
-
-            object-fit: contain;
-
-            margin-bottom: 10px;
-        }
-
-        .title {
-            font-size: 30px;
-            font-weight: 700;
-
-            color: #222;
-
-            margin: 5px 0;
-        }
-
-        .subtitle {
-            font-size: 17px;
-            color: #555;
-
-            margin-bottom: 25px;
-        }
-
-        .welcome {
-            margin-bottom: 30px;
-        }
-
-        .welcome h2 {
-            margin: 0;
-
-            font-size: 26px;
-
-            color: #222;
-        }
-
-        .welcome p {
-            margin: 6px 0 0;
-
-            font-size: 15px;
-
-            color: #555;
-        }
-
-        /* Financial Cards */
-
-        .cards {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 25px;
-        }
-
-        .card {
-        background: #0f1329;
-        padding: 30px 20px;
-        border-radius: 20px;
-        box-shadow:
-            0 10px 30px
-            rgba(219, 207, 207, 0.15);
-        transition: 0.3s;
-      }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .icon {
-            font-size: 38px;
-
-            margin-bottom: 10px;
-        }
-
-        .card-title {
-
-            font-size: 16px;
-
-            color: #e7e2e2;
-        }
-
-        .amount {
-
-            margin-top: 10px;
-
-            font-size: 30px;
-
-            font-weight: bold;
-
-            color: #222;
-        }
-
-        /* Annadhanam Section */
-
-        .annadhanam-section {
-
-            margin-top: 40px;
-        }
-
-        .section-title {
-
-            font-size: 28px;
-
-            font-weight: bold;
-
-            color: #222;
-
-            margin-bottom: 8px;
-        }
-
-        .section-subtitle {
-
-            color: #666;
-
-            font-size: 15px;
-
-            margin-bottom: 25px;
-        }
-
-        .donor-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 20px;
-
-            text-align: left;
-        }
-
-        .donor-card {
-
-            background: #ffffff;
-
-            border-radius: 18px;
-
-            padding: 18px;
-
-            box-shadow:
-                0 8px 25px
-                rgba(0, 0, 0, 0.13);
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 18px;
-
-            transition: 0.3s;
-        }
-
-        .donor-card:hover {
-
-            transform: translateY(-4px);
-
-        }
-
-        .donor-image {
-
-            width: 90px;
-
-            height: 90px;
-
-            min-width: 90px;
-
-            border-radius: 50%;
-
-            object-fit: cover;
-
-            border: 3px solid #FFD54F;
-
-            background: #fff8dc;
-
-        }
-
-        .donor-placeholder {
-
-            width: 90px;
-
-            height: 90px;
-
-            min-width: 90px;
-
-            border-radius: 50%;
-
-            background: #FFF3CD;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 38px;
-
-        }
-
-        .donor-details {
-
-            flex: 1;
-
-        }
-
-        .donor-name {
-
-            font-size: 19px;
-
-            font-weight: bold;
-
-            color: #222;
-
-            margin-bottom: 6px;
-
-        }
-
-        .donor-info {
-
-            font-size: 14px;
-
-            color: #555;
-
-            margin: 4px 0;
-
-        }
-
-        .slot {
-
-            display: inline-block;
-
-            margin-top: 6px;
-
-            padding: 5px 10px;
-
-            border-radius: 20px;
-
-            background: #FFF3CD;
-
-            color: #7A4B00;
-
-            font-size: 13px;
-
-            font-weight: bold;
-
-        }
-
-        .no-donors {
-
-            background: #ffffff;
-
-            padding: 25px;
-
-            border-radius: 18px;
-
-            color: #666;
-
-            box-shadow:
-                0 8px 25px
-                rgba(0, 0, 0, 0.10);
-
-        }
-
-        .footer {
-
-            margin-top: 35px;
-
-            font-size: 14px;
-
-            color: #666;
-
-            padding-bottom: 20px;
-
-        }
-
-        /* Mobile */
-
-        @media (max-width: 700px) {
-
-            body {
-                padding: 20px 10px;
-            }
-
-            .title {
-                font-size: 24px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-
-                gap: 15px;
-            }
-
-            .card {
-                padding: 25px 15px;
-            }
-
-            .amount {
-                font-size: 26px;
-            }
-
-            .donor-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-title {
-                font-size: 24px;
-            }
-
-            .donor-card {
-                padding: 15px;
-            }
-
-            .donor-image,
-            .donor-placeholder {
-                width: 75px;
-                height: 75px;
-                min-width: 75px;
-            }
-
-        }
-/* Annadhanam Registration Form */
-
-.annadhanam-form-section {
-    margin-top: 40px;
-    margin-bottom: 40px;
-
-    background: #ffffff;
-
-    padding: 30px;
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 10px 30px
-        rgba(0, 0, 0, 0.15);
+    /* ================================
+   CENTER EVERYTHING
+================================ */
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FF9933,
+            #FFD54F,
+            #FFF8DC
+        );
+
+    padding: 25px 15px;
 }
 
-.annadhanam-form {
-    max-width: 650px;
-
+/* Main page */
+.public-container {
+    width: 100%;
+    max-width: 1180px;
     margin: 0 auto;
-
-    text-align: left;
+    text-align: center;
 }
 
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
+/* Header */
+.logo {
     display: block;
-
-    font-weight: bold;
-
-    color: #444;
-
-    margin-bottom: 7px;
+    margin: 0 auto 10px;
 }
 
-.form-group label span {
-    color: red;
+.title,
+.subtitle {
+    text-align: center;
 }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-
-    padding: 12px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
-
-    font-size: 15px;
-
-    outline: none;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #FF9800;
-}
-
-.form-group small {
-    display: block;
-
-    margin-top: 5px;
-
-    color: #777;
-
-    font-size: 12px;
-}
-
-.annadhanam-submit {
-    width: 100%;
-
-    padding: 14px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #E65100;
-
-    color: white;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.annadhanam-submit:hover {
-    background: #BF360C;
-}
-/* ============================= */
-/* ANNADHANAM REGISTRATION CARD */
-/* ============================= */
-
-.annadhanam-card {
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.annadhanam-card:hover {
-    transform: translateY(-5px);
-}
-
-.register-text {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #666;
-}
-
-.register-btn {
-    margin-top: 15px;
-
-    padding: 11px 25px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: #E65100;
-
-    color: white;
-
-    font-size: 15px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.register-btn:hover {
-    background: #BF360C;
-}
-.flash-message {
-    margin: 15px auto 25px;
-    max-width: 700px;
-    padding: 14px 20px;
-
-    background: #0d1b3d;
-    color: white;
-
-    border-radius: 12px;
-
-    font-size: 15px;
-    font-weight: bold;
-
-    box-shadow:
-        0 6px 20px
-        rgba(0, 0, 0, 0.20);
-}
-.reset-form-btn,
-.close-form-btn {
-    flex: 1;
-    padding: 11px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.reset-form-btn {
-    background: #6c757d;
-    color: white;
-}
-
-.reset-form-btn:hover {
-    background: #5a6268;
-}
-
-.close-form-btn {
-    background: #0d1b3d;
-    color: white;
-}
-
-.close-form-btn:hover {
-    background: #08132d;
-}
+/* Announcement */
 .announcement-bar {
-    display: flex;
-    align-items: center;
-    background: #fff3cd;
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 15px 0;
-    padding: 10px 0;
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
 }
 
-.announcement-title {
-    background: #dc3545;
-    color: white;
-    padding: 8px 12px;
-    font-weight: bold;
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-.announcement-scroll {
-    overflow: hidden;
-    flex: 1;
-    white-space: nowrap;
-}
-
-.announcement-scroll span {
-    display: inline-block;
-    padding-left: 100%;
-    animation: announcementMove 12s linear infinite;
-    color: #b02a37;
-    font-weight: bold;
-}
-
-@keyframes announcementMove {
-
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(-100%);
-    }
-
-}
-
-
+/* Upcoming events */
 .events-section {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    margin: 15px 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    text-align: center;
 }
 
 .events-section h2 {
-    margin: 0 0 12px;
-    color: #E65100;
-    font-size: 18px;
+    text-align: center;
 }
 
 .events-scroll {
     display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 5px;
-}
-
-.event-item {
-    min-width: 180px;
-    padding: 12px;
-    background: #FFF8DC;
-    border-left: 4px solid #FF9800;
-    border-radius: 8px;
-}
-
-.event-item strong {
-    display: block;
-    color: #E65100;
-    margin-bottom: 5px;
-}
-
-.event-item span {
-    color: #444;
-    font-size: 14px;
-}
-/* =========================
-   DASHBOARD CARDS
-========================= */
-
-.cards-container {
-    display: flex;
     justify-content: center;
-    align-items: stretch;
-    gap: 13px;
-    flex-wrap: wrap;
-}
-
-
-
-
-/* =========================
-   GALLERY CARD
-========================= */
-
-.gallery-card {
-    width: 220px;
-    height: 180px;
-
-    padding: 12px;
-
-    background: #0d122d;
-
-    border-radius: 15px;
-
-    color: white;
-
-    text-align: center;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    overflow: hidden;
-}
-
-
-/* =========================
-   GALLERY TITLE
-========================= */
-
-.gallery-card {
-    width: 275px;
-    height: 225px;
-
-    padding: 15px;
-
-    background: #0d122d;
-    border-radius: 16px;
-
-    color: white;
-    text-align: center;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    overflow: hidden;
-}
-
-
-/* Icon */
-
-.gallery-card .card-icon {
-    font-size: 18px;
-    line-height: 20px;
-}
-
-
-/* Title */
-
-.gallery-card .card-title {
-    font-size: 16px;
-    margin-top: 2px;
-}
-
-
-/* Subtitle */
-
-.gallery-card .card-subtitle {
-    font-size: 13px;
-    line-height: 16px;
-    margin-top: 3px;
-}
-
-
-/* IMAGE BOX ONLY */
-
-.gallery-slider {
-    position: relative;
-
-    width: 210px;
-    height: 105px;
-
-    margin-top: 10px;
-
-    border-radius: 8px;
-
-    overflow: hidden;
-
-    background: #111;
-
-    flex-shrink: 0;
-}
-
-
-/* IMAGE */
-
-.gallery-image {
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    opacity: 0;
-
-    transition: opacity 0.8s ease;
-}
-
-
-/* ACTIVE IMAGE */
-
-.gallery-image.active {
-    opacity: 1;
-}
-
-
-/* BUTTON */
-
-.gallery-btn {
-    margin-top: auto;
-
-    padding: 8px 16px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background: #FF6F00;
-
-    color: white;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.gallery-btn:hover {
-    background: #E65100;
-}
-.gallery-wrapper {
-    width: 275px;
-    text-align: center;
-}
-
-
-/* TEXT OUTSIDE */
-
-.gallery-heading {
-    color: #0d122d;
-    margin-bottom: 8px;
-}
-
-.gallery-icon {
-    font-size: 18px;
-}
-
-.gallery-title {
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.gallery-subtitle {
-    font-size: 14px;
-    margin-top: 3px;
-}
-
-
-/* IMAGE BOX ONLY */
-
-.gallery-image-box {
-    width: 245px;
-    height: 125px;
-
-    margin: 0 auto;
-
-    border-radius: 9px;
-
-    overflow: hidden;
-
-    background: #111;
-}
-
-
-/* IMAGE */
-
-.gallery-slider {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-}
-
-.gallery-image {
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    opacity: 0;
-
-    transition: opacity 0.8s ease;
-}
-
-.gallery-image.active {
-    opacity: 1;
-}
-
-
-/* BUTTON */
-
-.gallery-btn {
-    margin-top: 10px;
-
-    padding: 8px 18px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background: #FF6F00;
-
-    color: white;
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-.image-modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0, 0, 0, 0.92);
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 15px;
-    box-sizing: border-box;
-}
-
-.image-modal img {
-    max-width: 95vw;
-    max-height: 85vh;
-
-    width: auto;
-    height: auto;
-
-    object-fit: contain;
-
-    border-radius: 8px;
-}
-
-.modal-close {
-    position: absolute;
-
-    top: 10px;
-    right: 18px;
-
-    color: white;
-
-    font-size: 35px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-/* =========================
-   GALLERY OVERVIEW
-========================= */
-
-.gallery-overview-modal {
-    display: none;
-    position: fixed;
-    z-index: 9998;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.92);
-    padding: 25px 15px;
-    overflow-y: auto;
-}
-
-.gallery-overview-content {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.gallery-overview-title {
-    color: white;
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.gallery-overview-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
 }
 
-.gallery-overview-item {
+.event-item {
+    flex: 1;
+    max-width: 250px;
+    text-align: left;
+}
+
+/* Welcome */
+.welcome {
     width: 100%;
-    height: 200px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #111;
-    cursor: pointer;
-}
-
-.gallery-overview-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-.gallery-overview-item img:hover {
-    transform: scale(1.03);
-}
-
-.gallery-overview-close {
-    display: block;
-    margin: 20px auto 0;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 8px;
-    background: #E65100;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-@media (max-width: 700px) {
-
-    .gallery-overview-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-
-    .gallery-overview-item {
-        height: 150px;
-    }
-}
-
-@media (max-width: 450px) {
-
-    .gallery-overview-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .gallery-overview-item {
-        height: 130px;
-    }
-}
-/* =========================
-   DONATE NOW
-   ========================= */
-
-.donation-box {
-    max-width: 600px;
+    text-align: center;
     margin: 30px auto;
-    padding: 25px 20px;
-    background: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+/* Dashboard cards */
+.cards {
+    width: 100%;
+    max-width: 900px;
+    margin: 25px auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+/* Cards */
+.card {
+    width: 100%;
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
     text-align: center;
 }
 
-.donation-icon {
-    font-size: 35px;
-    margin-bottom: 8px;
+/* Gallery */
+.gallery-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.donation-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #0d1b3d;
-    margin-bottom: 8px;
-}
-
-.donation-text {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 18px;
-}
-
+/* Donate */
 .donate-btn {
-    display: inline-block;
-    padding: 12px 30px;
-    background: #0d1b3d;
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.donate-btn:hover {
-    background: #162a5a;
-    transform: translateY(-2px);
+    display: block;
+    width: fit-content;
+    margin: 22px auto 0;
 }
 
 .payment-note {
-    margin-top: 12px;
-    font-size: 12px;
-    color: #777;
+    text-align: center;
+}
+
+/* Annadhanam form */
+.annadhanam-form-section {
+    width: 100%;
+    max-width: 760px;
+    margin: 35px auto;
+    text-align: center;
+}
+
+.annadhanam-form {
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* Donors */
+.annadhanam-section {
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.donor-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: left;
+}
+
+/* No donors message */
+.no-donors {
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    text-align: center;
+    margin: 35px auto;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 700px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+    }
+
+    .events-scroll {
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+
+    .event-item {
+        min-width: 180px;
+        flex: 0 0 180px;
+    }
+
+    .donor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .annadhanam-form-section {
+        padding: 20px 15px;
+    }
 }
 </style>
 
