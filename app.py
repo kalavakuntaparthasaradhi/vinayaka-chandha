@@ -55,6 +55,7 @@ def check_session():
     "public_dashboard",
     "annadhanam_slot_availability",
     "donate",
+    "submit_payment",
     "static"
     ]:
         if "username" not in session:
