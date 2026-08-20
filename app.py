@@ -1112,22 +1112,6 @@ def edit_donation(id):
         conn.close()
 
 # =========================
-# UPI DONATION
-# =========================
-
-@app.route("/donate")
-def donate():
-
-    upi_url = (
-        f"upi://pay?"
-        f"pa={quote(UPI_ID)}"
-        f"&pn={quote('Lakshmi Ganapathi Youth')}"
-        f"&cu=INR"
-    )
-
-    return redirect(upi_url)
-
-# =========================
 # PAYMENT HISTORY
 # =========================
 
