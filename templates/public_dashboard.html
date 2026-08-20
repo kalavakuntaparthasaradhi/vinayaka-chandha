@@ -1763,51 +1763,24 @@ body {
 
     <div class="gallery-image-box">
 
-    <div class="gallery-slider">
+        <div class="gallery-slider">
 
-        {% if gallery_images %}
+            {% if gallery_images %}
 
-            {% for image in gallery_images %}
+                {% for image in gallery_images %}
 
-                <img
-                    
-        <div class="gallery-overview-item"
-             onclick="openLargeFromGallery(this.dataset.index)"
-             data-index="{{ loop.index0 }}">
+                    <img
+                        src="{{ url_for('static', filename='gallery/' + image) }}"
+                        class="gallery-image {% if loop.first %}active{% endif %}"
+                        alt="Event Photo {{ loop.index }}">
 
-            <img
-                src="{{ url_for('static', filename='gallery/' + image) }}"
-                alt="Event Photo {{ loop.index }}">
+                {% endfor %}
+
+            {% endif %}
 
         </div>
 
-    {% endfor %}
-
-</div>
-<!-- =========================
-     LARGE GALLERY MODAL
-========================= -->
-
-    <div id="imageModal"
-        class="image-modal"
-        onclick="closeLargeImage()">
-
-        <img id="largeImage"
-            src=""
-            alt="Gallery Image"
-            onclick="event.stopPropagation()">
-
     </div>
-                    class="gallery-image {% if loop.first %}active{% endif %}"
-                    alt="Event Photo {{ loop.index }}">
-
-            {% endfor %}
-
-        {% endif %}
-
-    </div>
-
-</div>
 
 <!-- GALLERY IMAGE DATA -->
 
@@ -2868,38 +2841,61 @@ function resetAnnadhanamForm() {
      GALLERY OVERVIEW
 ========================= -->
 
-<div class="gallery-overview-grid">
+<div id="galleryOverview"
+     class="gallery-overview-modal">
 
-    {% for image in gallery_images %}
+    <div class="gallery-overview-content">
 
-        <div class="gallery-overview-item"
-             onclick="openLargeFromGallery(this.dataset.index)"
-             data-index="{{ loop.index0 }}">
+        <div class="gallery-overview-title">
+            📸 Event Gallery
+        </div>
 
-            <img
-                src="{{ url_for('static', filename='gallery/' + image) }}"
-                alt="Event Photo {{ loop.index }}">
+        <div class="gallery-overview-grid">
+
+            {% for image in gallery_images %}
+
+                <div class="gallery-overview-item"
+                     onclick="openLargeFromGallery(this.dataset.index)"
+                     data-index="{{ loop.index0 }}">
+
+                    <img
+                        src="{{ url_for('static', filename='gallery/' + image) }}"
+                        alt="Event Photo {{ loop.index }}">
+
+                </div>
+
+            {% endfor %}
 
         </div>
 
-    {% endfor %}
+        <button
+            type="button"
+            class="gallery-overview-close"
+            onclick="closeGalleryOverview()">
+
+            ✕ Close Gallery
+
+        </button>
+
+    </div>
 
 </div>
+
 <!-- =========================
      LARGE GALLERY MODAL
 ========================= -->
 
-    <div id="imageModal"
-        class="image-modal"
-        onclick="closeLargeImage()">
+<div id="imageModal"
+     class="image-modal"
+     onclick="closeLargeImage()">
 
-        
-        <img id="largeImage"
-            src=""
-            alt="Gallery Image"
-            onclick="event.stopPropagation()">
+    <img id="largeImage"
+         src=""
+         alt="Gallery Image"
+         onclick="event.stopPropagation()">
 
-    </div>
+</div>
+
 <script>
 
 /* =========================
