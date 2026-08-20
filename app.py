@@ -1,7 +1,7 @@
 
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
 from urllib.parse import quote
 import mysql.connector
 from datetime import timedelta, datetime
@@ -908,6 +908,29 @@ def delete_gallery_image(filename):
     return redirect(
         url_for("admin_gallery")
     )
+
+@app.route(
+    "/admin/gallery/delete/<filename>",
+    methods=["POST"]
+)
+def delete_gallery_image(filename):
+    ...
+    return redirect(
+        url_for("admin_gallery")
+    )
+
+
+# =========================
+# SERVE EVENT GALLERY IMAGES
+# =========================
+
+@app.route("/gallery/<filename>")
+def serve_gallery_image(filename):
+    return send_from_directory(
+        GALLERY_FOLDER,
+        filename
+    )
+
 
 # ------------------ Public Dashboard ------------------
 

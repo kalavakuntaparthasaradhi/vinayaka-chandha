@@ -1770,7 +1770,7 @@ body {
             {% for image in gallery_images %}
 
                 <img
-                    src="{{ url_for('static', filename='gallery/' + image) }}"
+                    src="{{ url_for('serve_gallery_image', filename=image) }}"
                     class="gallery-image {% if loop.first %}active{% endif %}"
                     alt="Event Photo {{ loop.index }}">
 
