@@ -449,135 +449,6 @@ body {
     background: #E65100;
 }
 
-
-/* ================= DONATE POPUP FIX ================= */
-
-.donate-qr-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.70);
-    z-index: 99999;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-}
-
-.donate-qr-box {
-    position: relative;
-
-    width: 420px;
-    max-width: 95vw;
-    max-height: 90vh;
-
-    background: white;
-    border-radius: 18px;
-
-    padding: 25px;
-
-    text-align: center;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    box-sizing: border-box;
-}
-
-/* QR IMAGE */
-.donate-qr-box .upi-qr-image {
-    display: block;
-
-    width: 250px !important;
-    height: 250px !important;
-
-    max-width: 100%;
-    object-fit: contain;
-
-    margin: 15px auto;
-
-    border-radius: 5px;
-}
-
-/* DONATE BUTTON INSIDE POPUP */
-.donate-qr-box .donate-btn {
-    display: block;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    padding: 12px 20px !important;
-
-    margin: 0 0 15px 0 !important;
-
-    font-size: 16px !important;
-    font-weight: bold;
-
-    border-radius: 8px;
-
-    box-sizing: border-box;
-}
-
-/* FORM */
-.donate-qr-box form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.donate-qr-box input {
-    width: 100%;
-    padding: 12px;
-
-    border: 1px solid #ccc;
-    border-radius: 8px;
-
-    box-sizing: border-box;
-    font-size: 14px;
-}
-
-/* SUBMIT BUTTON */
-.donate-qr-box form button[type="submit"] {
-    width: 100%;
-
-    padding: 13px;
-
-    border: none;
-    border-radius: 8px;
-
-    background: #ff6500;
-    color: white;
-
-    font-size: 15px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-/* CLOSE BUTTON */
-.donate-close-btn {
-    position: absolute;
-
-    top: 10px;
-    right: 12px;
-
-    width: 32px;
-    height: 32px;
-
-    border: none;
-    border-radius: 50%;
-
-    background: #eee;
-    color: #333;
-
-    font-size: 18px;
-
-    cursor: pointer;
-}
 /* =========================================================
    IMPORTANT ANNOUNCEMENT
 ========================================================= */
@@ -1461,6 +1332,292 @@ body {
     font-size: 13px;
 
     color: #777;
+}
+/* =========================================================
+   DONATE BUTTON
+========================================================= */
+
+.donate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 180px;
+    min-height: 48px;
+
+    margin: 10px auto;
+
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #0d1b3d;
+    color: #fff;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.18);
+
+    transition: 0.2s;
+}
+
+.donate-btn:hover {
+    background: #162a5a;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   DONATE QR MODAL
+========================================================= */
+
+.donate-qr-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.75);
+
+    z-index: 99999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+/* =========================================================
+   DONATE POPUP BOX
+========================================================= */
+
+.donate-qr-box {
+    position: relative;
+
+    width: 100%;
+    max-width: 420px;
+
+    max-height: 90vh;
+
+    background: #fff;
+
+    border-radius: 18px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.donate-qr-close,
+.donate-close-btn {
+    position: absolute;
+
+    top: 10px;
+    right: 12px;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #0d1b3d;
+    color: #fff;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.donate-qr-title {
+    font-size: 24px;
+    font-weight: bold;
+
+    color: #0d1b3d;
+
+    margin: 5px 0 8px;
+}
+
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
+
+.donate-qr-subtitle {
+    font-size: 14px;
+
+    color: #666;
+
+    margin-bottom: 15px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   QR IMAGE
+========================================================= */
+
+.donate-qr-image,
+.upi-qr-image {
+
+    display: block;
+
+    width: 240px !important;
+    height: 240px !important;
+
+    max-width: 100%;
+
+    object-fit: contain;
+
+    margin: 10px auto 15px;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   PAYMENT NOTE
+========================================================= */
+
+.donate-qr-note,
+.payment-note {
+
+    margin: 10px 0 15px;
+
+    font-size: 13px;
+
+    color: #666;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   PAYMENT FORM
+========================================================= */
+
+.donate-qr-box form {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.donate-qr-box input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #d5d5d5;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+}
+
+
+.donate-qr-box input:focus {
+    border-color: #FF9800;
+
+    box-shadow:
+        0 0 0 3px rgba(255,152,0,0.12);
+}
+
+
+/* =========================================================
+   SUBMIT PAYMENT
+========================================================= */
+
+.donate-qr-box form button[type="submit"] {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #E65100;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.donate-qr-box form button[type="submit"]:hover {
+    background: #BF360C;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+
+    .donate-qr-modal {
+        padding: 12px;
+    }
+
+    .donate-qr-box {
+        max-width: 100%;
+
+        max-height: 92vh;
+
+        padding: 22px 15px;
+    }
+
+    .donate-qr-image,
+    .upi-qr-image {
+        width: 210px !important;
+        height: 210px !important;
+    }
+
+    .donate-qr-title {
+        font-size: 21px;
+    }
+
+    .donate-btn {
+        width: 180px;
+    }
 }
 </style>
 
