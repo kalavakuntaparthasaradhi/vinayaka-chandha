@@ -1770,7 +1770,34 @@ body {
             {% for image in gallery_images %}
 
                 <img
-                    src="{{ url_for('serve_gallery_image', filename=image) }}"
+                    
+        <div class="gallery-overview-item"
+             onclick="openLargeFromGallery(this.dataset.index)"
+             data-index="{{ loop.index0 }}">
+
+            <img
+                src="{{ url_for('static', filename='gallery/' + image) }}"
+                alt="Event Photo {{ loop.index }}">
+
+        </div>
+
+    {% endfor %}
+
+</div>
+<!-- =========================
+     LARGE GALLERY MODAL
+========================= -->
+
+    <div id="imageModal"
+        class="image-modal"
+        onclick="closeLargeImage()">
+
+        <img id="largeImage"
+            src=""
+            alt="Gallery Image"
+            onclick="event.stopPropagation()">
+
+    </div>
                     class="gallery-image {% if loop.first %}active{% endif %}"
                     alt="Event Photo {{ loop.index }}">
 
@@ -2866,6 +2893,7 @@ function resetAnnadhanamForm() {
         class="image-modal"
         onclick="closeLargeImage()">
 
+        
         <img id="largeImage"
             src=""
             alt="Gallery Image"
