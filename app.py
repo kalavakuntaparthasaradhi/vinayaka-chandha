@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 
 load_dotenv()
 app = Flask(__name__)
+UPI_ID = "6305777042@ybl"
 # =========================
 # EVENT GALLERY
 # =========================
@@ -53,6 +54,7 @@ def check_session():
     "login",
     "public_dashboard",
     "annadhanam_slot_availability",
+    "donate",
     "static"
     ]:
         if "username" not in session:
@@ -1110,19 +1112,20 @@ def edit_donation(id):
         conn.close()
 
 # =========================
-# PHONEPE DONATION
+# UPI DONATION
 # =========================
 
 @app.route("/donate")
 def donate():
 
-    phonepe_url = os.getenv("PHONEPE_UPI_URL")
+    upi_url = (
+        f"upi://pay?"
+        f"pa={quote(UPI_ID)}"
+        f"&pn={quote('Lakshmi Ganapathi Youth')}"
+        f"&cu=INR"
+    )
 
-    if not phonepe_url:
-        flash("Payment option is currently unavailable.", "error")
-        return redirect(url_for("public_dashboard"))
-
-    return redirect(phonepe_url)
+    return redirect(upi_url)
 
 if __name__ == "__main__":
     app.run(debug=True)
