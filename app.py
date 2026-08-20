@@ -410,7 +410,7 @@ Thank you for your valuable contribution.
             status,
             remarks,
             created_at
-        FROM payments
+        FROM payment_history
         ORDER BY created_at DESC
     """)
 
@@ -1149,7 +1149,7 @@ def submit_payment():
         # Check duplicate transaction ID
         cursor.execute("""
             SELECT id
-            FROM payments
+            FROM payment_history
             WHERE transaction_id = %s
         """, (transaction_id,))
 
@@ -1164,7 +1164,7 @@ def submit_payment():
             """
 
         cursor.execute("""
-            INSERT INTO payments
+            INSERT INTO payment_history
             (
                 donor_name,
                 mobile,
@@ -1225,7 +1225,7 @@ def update_payment_status(id):
     try:
 
         cursor.execute("""
-            UPDATE payments
+            UPDATE payment_history
             SET status = %s
             WHERE id = %s
         """, (
