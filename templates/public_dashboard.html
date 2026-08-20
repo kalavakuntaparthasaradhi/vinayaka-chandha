@@ -2946,16 +2946,17 @@ document.addEventListener(
 
 </script>
 <!-- DONATE QR MODAL -->
-<div id="donateQRModal" class="donate-qr-modal">
+<div id="donateQRModal" class="donate-qr-modal" style="display:none;">
 
     <div class="donate-qr-box">
 
         <button type="button"
-        class="donate-btn"
-        disabled
-        style="opacity:0.5; cursor:not-allowed;">
-    💳 Donate Now
-</button>
+                class="donate-btn"
+                disabled
+                style="opacity:0.5; cursor:not-allowed;">
+            💳 Donate Now
+        </button>
+
         <div class="donate-qr-title">
             🙏 Donate Now
         </div>
@@ -2963,7 +2964,6 @@ document.addEventListener(
         <div class="donate-qr-subtitle">
             Scan the QR code to donate through PhonePe
         </div>
-
         <img
             src="{{ url_for('static', filename='.png') }}"
             class="donate-qr-image"
