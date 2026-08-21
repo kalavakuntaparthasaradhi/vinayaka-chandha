@@ -385,12 +385,18 @@
                         <form
                             method="POST"
                             action="{{ url_for('update_payment_status', id=payment.id) }}"
-                            class="action-form">
+                            class="action-form"
+                            onsubmit="return askRejectOTP(this);">
 
                             <input
                                 type="hidden"
                                 name="status"
                                 value="Rejected">
+
+                            <input
+                                type="hidden"
+                                name="otp"
+                                class="otp-value">
 
                             <button
                                 type="submit"
@@ -409,7 +415,12 @@
                             method="POST"
                             action="{{ url_for('delete_payment', id=payment.id) }}"
                             class="action-form"
-                            onsubmit="return confirm('Delete this payment?');">
+                            onsubmit="return askDeleteOTP(this);">
+
+                            <input
+                                type="hidden"
+                                name="otp"
+                                class="otp-value">
 
                             <button
                                 type="submit"
@@ -448,6 +459,54 @@
     </div>
 
 </div>
+<script>
+function askRejectOTP(form) {
 
+    const otp = prompt(
+        "🔐 Enter Admin OTP to reject this payment:"
+    );
+
+    if (otp === null) {
+        return false;
+    }
+
+    if (!/^\d{6}$/.test(otp)) {
+        alert("❌ OTP must contain exactly 6 digits.");
+        return false;
+    }
+
+    form.querySelector(".otp-value").value = otp;
+
+    return confirm(
+        "Are you sure you want to reject this payment?"
+    );
+}
+
+</script>
+    <script>
+        function askDeleteOTP(form) {
+
+            if (!confirm("⚠️ Are you sure you want to delete this payment?")) {
+                return false;
+            }
+
+            const otp = prompt(
+                "🔐 Enter Admin OTP to permanently delete this payment:"
+            );
+
+            if (otp === null) {
+                return false;
+            }
+
+            if (!/^\d{6}$/.test(otp)) {
+                alert("❌ OTP must contain exactly 6 digits.");
+                return false;
+            }
+
+            form.querySelector(".otp-value").value = otp;
+
+            return true;
+        }
+    </script>
 </body>
 </html>

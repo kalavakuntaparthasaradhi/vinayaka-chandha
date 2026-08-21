@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 load_dotenv()
 app = Flask(__name__)
 UPI_ID = "6305777042@axl"
+PAYMENT_ACTION_OTP = "123456"
 # =========================
 # EVENT GALLERY
 # =========================
@@ -1256,9 +1257,18 @@ def update_payment_status(id):
         return redirect(url_for("login"))
 
     status = request.form.get("status")
+    otp = request.form.get("otp", "").strip()
 
     if status not in ["Pending", "Verified", "Rejected"]:
         return "Invalid status", 400
+
+    # OTP required only for Reject
+    if status == "Rejected":
+        correct_otp = PAYMENT_ACTION_OTP
+
+        if not otp or otp != correct_otp:
+            flash("❌ Invalid OTP. Payment was not rejected.")
+            return redirect(url_for("payment_history"))
 
     conn, cursor = get_db()
 
@@ -1275,27 +1285,41 @@ def update_payment_status(id):
 
         conn.commit()
 
-        return redirect(url_for("dashboard"))
+        if status == "Rejected":
+            flash("✅ Payment rejected successfully.")
+        else:
+            flash("✅ Payment status updated successfully.")
+
+        return redirect(url_for("payment_history"))
 
     except Exception as e:
 
         conn.rollback()
-
         return f"<h2>Error</h2><pre>{e}</pre>"
 
     finally:
-
         cursor.close()
         conn.close()
 
-# ================= DELETE PAYMENT =================
+        # ================= DELETE PAYMENT =================
 
 @app.route("/delete_payment/<int:id>", methods=["POST"])
 def delete_payment(id):
 
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    otp = request.form.get("otp", "").strip()
+    correct_otp = os.getenv("PAYMENT_ACTION_OTP", "")
+
+    if not otp or otp != correct_otp:
+        flash("❌ Invalid OTP. Payment was NOT deleted.")
+        return redirect(url_for("payment_history"))
+
     conn, cursor = get_db()
 
     try:
+
         cursor.execute("""
             DELETE FROM payment_history
             WHERE id = %s
@@ -1308,12 +1332,14 @@ def delete_payment(id):
         return redirect(url_for("payment_history"))
 
     except Exception as e:
+
         conn.rollback()
         return f"<h2>Error</h2><pre>{e}</pre>"
 
     finally:
         cursor.close()
         conn.close()
+
 
 if __name__ == "__main__":
     app.run(debug=True)
