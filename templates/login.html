@@ -171,6 +171,29 @@
 </div>
         <button type="submit">Login</button>
 
+<div style="
+    margin:20px 0;
+    color:#999;
+    font-weight:bold;
+">
+    OR
+</div>
+
+<button
+    type="button"
+    onclick="registerFingerprint()"
+    style="background:#00897b; margin-bottom:10px;"
+>
+    📱 Register This Device
+</button>
+
+<button
+    type="button"
+    onclick="loginWithFingerprint()"
+    style="background:#333;"
+>
+    🔐 Login with Fingerprint
+</button>
     </form>
 
     <p class="error">{{ msg }}</p>
@@ -222,6 +245,370 @@
         }
 
         setInterval(createFlower, 500);
+</script>
+<script>
+
+function base64urlToUint8Array(base64url) {
+
+    const padding =
+        "=".repeat((4 - base64url.length % 4) % 4);
+
+    const base64 =
+        base64url
+            .replace(/-/g, "+")
+            .replace(/_/g, "/") + padding;
+
+    const binary = atob(base64);
+
+    const bytes =
+        new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return bytes;
+}
+
+
+function uint8ArrayToBase64url(bytes) {
+
+    let binary = "";
+
+    bytes = new Uint8Array(bytes);
+
+    for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+
+    return btoa(binary)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=/g, "");
+}
+
+
+/* =========================
+   REGISTER DEVICE
+========================= */
+
+async function registerFingerprint() {
+
+    try {
+
+        const username =
+            document.querySelector(
+                'input[name="username"]'
+            ).value.trim();
+
+        if (!username) {
+
+            alert(
+                "Please enter your username first."
+            );
+
+            return;
+        }
+
+        const response =
+            await fetch(
+                "/passkey/register/options",
+                {
+                    method: "POST"
+                }
+            );
+
+        const options =
+            await response.json();
+
+        if (options.error) {
+
+            alert("❌ " + options.error);
+
+            return;
+        }
+
+        options.challenge =
+            base64urlToUint8Array(
+                options.challenge
+            );
+
+        options.user.id =
+            base64urlToUint8Array(
+                options.user.id
+            );
+
+        if (options.excludeCredentials) {
+
+            options.excludeCredentials =
+                options.excludeCredentials.map(c => ({
+                    ...c,
+                    id:
+                        base64urlToUint8Array(c.id)
+                }));
+        }
+
+        /*
+         * This is where the Motorola
+         * fingerprint/biometric prompt appears.
+         */
+        const credential =
+            await navigator.credentials.create({
+                publicKey: options
+            });
+
+        if (!credential) {
+
+            alert(
+                "❌ Registration cancelled."
+            );
+
+            return;
+        }
+
+        const responseData =
+            credential.response;
+
+        const credentialData = {
+
+            id: credential.id,
+
+            rawId:
+                uint8ArrayToBase64url(
+                    credential.rawId
+                ),
+
+            type: credential.type,
+
+            response: {
+
+                clientDataJSON:
+                    uint8ArrayToBase64url(
+                        responseData.clientDataJSON
+                    ),
+
+                attestationObject:
+                    uint8ArrayToBase64url(
+                        responseData.attestationObject
+                    )
+            }
+        };
+
+        const verifyResponse =
+            await fetch(
+                "/passkey/register/verify",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        credential:
+                            credentialData
+                    })
+                }
+            );
+
+        const result =
+            await verifyResponse.json();
+
+        if (result.success) {
+
+            alert(
+                "✅ Fingerprint registered successfully!"
+            );
+
+        } else {
+
+            alert(
+                "❌ " +
+                (result.error ||
+                 "Registration failed.")
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Fingerprint registration failed.\n\n" +
+            error.message
+        );
+    }
+}
+
+</script>
+<script>
+
+async function loginWithFingerprint() {
+
+    try {
+
+        const username =
+            document.querySelector(
+                'input[name="username"]'
+            ).value.trim();
+
+        if (!username) {
+
+            alert(
+                "Please enter your username first."
+            );
+
+            return;
+        }
+
+        const response =
+            await fetch(
+                "/passkey/login/options",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username: username
+                    })
+                }
+            );
+
+        const options =
+            await response.json();
+
+        if (options.error) {
+
+            alert("❌ " + options.error);
+
+            return;
+        }
+
+        options.challenge =
+            base64urlToUint8Array(
+                options.challenge
+            );
+
+        if (options.allowCredentials) {
+
+            options.allowCredentials =
+                options.allowCredentials.map(
+                    credential => ({
+                        ...credential,
+                        id:
+                            base64urlToUint8Array(
+                                credential.id
+                            )
+                    })
+                );
+        }
+
+        // Motorola fingerprint / biometric prompt
+        const credential =
+            await navigator.credentials.get({
+                publicKey: options
+            });
+
+        if (!credential) {
+
+            alert(
+                "❌ Fingerprint authentication cancelled."
+            );
+
+            return;
+        }
+
+        const responseData =
+            credential.response;
+
+        const credentialData = {
+
+            id: credential.id,
+
+            rawId:
+                uint8ArrayToBase64url(
+                    credential.rawId
+                ),
+
+            type: credential.type,
+
+            response: {
+
+                clientDataJSON:
+                    uint8ArrayToBase64url(
+                        responseData.clientDataJSON
+                    ),
+
+                authenticatorData:
+                    uint8ArrayToBase64url(
+                        responseData.authenticatorData
+                    ),
+
+                signature:
+                    uint8ArrayToBase64url(
+                        responseData.signature
+                    ),
+
+                userHandle:
+                    responseData.userHandle
+                        ? uint8ArrayToBase64url(
+                            responseData.userHandle
+                        )
+                        : null
+            }
+        };
+
+        const verifyResponse =
+            await fetch(
+                "/passkey/login/verify",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        credential:
+                            credentialData
+                    })
+                }
+            );
+
+        const result =
+            await verifyResponse.json();
+
+        if (result.success) {
+
+            window.location.href =
+                result.redirect;
+
+        } else {
+
+            alert(
+                "❌ " +
+                (result.error ||
+                 "Fingerprint login failed.")
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Fingerprint login failed.\n\n" +
+            error.message
+        );
+    }
+}
+
 </script>
 </body>
 </html>

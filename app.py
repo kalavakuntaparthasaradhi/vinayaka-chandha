@@ -1,13 +1,32 @@
 
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from urllib.parse import quote
 import mysql.connector
 from datetime import timedelta, datetime
 import re
 from werkzeug.utils import secure_filename
 
+import secrets
+import json
+
+from webauthn import (
+    generate_registration_options,
+    verify_registration_response,
+    generate_authentication_options,
+    verify_authentication_response,
+    options_to_json,
+    base64url_to_bytes,
+)
+
+from webauthn.helpers.structs import (
+    AuthenticatorSelectionCriteria,
+    AuthenticatorAttachment,
+    ResidentKeyRequirement,
+    UserVerificationRequirement,
+    PublicKeyCredentialDescriptor,
+)
 
 load_dotenv()
 app = Flask(__name__)
@@ -45,6 +64,15 @@ def allowed_gallery_file(filename):
     )
 app.secret_key = "vinayaka123"
 app.permanent_session_lifetime = timedelta(minutes=5)
+
+
+# =========================
+# WEBAUTHN CONFIGURATION
+# =========================
+
+RP_ID = "localhost"
+RP_NAME = "Lakshmi Ganapathi Youth"
+ORIGIN = "https://lakshmiganapathi.onrender.com"
 
 # Sleep Mode
 
@@ -154,6 +182,243 @@ def login():
 
     return render_template("login.html", msg=msg)
 
+
+# =========================
+# PASSKEY REGISTRATION OPTIONS
+# =========================
+
+@app.route("/passkey/register/options", methods=["POST"])
+def passkey_register_options():
+
+    if "username" not in session:
+        return jsonify({
+            "error": "Please login first."
+        }), 401
+
+    username = session["username"]
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute("""
+            SELECT credential_id
+            FROM webauthn_credentials
+            WHERE username = %s
+        """, (username,))
+
+        rows = cursor.fetchall()
+
+        exclude_credentials = [
+            PublicKeyCredentialDescriptor(
+                id=bytes(row["credential_id"])
+            )
+            for row in rows
+        ]
+
+        options = generate_registration_options(
+            rp_id=RP_ID,
+            rp_name=RP_NAME,
+            user_name=username,
+            user_display_name=USERS[username]["name"],
+            authenticator_selection=AuthenticatorSelectionCriteria(
+                authenticator_attachment=AuthenticatorAttachment.PLATFORM,
+                resident_key=ResidentKeyRequirement.PREFERRED,
+                user_verification=UserVerificationRequirement.REQUIRED,
+            ),
+            exclude_credentials=exclude_credentials,
+        )
+
+        # Save challenge temporarily
+        session["webauthn_register_challenge"] = options.challenge
+
+        return jsonify(
+            json.loads(options_to_json(options))
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
+
+# =========================
+# PASSKEY LOGIN OPTIONS
+# =========================
+
+@app.route("/passkey/login/options", methods=["POST"])
+def passkey_login_options():
+
+    data = request.get_json() or {}
+    username = data.get("username", "").strip()
+
+    if username not in USERS:
+        return jsonify({
+            "error": "Invalid username."
+        }), 401
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute("""
+            SELECT credential_id
+            FROM webauthn_credentials
+            WHERE username = %s
+        """, (username,))
+
+        rows = cursor.fetchall()
+
+        if not rows:
+            return jsonify({
+                "error": "No fingerprint is registered for this user."
+            }), 404
+
+        allow_credentials = [
+            PublicKeyCredentialDescriptor(
+                id=bytes(row["credential_id"])
+            )
+            for row in rows
+        ]
+
+        options = generate_authentication_options(
+            rp_id=RP_ID,
+            allow_credentials=allow_credentials,
+            user_verification=UserVerificationRequirement.REQUIRED,
+        )
+
+        session["webauthn_login_challenge"] = options.challenge
+        session["webauthn_login_username"] = username
+
+        return jsonify(
+            json.loads(options_to_json(options))
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
+
+# =========================
+# PASSKEY LOGIN VERIFY
+# =========================
+
+@app.route("/passkey/login/verify", methods=["POST"])
+def passkey_login_verify():
+
+    data = request.get_json() or {}
+    credential = data.get("credential")
+
+    username = session.get(
+        "webauthn_login_username"
+    )
+
+    challenge = session.get(
+        "webauthn_login_challenge"
+    )
+
+    if not username or not challenge:
+        return jsonify({
+            "error": "Login session expired. Please try again."
+        }), 400
+
+    if not credential:
+        return jsonify({
+            "error": "Credential is missing."
+        }), 400
+
+    try:
+
+        credential_id = base64url_to_bytes(
+            credential["rawId"]
+        )
+
+        conn, cursor = get_db()
+
+        try:
+
+            cursor.execute("""
+                SELECT
+                    credential_id,
+                    public_key,
+                    sign_count
+                FROM webauthn_credentials
+                WHERE username = %s
+                  AND credential_id = %s
+            """, (
+                username,
+                credential_id
+            ))
+
+            stored = cursor.fetchone()
+
+            if not stored:
+                return jsonify({
+                    "error": "Fingerprint credential not found."
+                }), 401
+
+            verification = verify_authentication_response(
+                credential=credential,
+                expected_challenge=challenge,
+                expected_rp_id=RP_ID,
+                expected_origin=ORIGIN,
+                credential_public_key=bytes(
+                    stored["public_key"]
+                ),
+                credential_current_sign_count=int(
+                    stored["sign_count"]
+                ),
+                require_user_verification=True,
+            )
+
+            cursor.execute("""
+                UPDATE webauthn_credentials
+                SET sign_count = %s
+                WHERE username = %s
+                  AND credential_id = %s
+            """, (
+                verification.new_sign_count,
+                username,
+                credential_id
+            ))
+
+            conn.commit()
+
+        finally:
+            cursor.close()
+            conn.close()
+
+        # Create normal Flask login session
+        session.permanent = True
+
+        session["username"] = username
+        session["name"] = USERS[username]["name"]
+
+        session["last_login"] = datetime.now().strftime(
+            "%d-%m-%Y %I:%M:%S %p"
+        )
+
+        session.pop(
+            "webauthn_login_challenge",
+            None
+        )
+
+        session.pop(
+            "webauthn_login_username",
+            None
+        )
+
+        return jsonify({
+            "success": True,
+            "redirect": url_for("dashboard")
+        })
+
+    except Exception as e:
+
+        print(
+            "WebAuthn login error:",
+            str(e)
+        )
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 401
 
 
 # ------------------ Logout ------------------

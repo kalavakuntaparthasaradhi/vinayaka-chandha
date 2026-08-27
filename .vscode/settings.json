@@ -1,0 +1,7 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\kalav\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+    "python.analysis.extraPaths": [
+        "C:\\Users\\kalav\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\site-packages"
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:system"
+}
