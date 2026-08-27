@@ -62,9 +62,13 @@ def allowed_gallery_file(filename):
         and filename.rsplit(".", 1)[1].lower()
         in ALLOWED_GALLERY_EXTENSIONS
     )
-app.secret_key = "vinayaka123"
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "vinayaka123")
 
+app.permanent_session_lifetime = timedelta(hours=2)
+
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 # =========================
 # WEBAUTHN CONFIGURATION
