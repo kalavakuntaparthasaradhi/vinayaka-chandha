@@ -86,8 +86,11 @@ def check_session():
     "donate",
     "submit_payment",
     "static"
+    "passkey_register_options",
+    "passkey_register_verify",
     "passkey_login_options",
     "passkey_login_verify"
+    
     ]:
         if "username" not in session:
             return redirect(url_for("login"))
