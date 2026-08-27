@@ -85,7 +85,7 @@ def check_session():
     "annadhanam_slot_availability",
     "donate",
     "submit_payment",
-    "static"
+    "static",
     "passkey_register_options",
     "passkey_register_verify",
     "passkey_login_options",
