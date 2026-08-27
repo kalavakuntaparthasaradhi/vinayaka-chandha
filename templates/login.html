@@ -348,9 +348,21 @@ async function registerFingerprint() {
         }
 
 
-        const options =
-            await response.json();
+        const text = await response.text();
 
+            console.log("Register options response:", text);
+
+            let options;
+
+            try {
+                options = JSON.parse(text);
+            } catch (e) {
+                alert(
+                    "❌ Server returned invalid JSON.\n\n" +
+                    text.substring(0, 500)
+                );
+                return;
+            }
 
         if (options.error) {
 

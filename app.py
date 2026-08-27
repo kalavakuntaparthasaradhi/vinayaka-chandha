@@ -240,7 +240,117 @@ def passkey_register_options():
     finally:
         cursor.close()
         conn.close()
+# =========================
+# PASSKEY REGISTER VERIFY
+# =========================
 
+@app.route("/passkey/register/verify", methods=["POST"])
+def passkey_register_verify():
+
+    if "username" not in session:
+        return jsonify({
+            "success": False,
+            "error": "Please login first."
+        }), 401
+
+    username = session["username"]
+
+    challenge = session.get(
+        "webauthn_register_challenge"
+    )
+
+    if not challenge:
+        return jsonify({
+            "success": False,
+            "error": "Registration session expired. Please try again."
+        }), 400
+
+    data = request.get_json(silent=True) or {}
+
+    credential = data.get("credential")
+
+    if not credential:
+        return jsonify({
+            "success": False,
+            "error": "Credential is missing."
+        }), 400
+
+    conn, cursor = get_db()
+
+    try:
+
+        verification = verify_registration_response(
+            credential=credential,
+            expected_challenge=challenge,
+            expected_rp_id=RP_ID,
+            expected_origin=ORIGIN,
+            require_user_verification=True,
+        )
+
+        credential_id = verification.credential_id
+        public_key = verification.credential_public_key
+        sign_count = verification.sign_count
+
+        cursor.execute("""
+            SELECT credential_id
+            FROM webauthn_credentials
+            WHERE credential_id = %s
+        """, (credential_id,))
+
+        existing = cursor.fetchone()
+
+        if existing:
+            return jsonify({
+                "success": False,
+                "error": "This fingerprint is already registered."
+            }), 409
+
+        cursor.execute("""
+            INSERT INTO webauthn_credentials
+            (
+                username,
+                credential_id,
+                public_key,
+                sign_count
+            )
+            VALUES (%s, %s, %s, %s)
+        """, (
+            username,
+            credential_id,
+            public_key,
+            sign_count
+        ))
+
+        conn.commit()
+
+        session.pop(
+            "webauthn_register_challenge",
+            None
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "Fingerprint registered successfully."
+        })
+
+    except Exception as e:
+
+        conn.rollback()
+
+        print(
+            "WebAuthn registration error:",
+            str(e)
+        )
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 400
+
+    finally:
+
+        cursor.close()
+        conn.close()
 # =========================
 # PASSKEY LOGIN OPTIONS
 # =========================
