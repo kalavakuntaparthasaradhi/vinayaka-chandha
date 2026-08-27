@@ -247,9 +247,7 @@
         setInterval(createFlower, 500);
 </script>
 <script>
-
 function base64urlToUint8Array(base64url) {
-
     const padding =
         "=".repeat((4 - base64url.length % 4) % 4);
 
@@ -272,13 +270,12 @@ function base64urlToUint8Array(base64url) {
 
 
 function uint8ArrayToBase64url(bytes) {
+    const uint8Array = new Uint8Array(bytes);
 
     let binary = "";
 
-    bytes = new Uint8Array(bytes);
-
-    for (let i = 0; i < bytes.length; i++) {
-        binary += String.fromCharCode(bytes[i]);
+    for (let i = 0; i < uint8Array.length; i++) {
+        binary += String.fromCharCode(uint8Array[i]);
     }
 
     return btoa(binary)
@@ -302,60 +299,114 @@ async function registerFingerprint() {
             ).value.trim();
 
         if (!username) {
-
-            alert(
-                "Please enter your username first."
-            );
-
+            alert("Please enter your username first.");
             return;
         }
+
 
         const response =
             await fetch(
                 "/passkey/register/options",
                 {
-                    method: "POST"
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        username: username
+                    })
                 }
             );
+
+
+        /*
+         * Check HTTP response before trying JSON.
+         */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Registration options error:",
+                response.status,
+                errorText
+            );
+
+            alert(
+                "❌ Registration server error (" +
+                response.status +
+                ").\n\n" +
+                errorText.substring(0, 300)
+            );
+
+            return;
+        }
+
 
         const options =
             await response.json();
 
+
         if (options.error) {
 
-            alert("❌ " + options.error);
+            alert(
+                "❌ " + options.error
+            );
 
             return;
         }
+
+
+        /*
+         * Convert WebAuthn values.
+         */
 
         options.challenge =
             base64urlToUint8Array(
                 options.challenge
             );
 
-        options.user.id =
-            base64urlToUint8Array(
-                options.user.id
-            );
+
+        if (options.user && options.user.id) {
+
+            options.user.id =
+                base64urlToUint8Array(
+                    options.user.id
+                );
+        }
+
 
         if (options.excludeCredentials) {
 
             options.excludeCredentials =
-                options.excludeCredentials.map(c => ({
-                    ...c,
-                    id:
-                        base64urlToUint8Array(c.id)
-                }));
+                options.excludeCredentials.map(
+                    credential => ({
+
+                        ...credential,
+
+                        id:
+                            base64urlToUint8Array(
+                                credential.id
+                            )
+                    })
+                );
         }
 
+
         /*
-         * This is where the Motorola
-         * fingerprint/biometric prompt appears.
+         * Browser WebAuthn registration.
          */
+
         const credential =
             await navigator.credentials.create({
                 publicKey: options
             });
+
 
         if (!credential) {
 
@@ -366,8 +417,10 @@ async function registerFingerprint() {
             return;
         }
 
+
         const responseData =
             credential.response;
+
 
         const credentialData = {
 
@@ -394,6 +447,11 @@ async function registerFingerprint() {
             }
         };
 
+
+        /*
+         * Send credential to Flask.
+         */
+
         const verifyResponse =
             await fetch(
                 "/passkey/register/verify",
@@ -406,14 +464,43 @@ async function registerFingerprint() {
                     },
 
                     body: JSON.stringify({
+                        username: username,
                         credential:
                             credentialData
                     })
                 }
             );
 
+
+        /*
+         * Check Flask response.
+         */
+
+        if (!verifyResponse.ok) {
+
+            const errorText =
+                await verifyResponse.text();
+
+            console.error(
+                "Registration verification error:",
+                verifyResponse.status,
+                errorText
+            );
+
+            alert(
+                "❌ Registration verification failed (" +
+                verifyResponse.status +
+                ").\n\n" +
+                errorText.substring(0, 300)
+            );
+
+            return;
+        }
+
+
         const result =
             await verifyResponse.json();
+
 
         if (result.success) {
 
@@ -425,14 +512,20 @@ async function registerFingerprint() {
 
             alert(
                 "❌ " +
-                (result.error ||
-                 "Registration failed.")
+                (
+                    result.error ||
+                    "Registration failed."
+                )
             );
         }
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Fingerprint registration error:",
+            error
+        );
 
         alert(
             "❌ Fingerprint registration failed.\n\n" +
@@ -441,8 +534,10 @@ async function registerFingerprint() {
     }
 }
 
-</script>
-<script>
+
+/* =========================
+   LOGIN WITH FINGERPRINT
+========================= */
 
 async function loginWithFingerprint() {
 
@@ -453,6 +548,7 @@ async function loginWithFingerprint() {
                 'input[name="username"]'
             ).value.trim();
 
+
         if (!username) {
 
             alert(
@@ -461,6 +557,11 @@ async function loginWithFingerprint() {
 
             return;
         }
+
+
+        /*
+         * Request authentication options.
+         */
 
         const response =
             await fetch(
@@ -479,27 +580,69 @@ async function loginWithFingerprint() {
                 }
             );
 
-        const options =
-            await response.json();
 
-        if (options.error) {
+        /*
+         * Check HTTP response before JSON.
+         */
 
-            alert("❌ " + options.error);
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Login options error:",
+                response.status,
+                errorText
+            );
+
+            alert(
+                "❌ Login server error (" +
+                response.status +
+                ").\n\n" +
+                errorText.substring(0, 300)
+            );
 
             return;
         }
+
+
+        const options =
+            await response.json();
+
+
+        if (options.error) {
+
+            alert(
+                "❌ " + options.error
+            );
+
+            return;
+        }
+
+
+        /*
+         * Convert challenge.
+         */
 
         options.challenge =
             base64urlToUint8Array(
                 options.challenge
             );
 
+
+        /*
+         * Convert allowed credentials.
+         */
+
         if (options.allowCredentials) {
 
             options.allowCredentials =
                 options.allowCredentials.map(
                     credential => ({
+
                         ...credential,
+
                         id:
                             base64urlToUint8Array(
                                 credential.id
@@ -508,11 +651,16 @@ async function loginWithFingerprint() {
                 );
         }
 
-        // Motorola fingerprint / biometric prompt
+
+        /*
+         * Browser WebAuthn authentication.
+         */
+
         const credential =
             await navigator.credentials.get({
                 publicKey: options
             });
+
 
         if (!credential) {
 
@@ -523,8 +671,10 @@ async function loginWithFingerprint() {
             return;
         }
 
+
         const responseData =
             credential.response;
+
 
         const credentialData = {
 
@@ -563,6 +713,11 @@ async function loginWithFingerprint() {
             }
         };
 
+
+        /*
+         * Send authentication response to Flask.
+         */
+
         const verifyResponse =
             await fetch(
                 "/passkey/login/verify",
@@ -575,14 +730,45 @@ async function loginWithFingerprint() {
                     },
 
                     body: JSON.stringify({
+
+                        username: username,
+
                         credential:
                             credentialData
                     })
                 }
             );
 
+
+        /*
+         * Check Flask response.
+         */
+
+        if (!verifyResponse.ok) {
+
+            const errorText =
+                await verifyResponse.text();
+
+            console.error(
+                "Login verification error:",
+                verifyResponse.status,
+                errorText
+            );
+
+            alert(
+                "❌ Login verification failed (" +
+                verifyResponse.status +
+                ").\n\n" +
+                errorText.substring(0, 300)
+            );
+
+            return;
+        }
+
+
         const result =
             await verifyResponse.json();
+
 
         if (result.success) {
 
@@ -593,14 +779,20 @@ async function loginWithFingerprint() {
 
             alert(
                 "❌ " +
-                (result.error ||
-                 "Fingerprint login failed.")
+                (
+                    result.error ||
+                    "Fingerprint login failed."
+                )
             );
         }
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Fingerprint login error:",
+            error
+        );
 
         alert(
             "❌ Fingerprint login failed.\n\n" +
@@ -608,7 +800,6 @@ async function loginWithFingerprint() {
         );
     }
 }
-
 </script>
 </body>
 </html>
