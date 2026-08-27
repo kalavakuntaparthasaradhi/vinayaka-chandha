@@ -70,9 +70,9 @@ app.permanent_session_lifetime = timedelta(minutes=5)
 # WEBAUTHN CONFIGURATION
 # =========================
 
-RP_ID = "localhost"
+RP_ID = "vinayaka-chandha.onrender.com"
 RP_NAME = "Lakshmi Ganapathi Youth"
-ORIGIN = "https://lakshmiganapathi.onrender.com"
+ORIGIN = "https://vinayaka-chandha.onrender.com"
 
 # Sleep Mode
 
@@ -86,6 +86,8 @@ def check_session():
     "donate",
     "submit_payment",
     "static"
+    "passkey_login_options",
+    "passkey_login_verify"
     ]:
         if "username" not in session:
             return redirect(url_for("login"))
