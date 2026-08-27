@@ -863,9 +863,273 @@ th{
 </button>
 
 <script>
-function registerFingerprint() {
-    alert("Register button is working!");
+
+function base64urlToUint8Array(base64url) {
+
+    const padding =
+        "=".repeat((4 - base64url.length % 4) % 4);
+
+    const base64 =
+        base64url
+            .replace(/-/g, "+")
+            .replace(/_/g, "/") + padding;
+
+    const binary = atob(base64);
+
+    const bytes =
+        new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return bytes;
 }
+
+
+function uint8ArrayToBase64url(bytes) {
+
+    let binary = "";
+
+    bytes = new Uint8Array(bytes);
+
+    for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+
+    return btoa(binary)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=/g, "");
+}
+
+
+async function registerFingerprint() {
+
+    try {
+
+        alert("Starting fingerprint registration...");
+
+        const username =
+            "{{ session.get('username', '') }}";
+
+        if (!username) {
+
+            alert("❌ Please login first.");
+
+            return;
+        }
+
+        console.log(
+            "Registering fingerprint for:",
+            username
+        );
+
+
+        const response =
+            await fetch(
+                "/passkey/register/options",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        console.log(
+            "Options response:",
+            response.status
+        );
+
+
+        const options =
+            await response.json();
+
+
+        console.log(
+            "WebAuthn options:",
+            options
+        );
+
+
+        if (!response.ok || options.error) {
+
+            alert(
+                "❌ Registration server error (" +
+                response.status +
+                ")\n\n" +
+                (options.error ||
+                 "Unable to start registration.")
+            );
+
+            return;
+        }
+
+
+        options.challenge =
+            base64urlToUint8Array(
+                options.challenge
+            );
+
+
+        if (
+            options.user &&
+            options.user.id
+        ) {
+
+            options.user.id =
+                base64urlToUint8Array(
+                    options.user.id
+                );
+        }
+
+
+        if (options.excludeCredentials) {
+
+            options.excludeCredentials =
+                options.excludeCredentials.map(
+                    credential => ({
+
+                        ...credential,
+
+                        id:
+                            base64urlToUint8Array(
+                                credential.id
+                            )
+                    })
+                );
+        }
+
+
+        alert(
+            "Now complete the fingerprint/passkey prompt."
+        );
+
+
+        const credential =
+            await navigator.credentials.create({
+                publicKey: options
+            });
+
+
+        if (!credential) {
+
+            alert(
+                "❌ Registration cancelled."
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "Credential created:",
+            credential
+        );
+
+
+        const responseData =
+            credential.response;
+
+
+        const credentialData = {
+
+            id:
+                credential.id,
+
+            rawId:
+                uint8ArrayToBase64url(
+                    credential.rawId
+                ),
+
+            type:
+                credential.type,
+
+            response: {
+
+                clientDataJSON:
+                    uint8ArrayToBase64url(
+                        responseData.clientDataJSON
+                    ),
+
+                attestationObject:
+                    uint8ArrayToBase64url(
+                        responseData.attestationObject
+                    )
+            }
+        };
+
+
+        const verifyResponse =
+            await fetch(
+                "/passkey/register/verify",
+                {
+                    method: "POST",
+
+                    credentials: "same-origin",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        credential:
+                            credentialData
+                    })
+                }
+            );
+
+
+        const result =
+            await verifyResponse.json();
+
+
+        console.log(
+            "Verification result:",
+            result
+        );
+
+
+        if (
+            verifyResponse.ok &&
+            result.success
+        ) {
+
+            alert(
+                "✅ Fingerprint registered successfully!"
+            );
+
+        } else {
+
+            alert(
+                "❌ Registration failed.\n\n" +
+                (
+                    result.error ||
+                    "Unable to register this device."
+                )
+            );
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Fingerprint registration error:",
+            error
+        );
+
+        alert(
+            "❌ Fingerprint registration failed.\n\n" +
+            error.message
+        );
+    }
+}
+
 </script>
 
 </body>
