@@ -744,12 +744,17 @@ Thank you for your valuable contribution.
 
     # Total Expenses
     cursor.execute("""
-        SELECT IFNULL(SUM(amount), 0) AS total
-        FROM expenses
+    SELECT IFNULL(SUM(paid_amount), 0) AS total
+    FROM expenses
     """)
     total_expenses = cursor.fetchone()["total"]
 
-    # Balance
+    cursor.execute("""
+        SELECT IFNULL(SUM(remaining_amount), 0) AS total
+        FROM expenses
+    """)
+    total_remaining_expenses = cursor.fetchone()["total"]
+
     balance = total_collection - total_expenses
 
     # Total Donors
@@ -774,14 +779,17 @@ Thank you for your valuable contribution.
 
     # Expense List
     cursor.execute("""
-        SELECT
-            id,
-            expense_name,
-            amount,
-            spent_by
-        FROM expenses
-        ORDER BY id ASC
-    """)
+    SELECT
+        id,
+        expense_name,
+        amount,
+        paid_amount,
+        remaining_amount,
+        payment_status,
+        spent_by
+    FROM expenses
+    ORDER BY id ASC
+""")
     expenses = cursor.fetchall()
 
  # ================= PAYMENT HISTORY =================
@@ -813,6 +821,7 @@ Thank you for your valuable contribution.
         "dashboard.html",
         total_collection=total_collection,
         total_expenses=total_expenses,
+        total_remaining_expenses=total_remaining_expenses,
         balance=balance,
         total_donors=total_donors,
         members=members,
@@ -857,24 +866,57 @@ def payment_history():
 
 @app.route("/add_expense", methods=["POST"])
 def add_expense():
-
     conn, cursor = get_db()
 
     try:
         expense_name = request.form["expense_name"]
         amount = float(request.form["amount"])
+        paid_amount = float(request.form.get("paid_amount", 0))
         payment_mode = request.form["payment_mode"]
         spent_by = request.form["spent_by"]
         expense_date = request.form["expense_date"]
         remarks = request.form["remarks"]
 
+        # Validation
+        if amount <= 0:
+            raise ValueError("Total amount must be greater than 0.")
+
+        if paid_amount < 0 or paid_amount > amount:
+            raise ValueError(
+                "Paid/Advance amount must be between 0 and Total Amount."
+            )
+
+        # Calculate remaining amount
+        remaining_amount = amount - paid_amount
+
+        # Determine payment status
+        if paid_amount == 0:
+            payment_status = "Not Paid"
+        elif paid_amount < amount:
+            payment_status = "Advance Paid"
+        else:
+            payment_status = "Fully Paid"
+
         cursor.execute("""
             INSERT INTO expenses
-            (expense_name, amount, payment_mode, spent_by, remarks, expense_date)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            (
+                expense_name,
+                amount,
+                paid_amount,
+                remaining_amount,
+                payment_status,
+                payment_mode,
+                spent_by,
+                remarks,
+                expense_date
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             expense_name,
             amount,
+            paid_amount,
+            remaining_amount,
+            payment_status,
             payment_mode,
             spent_by,
             remarks,
