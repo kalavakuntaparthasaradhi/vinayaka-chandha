@@ -1429,20 +1429,57 @@ placeholder="Enter Remarks"></textarea>
             <table>
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>expense_name</th>
-                        <th>amount</th>
-                        <th>spent_By</th>
+                        <th>ID</th>
+                        <th>Expense</th>
+                        <th>Total Amount</th>
+                        <th>Advance / Paid</th>
+                        <th>Remaining</th>
+                        <th>Status</th>
+                        <th>Spent_By</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for expense in expenses %}
                     <tr>
-                        <td>{{ expense.id}}</td>
-                        <td>{{ expense.expense_name}}</td>
-                        <td>₹{{ expense.amount }}</td>
-                        <td>{{ expense.spent_by }}</td>
+                        <td>{{ expense.id }}</td>
+
+                        <td>{{ expense.expense_name }}</td>
+
+                        <td>₹{{ "%.2f"|format(expense.amount|float) }}</td>
+
+                        <td>₹{{ "%.2f"|format(expense.advance_amount|float) }}</td>
+
+                        <td>
+                            {% if expense.remaining_amount|float > 0 %}
+                                <span style="color:red; font-weight:bold;">
+                                    ₹{{ "%.2f"|format(expense.remaining_amount|float) }}
+                                </span>
+                            {% else %}
+                                <span style="color:green; font-weight:bold;">
+                                    ₹0.00
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if expense.payment_status == "Fully Paid" %}
+                                <span style="color:green; font-weight:bold;">
+                                    ✓ Fully Paid
+                                </span>
+                            {% elif expense.payment_status == "Advance Paid" %}
+                                <span style="color:orange; font-weight:bold;">
+                                    ⚠ Advance Paid
+                                </span>
+                            {% else %}
+                                <span style="color:red; font-weight:bold;">
+                                    ✗ Not Paid
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ expense.spent_by }}
+                    </td>
                     </tr>
                     {% endfor %}
                 </tbody>
