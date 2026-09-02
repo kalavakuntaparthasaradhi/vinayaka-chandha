@@ -744,7 +744,7 @@ Thank you for your valuable contribution.
 
     # Total Expenses
     cursor.execute("""
-    SELECT IFNULL(SUM(paid_amount), 0) AS total
+    SELECT IFNULL(SUM(advance_amount), 0) AS total
     FROM expenses
     """)
     total_expenses = cursor.fetchone()["total"]
@@ -783,7 +783,7 @@ Thank you for your valuable contribution.
         id,
         expense_name,
         amount,
-        paid_amount,
+        advance_amount,
         remaining_amount,
         payment_status,
         spent_by
@@ -871,7 +871,7 @@ def add_expense():
     try:
         expense_name = request.form["expense_name"]
         amount = float(request.form["amount"])
-        paid_amount = float(request.form.get("paid_amount", 0))
+        advance_amount = float(request.form.get("advance_amount", 0))
         payment_mode = request.form["payment_mode"]
         spent_by = request.form["spent_by"]
         expense_date = request.form["expense_date"]
@@ -881,18 +881,18 @@ def add_expense():
         if amount <= 0:
             raise ValueError("Total amount must be greater than 0.")
 
-        if paid_amount < 0 or paid_amount > amount:
+        if advance_amount < 0 or advance_amount > amount:
             raise ValueError(
                 "Paid/Advance amount must be between 0 and Total Amount."
             )
 
         # Calculate remaining amount
-        remaining_amount = amount - paid_amount
+        remaining_amount = amount - advance_amount
 
         # Determine payment status
-        if paid_amount == 0:
+        if advance_amount == 0:
             payment_status = "Not Paid"
-        elif paid_amount < amount:
+        elif advance_amount < amount:
             payment_status = "Advance Paid"
         else:
             payment_status = "Fully Paid"
@@ -902,7 +902,7 @@ def add_expense():
             (
                 expense_name,
                 amount,
-                paid_amount,
+                advance_amount,
                 remaining_amount,
                 payment_status,
                 payment_mode,
@@ -914,7 +914,7 @@ def add_expense():
         """, (
             expense_name,
             amount,
-            paid_amount,
+            advance_amount,
             remaining_amount,
             payment_status,
             payment_mode,

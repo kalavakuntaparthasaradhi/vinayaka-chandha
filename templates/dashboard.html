@@ -1276,46 +1276,50 @@ placeholder="Enter Remarks"></textarea>
 
 <div class="row">
 
-<div class="form-group">
-<label>Expense Name</label>
-<input type="text" name="expense_name" placeholder="Enter Expense Name" required>
+    <div class="form-group">
+        <label>Expense Name</label>
+        <input type="text"
+               name="expense_name"
+               placeholder="Enter Expense Name"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label>Total Amount (₹)</label>
+        <input type="number"
+               id="expenseTotal"
+               name="amount"
+               placeholder="Enter Total Amount"
+               min="1"
+               step="0.01"
+               required
+               oninput="calculateExpenseRemaining()">
+    </div>
+
 </div>
 
-<div class="form-group">
-<label>Total Amount (₹)</label>
-<input type="number"
-       id="expenseTotal"
-       name="amount"
-       placeholder="Enter Total Amount"
-       min="1"
-       step="0.01"
-       required
-       oninput="calculateExpenseRemaining()">
-</div>
-
-<div class="form-group">
-<label>Advance / Paid Amount (₹)</label>
-<input type="number"
-       id="paidAmount"
-       name="paid_amount"
-       placeholder="Enter Advance / Paid Amount"
-       min="0"
-       step="0.01"
-       value="0"
-       oninput="calculateExpenseRemaining()">
-</div>
 <div class="row">
 
-<div class="form-group">
-<label>Remaining Amount (₹)</label>
-<input type="number"
-       id="remainingAmount"
-       value="0"
-       readonly
-       style="background:#f3f3f3;">
-</div>
+    <div class="form-group">
+        <label>Advance / Paid Amount (₹)</label>
+        <input type="number"
+               id="advanceAmount"
+               name="advance_amount"
+               placeholder="Enter Advance / Paid Amount"
+               min="0"
+               step="0.01"
+               value="0"
+               oninput="calculateExpenseRemaining()">
+    </div>
 
-</div>
+    <div class="form-group">
+        <label>Remaining Amount (₹)</label>
+        <input type="number"
+               id="remainingAmount"
+               value="0"
+               readonly
+               style="background:#f3f3f3;">
+    </div>
 
 </div>
 
@@ -1664,18 +1668,18 @@ updateGreeting();
 <script>
     function calculateExpenseRemaining() {
     const totalInput = document.getElementById("expenseTotal");
-    const paidInput = document.getElementById("paidAmount");
+    const advanceInput = document.getElementById("advanceAmount");
     const remainingInput = document.getElementById("remainingAmount");
 
     const total = parseFloat(totalInput.value) || 0;
-    let paid = parseFloat(paidInput.value) || 0;
+    let advance = parseFloat(advanceInput.value) || 0;
 
-    if (paid > total && total > 0) {
-        paid = total;
-        paidInput.value = total;
+    if (advance > total && total > 0) {
+        advance = total;
+        advanceInput.value = total;
     }
 
-    const remaining = Math.max(total - paid, 0);
+    const remaining = Math.max(total - advance, 0);
 
     remainingInput.value = remaining.toFixed(2);
 }
