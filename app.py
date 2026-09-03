@@ -1562,61 +1562,63 @@ def edit_donation(id):
             remarks = request.form["remarks"]
             donation_date = request.form["donation_date"]
 
+            # Only Pardhu can change donation amount
             if session.get("username") == "Pardhu":
 
                 donation_amount = request.form["donation"]
 
-            cursor.execute("""
-                UPDATE donations
-                SET
-                    name = %s,
-                    mobile = %s,
-                    area = %s,
-                    house = %s,
-                    donation = %s,
-                    payment = %s,
-                    collector = %s,
-                    remarks = %s,
-                    donation_date = %s
-                WHERE id = %s
-            """, (
-                name,
-                mobile,
-                area,
-                house,
-                donation_amount,
-                payment,
-                collector,
-                remarks,
-                donation_date,
-                id
-            ))
+                cursor.execute("""
+                    UPDATE donations
+                    SET
+                        name = %s,
+                        mobile = %s,
+                        area = %s,
+                        house = %s,
+                        donation = %s,
+                        payment = %s,
+                        collector = %s,
+                        remarks = %s,
+                        donation_date = %s
+                    WHERE id = %s
+                """, (
+                    name,
+                    mobile,
+                    area,
+                    house,
+                    donation_amount,
+                    payment,
+                    collector,
+                    remarks,
+                    donation_date,
+                    id
+                ))
 
-        else:
+            else:
 
-            cursor.execute("""
-                UPDATE donations
-                SET
-                    name = %s,
-                    mobile = %s,
-                    area = %s,
-                    house = %s,
-                    payment = %s,
-                    collector = %s,
-                    remarks = %s,
-                    donation_date = %s
-                WHERE id = %s
-            """, (
-                name,
-                mobile,
-                area,
-                house,
-                payment,
-                collector,
-                remarks,
-                donation_date,
-                id
-            ))
+                # Other admins cannot change donation amount
+                cursor.execute("""
+                    UPDATE donations
+                    SET
+                        name = %s,
+                        mobile = %s,
+                        area = %s,
+                        house = %s,
+                        payment = %s,
+                        collector = %s,
+                        remarks = %s,
+                        donation_date = %s
+                    WHERE id = %s
+                """, (
+                    name,
+                    mobile,
+                    area,
+                    house,
+                    payment,
+                    collector,
+                    remarks,
+                    donation_date,
+                    id
+                ))
 
             conn.commit()
 
@@ -1624,7 +1626,8 @@ def edit_donation(id):
 
         return render_template(
             "edit_donation.html",
-            donation=donation
+            donation=donation,
+            name=session.get("name")
         )
 
     except Exception as e:
@@ -1634,6 +1637,9 @@ def edit_donation(id):
     finally:
         cursor.close()
         conn.close()
+
+
+# submit payment
 
 @app.route("/submit_payment", methods=["POST"])
 def submit_payment():
