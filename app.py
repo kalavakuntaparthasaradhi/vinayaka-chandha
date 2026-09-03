@@ -1,12 +1,14 @@
 
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file
 from urllib.parse import quote
 import mysql.connector
 from datetime import timedelta, datetime
 import re
 from werkzeug.utils import secure_filename
+import pandas as pd
+from io import BytesIO
 
 import secrets
 import json
@@ -831,6 +833,58 @@ Thank you for your valuable contribution.
         payments=payments,
         name=session.get("name")
     )
+
+@app.route("/export_donations")
+def export_donations():
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute("""
+            SELECT
+                id,
+                name,
+                mobile,
+                area,
+                house,
+                donation,
+                payment,
+                collector,
+                remarks,
+                donation_date
+            FROM donations
+            ORDER BY id ASC
+        """)
+
+        donations = cursor.fetchall()
+
+        # Convert database records to Excel
+        df = pd.DataFrame(donations)
+
+        output = BytesIO()
+
+        with pd.ExcelWriter(output, engine="openpyxl") as writer:
+            df.to_excel(
+                writer,
+                index=False,
+                sheet_name="Donations"
+            )
+
+        output.seek(0)
+
+        return send_file(
+            output,
+            as_attachment=True,
+            download_name="donations.xlsx",
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
+    except Exception as e:
+        return f"Error exporting donations: {e}"
+
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route("/payment-history")
 def payment_history():
