@@ -34,11 +34,25 @@
 
     <br><br>
 
-    <!-- 🔒 Amount cannot be edited -->
+    {% if session.get("username") == "Pardhu" %}
+
+    <label>Donation Amount</label>
+    <input type="number"
+           name="donation"
+           value="{{ donation.donation }}"
+           min="0"
+           step="0.01"
+           required>
+
+{% else %}
+
     <label>Donation Amount 🔒</label>
     <input type="text"
            value="₹ {{ donation.donation }}"
            readonly>
+
+{% endif %}
+
 
     <br><br>
 

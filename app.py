@@ -230,9 +230,9 @@ def passkey_register_options():
             user_name=username,
             user_display_name=USERS[username]["name"],
             authenticator_selection=AuthenticatorSelectionCriteria(
-                authenticator_attachment=AuthenticatorAttachment.PLATFORM,
-                resident_key=ResidentKeyRequirement.PREFERRED,
-                user_verification=UserVerificationRequirement.REQUIRED,
+            authenticator_attachment=AuthenticatorAttachment.PLATFORM,
+            resident_key=ResidentKeyRequirement.PREFERRED,
+            user_verification=UserVerificationRequirement.REQUIRED,
             ),
             exclude_credentials=exclude_credentials,
         )
@@ -771,6 +771,7 @@ Thank you for your valuable contribution.
             name,
             mobile,
             donation,
+            remarks,
             'paid' AS status
         FROM donations
         ORDER BY id ASC
@@ -786,7 +787,8 @@ Thank you for your valuable contribution.
         advance_amount,
         remaining_amount,
         payment_status,
-        spent_by
+        spent_by,
+        remarks
     FROM expenses
     ORDER BY id ASC
 """)
@@ -1559,6 +1561,38 @@ def edit_donation(id):
             collector = request.form["collector"]
             remarks = request.form["remarks"]
             donation_date = request.form["donation_date"]
+
+            if session.get("username") == "Pardhu":
+
+                donation_amount = request.form["donation"]
+
+            cursor.execute("""
+                UPDATE donations
+                SET
+                    name = %s,
+                    mobile = %s,
+                    area = %s,
+                    house = %s,
+                    donation = %s,
+                    payment = %s,
+                    collector = %s,
+                    remarks = %s,
+                    donation_date = %s
+                WHERE id = %s
+            """, (
+                name,
+                mobile,
+                area,
+                house,
+                donation_amount,
+                payment,
+                collector,
+                remarks,
+                donation_date,
+                id
+            ))
+
+        else:
 
             cursor.execute("""
                 UPDATE donations
