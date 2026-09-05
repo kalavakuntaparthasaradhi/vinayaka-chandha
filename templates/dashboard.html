@@ -1444,6 +1444,7 @@ placeholder="Enter Remarks"></textarea>
                         <th>Remaining</th>
                         <th>Status</th>
                         <th>Spent_By</th>
+                        <th>Payment</th>
                     </tr>
                 </thead>
 
@@ -1487,6 +1488,34 @@ placeholder="Enter Remarks"></textarea>
                         </td>
 
                         <td>{{ expense.spent_by }}
+                        <td>
+                        {% if expense.remaining_amount|float > 0 %}
+                            <form method="POST"
+                                action="{{ url_for('pay_expense', id=expense.id) }}"
+                                style="display:flex; gap:5px; align-items:center;">
+
+                                <input type="number"
+                                    name="payment_amount"
+                                    value="{{ expense.remaining_amount }}"
+                                    min="0.01"
+                                    max="{{ expense.remaining_amount }}"
+                                    step="0.01"
+                                    style="width:100px; padding:6px;">
+
+                                <button type="submit"
+                                        style="width:auto;
+                                            padding:7px 12px;
+                                            background:#16a34a;
+                                            font-size:13px;">
+                                    💰 Pay
+                                </button>
+                            </form>
+                        {% else %}
+                            <span style="color:green; font-weight:bold;">
+                                ✓ Completed
+                            </span>
+                        {% endif %}
+                    </td>
                     </td>
                     </tr>
                     {% endfor %}

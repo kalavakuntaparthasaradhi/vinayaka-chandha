@@ -990,6 +990,80 @@ def add_expense():
     finally:
         cursor.close()
         conn.close()
+
+@app.route("/pay_expense/<int:id>", methods=["POST"])
+def pay_expense(id):
+
+    conn, cursor = get_db()
+
+    try:
+        payment_amount = float(
+            request.form.get("payment_amount", 0)
+        )
+
+        if payment_amount <= 0:
+            return "Payment amount must be greater than 0.", 400
+
+        cursor.execute("""
+            SELECT amount, advance_amount, remaining_amount
+            FROM expenses
+            WHERE id = %s
+        """, (id,))
+
+        expense = cursor.fetchone()
+
+        if not expense:
+            return "Expense not found.", 404
+
+        total_amount = float(expense["amount"])
+        already_paid = float(expense["advance_amount"] or 0)
+        remaining = float(expense["remaining_amount"] or 0)
+
+        if payment_amount > remaining:
+            return "Payment cannot be greater than remaining amount.", 400
+
+        new_paid_amount = already_paid + payment_amount
+
+        new_remaining = total_amount - new_paid_amount
+
+        if abs(new_remaining) < 0.01:
+            new_remaining = 0
+
+        if new_remaining == 0:
+            payment_status = "Fully Paid"
+        else:
+            payment_status = "Advance Paid"
+
+        cursor.execute("""
+            UPDATE expenses
+            SET advance_amount = %s,
+                remaining_amount = %s,
+                payment_status = %s
+            WHERE id = %s
+        """, (
+            new_paid_amount,
+            new_remaining,
+            payment_status,
+            id
+        ))
+
+        conn.commit()
+
+        flash(
+            f"✅ Payment of ₹{payment_amount:.2f} recorded successfully."
+        )
+
+        return redirect(url_for("dashboard"))
+
+    except Exception as e:
+        conn.rollback()
+        return f"Error: {e}", 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+        
 # ================= ANNADHANAM SLOT CONFIG =================
 
 ANNADHANAM_SLOT_CAPACITY = 2
